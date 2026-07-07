@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visakhapatnam Real Estate Services | Get Home Realty</title>
+<meta name="description" content="Find homes, apartments, villas, plots and investment opportunities in Visakhapatnam with Get Home Realty. Explore properties on an interactive map across Beach Road, MVP Colony, Madhurawada and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="visakhapatnam.html">
+<div data-gh-header></div>
+
+<section class="hero hero--compact hero--page">
+  <div class="hero-bg" style="background-image:url('https://mkone.in/wp-content/uploads/2022/04/2800-MK-One_Image_03-03.jpg')"></div>
+  <div class="wrap hero-inner">
+    <nav class="breadcrumb"><a href="index.html">Home</a><span>/</span><a href="services.html">Services</a><span>/</span>Visakhapatnam</nav>
+    <h1 class="h1">Explore Real Estate Opportunities in Visakhapatnam</h1>
+    <p class="lead">Find homes, apartments, villas, plots and investment opportunities in Visakhapatnam with Get Home Realty.</p>
+    <div class="hero-ctas"><a class="btn" href="#projects">View Projects</a><a class="btn btn--outline-light" href="#map">Explore Map</a></div>
+  </div>
+</section>
+
+<section class="section"><div class="wrap">
+  <div class="section-head center"><p class="eyebrow" style="justify-content:center">How We Help in Visakhapatnam</p>
+    <h2 class="h2">Full support, every property type</h2></div>
+  <div class="grid cols-4" id="vskpSvc"></div>
+</div></section>
+
+<section class="section" id="map"><div class="wrap">
+  <div class="section-head"><p class="eyebrow">Interactive Map</p><h2 class="h2">Explore our projects in Visakhapatnam</h2>
+    <p class="lead">Hover over a red pin to preview a project, or tap a card below to locate it. Locations are shown at locality level.</p></div>
+  <div class="map-frame map-frame--full"><div id="map-vskp"></div></div>
+</div></section>
+
+<section class="section section--mist" id="projects"><div class="wrap">
+  <div class="section-head"><p class="eyebrow">Projects</p>
+    <h2 class="h2">Projects across Visakhapatnam</h2></div>
+  <div class="map-filters" id="vskpDevFilters">
+    <select data-df="area"><option value="">All Localities</option></select>
+    <select data-df="band"><option value="">Any &#8377;/sq.ft</option>
+      <option value="lt5">Under &#8377;5,000/sq.ft</option>
+      <option value="5to8">&#8377;5,000 &ndash; &#8377;8,000/sq.ft</option>
+      <option value="gt8">&#8377;8,000+/sq.ft</option></select>
+  </div>
+  <div class="dev-grid" id="vskpDevList"></div>
+  <div class="map-empty" id="vskpDevEmpty">No projects match these filters. Try widening your search.</div>
+</div></section>
+
+<section class="section section--mist"><div class="wrap"><div class="cta-band">
+  <h2 class="h2">Looking for a property in Visakhapatnam?</h2>
+  <p>Our Vizag desk will shortlist sea-facing homes, plots and investments for you.</p>
+  <div class="btns"><a class="btn btn--light" href="contact.html">Contact Us for Visakhapatnam Properties</a></div>
+</div></div></section>
+
+<div data-gh-footer></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/maps.js"></script>
+<script>
+window.GHR_PAGE_INIT=function(){
+  const I=window.GHR.ICON;
+  const svc=[
+    ['home','Residential buying support','Find the right home in Vizag by budget, locality and lifestyle &mdash; from Madhurawada and Yendada to MVP Colony and Beach Road &mdash; with honest pricing guidance.'],
+    ['building','Apartment projects','Curated access to the city&rsquo;s gated high-rise communities, with floor plans, pricing and availability compared side by side.'],
+    ['home','Villa projects','Independent and gated villas across the hill and coastal pockets, matched to your space, privacy and budget needs.'],
+    ['area','Plot &amp; land opportunities','VUDA-approved plots and land in the growth corridors toward Bhogapuram and Anandapuram, with clear titles verified up front.'],
+    ['chart','Investment property guidance','Yield and appreciation analysis on Vizag&rsquo;s fastest-moving localities, so you buy where the returns actually are.'],
+    ['handshake','Builder / project coordination','We deal directly with developers on your behalf &mdash; bookings, allocations, documentation and follow-ups handled for you.'],
+    ['shield','End-to-end property assistance','One team from first site visit through negotiation, paperwork and registration &mdash; nothing left for you to chase.'],
+    ['spark','Pre-construction access','Early allocations and launch-day pricing on new Vizag projects before they reach public listings.'],
+  ];
+  document.getElementById('vskpSvc').innerHTML=svc.map(s=>`
+    <article class="card anim-up"><div class="ic">${I[s[0]]}</div><h3 style="font-size:1.05rem">${s[1]}</h3><p>${s[2]}</p></article>`).join('');
+  window.GHR.initCityMap({mapId:'map-vskp',center:[17.78,83.34],city:'Visakhapatnam',devListId:'vskpDevList',devFiltersId:'vskpDevFilters',devEmptyId:'vskpDevEmpty'});
+  window.dispatchEvent(new Event('scroll'));
+};
+</script>
+</body>
+</html>

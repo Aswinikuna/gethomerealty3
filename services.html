@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Services | Get Home Realty</title>
+<meta name="description" content="Buying, selling, leasing, investment, commercial and pre-construction real estate services from Get Home Realty, with dedicated coverage in Hyderabad and Visakhapatnam.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="services.html">
+<div data-gh-header></div>
+
+<section class="hero hero--compact hero--page">
+  <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80')"></div>
+  <div class="wrap hero-inner">
+    <nav class="breadcrumb"><a href="index.html">Home</a><span>/</span>Services</nav>
+    <h1 class="h1">Real estate services, complete and connected</h1>
+    <p class="lead">Everything you need to buy, sell, lease, invest or build &mdash; backed by one accountable team across Canada, Hyderabad and Visakhapatnam.</p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="section-head center" style="margin-bottom:1.8rem"><p class="eyebrow" style="justify-content:center">What We Offer</p>
+      <h2 class="h2">Every service, one accountable team</h2></div>
+    <div class="grid cols-3" id="svcGrid"></div>
+  </div>
+</section>
+
+<section class="section section--mist"><div class="wrap">
+  <div class="section-head center"><p class="eyebrow" style="justify-content:center">By City</p>
+    <h2 class="h2">Dedicated local desks</h2></div>
+  <div class="grid cols-2">
+    <div class="card card--accent svc-city">
+      <div class="svc-city-img" style="background-image:url('https://gamya.in/wp-content/uploads/2024/02/Club-North-West-View-1-1.jpg')"></div>
+      <div class="ic" data-ic="pin"></div>
+      <h3>Hyderabad Real Estate Services</h3>
+      <p>Explore residential homes, apartments, villas, plots and investment opportunities across Hyderabad.</p>
+      <div class="prop-actions" style="border:0;padding-top:1.2rem"><a class="btn btn--sm" href="hyderabad.html">View Hyderabad Properties</a></div></div>
+    <div class="card card--accent svc-city">
+      <div class="svc-city-img" style="background-image:url('https://mkone.in/wp-content/uploads/2022/04/2800-MK-One_Image_1-02.jpg')"></div>
+      <div class="ic" data-ic="pin"></div>
+      <h3>Visakhapatnam Real Estate Services</h3>
+      <p>Explore residential homes, apartments, villas, plots and investment opportunities across Visakhapatnam.</p>
+      <div class="prop-actions" style="border:0;padding-top:1.2rem"><a class="btn btn--sm" href="visakhapatnam.html">View Visakhapatnam Properties</a></div></div>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap"><div class="cta-band">
+  <h2 class="h2">Not sure which service you need?</h2>
+  <p>Tell us your goal and we&rsquo;ll point you to the right team.</p>
+  <div class="btns"><a class="btn btn--light" href="contact.html">Talk to an Advisor</a></div>
+</div></div></section>
+
+<div data-gh-footer></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+window.GHR_PAGE_INIT=function(){
+  const I=window.GHR.ICON;
+  document.querySelectorAll('[data-ic]').forEach(e=>e.innerHTML=I[e.dataset.ic]);
+  const svc=[
+    ['home','Residential Buying','Helping buyers find the right home based on location, budget, lifestyle and long-term value.','buyers.html','For Buyers'],
+    ['tag','Residential Selling','Helping sellers price, market, negotiate and sell their property with professional support.','sellers.html','Sell With Us'],
+    ['key','Residential Lease','Helping landlords and tenants with leasing, documentation, showings and smooth move-in support.','contact.html','Enquire Now'],
+    ['building','Commercial Buying','Helping clients purchase commercial properties for business or investment purposes.','contact.html','Enquire Now'],
+    ['building','Commercial Lease','Helping businesses find suitable commercial spaces for lease.','contact.html','Enquire Now'],
+    ['chart','Investment Properties','Helping investors identify strong opportunities based on location, rental potential and future growth.','investors.html','For Investors'],
+    ['pin','Hyderabad Real Estate Services','Helping clients explore homes, apartments, villas, plots and investment opportunities in Hyderabad.','hyderabad.html','View Hyderabad Properties'],
+    ['pin','Visakhapatnam Real Estate Services','Helping clients explore homes, apartments, villas, plots and investment opportunities in Visakhapatnam.','visakhapatnam.html','View Visakhapatnam Properties'],
+  ];
+  document.getElementById('svcGrid').innerHTML=svc.map(s=>`
+    <article class="card anim-up"><div class="ic">${I[s[0]]}</div><h3>${s[1]}</h3><p>${s[2]}</p>
+      <a class="card-link" href="${s[3]}">${s[4]} ${I.arrow}</a></article>`).join('');
+  window.dispatchEvent(new Event('scroll'));
+};
+</script>
+</body>
+</html>

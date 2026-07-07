@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Property Details | Get Home Realty</title>
+<meta name="description" content="View full details, features, amenities and location for this Get Home Realty listing, and schedule a showing or request a brochure.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="properties.html">
+<div data-gh-header></div>
+
+<section class="section section--tight" style="padding-top:calc(var(--header-h) - 40px)">
+  <div class="wrap">
+    <nav class="breadcrumb" style="color:var(--slate)"><a href="index.html" style="color:var(--slate)">Home</a><span>/</span><span id="bcName">Property</span></nav>
+    <div class="gallery" id="gallery" style="margin-top:1rem"></div>
+  </div>
+</section>
+
+<section class="section section--tight"><div class="wrap detail-grid">
+  <!-- main -->
+  <div>
+    <span class="pill" id="dStatus">Available</span>
+    <h1 class="h1" id="dName" style="margin:.6rem 0 .4rem">Property</h1>
+    <p class="prop-addr" id="dAddr" style="font-size:1rem"></p>
+
+    <div class="spec-grid" id="dSpecs"></div>
+
+    <h2 class="h3" style="margin-bottom:.6rem">Description</h2>
+    <p class="muted" id="dDesc"></p>
+
+    <h2 class="h3" style="margin:2rem 0 .9rem">Key features</h2>
+    <ul class="feature-list" id="dFeatures"></ul>
+
+    <h2 class="h3" style="margin:2rem 0 .9rem">Amenities</h2>
+    <ul class="feature-list" id="dAmenities"></ul>
+
+    <h2 class="h3" style="margin:2rem 0 .9rem">Location</h2>
+    <div class="map-frame" style="height:340px;position:relative"><div id="map-office" style="width:100%;height:100%"></div></div>
+  </div>
+
+  <!-- sidebar -->
+  <aside class="detail-side">
+    <div class="prop-price" id="dPrice" style="font-size:1.8rem"></div>
+    <p class="muted" id="dType" style="margin:.2rem 0 1.2rem"></p>
+    <a class="btn btn--block" href="#showing" id="scheduleBtn">Schedule a Showing</a>
+    <a class="btn btn--ghost btn--block" href="#" id="brochureBtn" style="margin-top:.6rem">Download Brochure</a>
+    <hr style="border:0;border-top:1px solid var(--line);margin:1.4rem 0">
+    <h3 class="h3" id="showing" style="font-size:1.15rem;margin-bottom:1rem">Request details</h3>
+    <form class="gh-form">
+      <div class="form-success">Thanks — an advisor will reach out to arrange your showing.</div>
+      <div class="field"><label>Name <span class="req">*</span></label><input class="input" type="text" required><span class="err-msg">Required.</span></div>
+      <div class="field"><label>Phone <span class="req">*</span></label><input class="input" type="tel" required><span class="err-msg">Enter a valid phone.</span></div>
+      <div class="field"><label>Email <span class="req">*</span></label><input class="input" type="email" required><span class="err-msg">Enter a valid email.</span></div>
+      <div class="field"><label>Message</label><textarea class="textarea" placeholder="I'd like to view this property…"></textarea></div>
+      <button class="btn btn--block" type="submit">Send Inquiry</button>
+    </form>
+  </aside>
+</div></section>
+
+<section class="section section--mist"><div class="wrap">
+  <div class="section-head"><p class="eyebrow">You may also like</p><h2 class="h2">Similar properties</h2></div>
+  <div class="grid cols-3" id="similar"></div>
+</div></section>
+
+<div data-gh-footer></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+window.GHR_PAGE_INIT=function(){
+  const I=window.GHR.ICON, all=window.GHR.GHR_PROPERTIES;
+  const id=new URLSearchParams(location.search).get('id');
+  const p=all.find(x=>x.id===id)||all[0];
+  const img=window.GHR.imgFor(p);
+
+  document.title=p.name+' | Get Home Realty';
+  document.getElementById('bcName').textContent=p.name;
+  document.getElementById('dName').textContent=p.name;
+  document.getElementById('dAddr').innerHTML=`${I.pin}<span>${p.area}, ${p.city}</span>`;
+  document.getElementById('dPrice').textContent=p.priceLabel;
+  document.getElementById('dType').textContent=p.type+' · '+p.deal;
+  document.getElementById('dDesc').textContent=p.desc+' This property is presented by Get Home Realty with full documentation support and transparent guidance from offer to registration.';
+  const st=document.getElementById('dStatus');st.textContent=p.status==='sold'?'Sold':'Available';
+  if(p.status==='sold')st.style.cssText='background:var(--slate);color:#fff';
+
+  // gallery
+  const angles=['','&sat=-20','&flip=h','&blur=0'];
+  document.getElementById('gallery').innerHTML=
+    `<div class="g main" style="background-image:url('${img}')"></div>`+
+    [1,2,3,4].map(i=>`<div class="g" style="background-image:url('${img}&v=${i}')"></div>`).join('');
+
+  // specs
+  const specs=[['Price',p.priceLabel],['Type',p.type],['Bedrooms',p.beds||'—'],
+    ['Bathrooms',p.baths||'—'],['Parking',p.parking||'—'],['Size',p.size]];
+  document.getElementById('dSpecs').innerHTML=specs.map(s=>`<div class="s"><small>${s[0]}</small><b>${s[1]}</b></div>`).join('');
+
+  const feats=['Premium quality construction','Vaastu-compliant layout','Power backup','24×7 security &amp; CCTV','Covered car parking','Rainwater harvesting'];
+  document.getElementById('dFeatures').innerHTML=feats.map(f=>`<li>${I.check}${f}</li>`).join('');
+  const amen=['Clubhouse','Swimming pool','Gymnasium','Children&rsquo;s play area','Landscaped gardens','Indoor games'];
+  document.getElementById('dAmenities').innerHTML=amen.map(a=>`<li>${I.check}${a}</li>`).join('');
+
+  // brochure (generated data file)
+  const brochure='data:text/plain;charset=utf-8,'+encodeURIComponent(
+    `GET HOME REALTY — ${p.name}\n${p.area}, ${p.city}\nPrice: ${p.priceLabel}\nType: ${p.type}\nBeds ${p.beds} · Baths ${p.baths} · Parking ${p.parking} · ${p.size}\n\n${p.desc}\n\nContact: hello@gethomerealty.com · +91 98765 43210`);
+  const b=document.getElementById('brochureBtn');b.setAttribute('href',brochure);b.setAttribute('download',p.id+'-brochure.txt');
+
+  // map
+  if(typeof L!=='undefined'){
+    const map=L.map('map-office',{scrollWheelZoom:false}).setView([p.lat,p.lng],14);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
+    L.marker([p.lat,p.lng],{icon:L.divIcon({className:'gh-marker',html:`<svg width="30" height="40" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.3 0 11.9 0 20.8 12 32 12 32s12-11.2 12-20.1C24 5.3 18.6 0 12 0z" fill="#C8102E"/><circle cx="12" cy="11.6" r="4.4" fill="#fff"/></svg>`,iconSize:[30,40],iconAnchor:[15,40]})}).addTo(map);
+  }
+
+  // similar
+  const sim=all.filter(x=>x.city===p.city&&x.id!==p.id).slice(0,3);
+  document.getElementById('similar').innerHTML=sim.map(window.GHR.propCard).join('');
+  window.dispatchEvent(new Event('scroll'));
+};
+</script>
+</body>
+</html>

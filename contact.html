@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact | Get Home Realty</title>
+<meta name="description" content="Contact Get Home Realty — call, email or visit our office. Tell us about your buying, selling, leasing, pre-construction or brokerage goals and we'll be in touch within one business day.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="contact.html">
+<div data-gh-header></div>
+
+<section class="hero hero--compact hero--page">
+  <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80')"></div>
+  <div class="wrap hero-inner">
+    <nav class="breadcrumb"><a href="index.html">Home</a><span>/</span>Contact</nav>
+    <h1 class="h1">Let&rsquo;s discuss your real estate goals</h1>
+    <p class="lead">Buying, selling, investing, leasing or joining the team &mdash; reach out and an advisor will get back to you within one business day.</p>
+  </div>
+</section>
+
+<section class="section"><div class="wrap">
+  <div class="split" style="align-items:start">
+    <div>
+      <p class="eyebrow">Get In Touch</p>
+      <h2 class="h2">Contact information</h2>
+      <div class="info-list" style="margin-top:1.4rem">
+        <div class="info-row"><div class="ic" data-ic="phone"></div><div><h4>Phone</h4><a id="cPhone" href="#">&nbsp;</a></div></div>
+        <div class="info-row"><div class="ic" data-ic="mail"></div><div><h4>Email</h4><a id="cMail" href="#">&nbsp;</a></div></div>
+        <div class="info-row"><div class="ic" data-ic="pin"></div><div><h4>Office address</h4><p id="cAddr">&nbsp;</p></div></div>
+        <div class="info-row"><div class="ic" data-ic="clock"></div><div><h4>Business hours</h4><p>Mon&ndash;Sat: 9:30 AM &ndash; 7:00 PM<br>Sunday: By appointment</p></div></div>
+        <div class="info-row"><div class="ic" data-ic="whatsapp"></div><div><h4>WhatsApp</h4><a id="cWa" href="#" target="_blank" rel="noopener">Chat with us</a></div></div>
+      </div>
+      <div class="info-social" id="cSocial" style="margin-top:1.6rem"></div>
+    </div>
+
+    <div class="form-card">
+      <form class="gh-form">
+        <div class="form-success">Thank you &mdash; your message has been received. A Get Home Realty advisor will contact you shortly.</div>
+        <div class="field-row">
+          <div class="field"><label>Name <span class="req">*</span></label><input class="input" type="text" required placeholder="Your full name"><span class="err-msg">Please enter your name.</span></div>
+          <div class="field"><label>Phone <span class="req">*</span></label><input class="input" type="tel" required placeholder="+91 9XXXXXXXXX"><span class="err-msg">Enter a valid phone number.</span></div>
+        </div>
+        <div class="field"><label>Email <span class="req">*</span></label><input class="input" type="email" required placeholder="you@example.com"><span class="err-msg">Enter a valid email.</span></div>
+        <div class="field"><label>I am interested in <span class="req">*</span></label>
+          <select class="select" required>
+            <option value="">Select an option</option>
+            <option>Buying</option><option>Selling</option><option>Leasing</option>
+            <option>Pre-Construction</option><option>Hyderabad</option><option>Visakhapatnam</option>
+            <option>Join Brokerage</option><option>General Inquiry</option>
+          </select><span class="err-msg">Please choose an option.</span></div>
+        <div class="field"><label>Message</label><textarea class="textarea" placeholder="How can we help?"></textarea></div>
+        <button class="btn btn--block" type="submit">Contact Us Today</button>
+      </form>
+    </div>
+  </div>
+</div></section>
+
+<section class="section section--tight"><div class="wrap">
+  <div class="section-head"><p class="eyebrow">Find Us</p><h2 class="h2">Our office</h2></div>
+  <div class="map-frame" style="height:420px;position:relative"><div id="map-office" style="width:100%;height:100%"></div></div>
+</div></section>
+
+<section class="section"><div class="wrap"><div class="cta-band">
+  <h2 class="h2">Ready when you are</h2>
+  <p>Whether you&rsquo;re just exploring or ready to move, we&rsquo;re here to help.</p>
+  <div class="btns"><a class="btn btn--light" id="ctaCall" href="#">Call Us Now</a></div>
+</div></div></section>
+
+<div data-gh-footer></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+window.GHR_PAGE_INIT=function(){
+  const I=window.GHR.ICON, C=window.GHR_CONFIG;
+  document.querySelectorAll('[data-ic]').forEach(e=>e.innerHTML=I[e.dataset.ic]);
+  if(C){
+    const ph=document.getElementById('cPhone'); ph.textContent=C.phone; ph.href='tel:'+C.phone.replace(/\s/g,'');
+    const ml=document.getElementById('cMail'); ml.textContent=C.email; ml.href='mailto:'+C.email;
+    document.getElementById('cAddr').textContent=C.addr;
+    document.getElementById('cWa').href=C.whatsapp;
+    const cc=document.getElementById('ctaCall'); cc.textContent='Call '+C.phone; cc.href='tel:'+C.phone.replace(/\s/g,'');
+  }
+  const S=window.GHR.SOCIAL;
+  document.getElementById('cSocial').innerHTML=['fb','ig','in','yt','x'].map(k=>`<a href="#" aria-label="${k}">${S[k]}</a>`).join('');
+  if(window.L){
+    const lat=17.4239, lng=78.4111;
+    const map=L.map('map-office',{scrollWheelZoom:false}).setView([lat,lng],14);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
+    L.marker([lat,lng],{icon:L.divIcon({className:'gh-marker',html:`<svg width="30" height="40" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.3 0 11.9 0 20.8 12 32 12 32s12-11.2 12-20.1C24 5.3 18.6 0 12 0z" fill="#C8102E"/><circle cx="12" cy="11.6" r="4.4" fill="#fff"/></svg>`,iconSize:[30,40],iconAnchor:[15,40]})}).addTo(map)
+      .bindPopup('<b>Get Home Realty</b><br>Jubilee Hills, Hyderabad');
+  }
+  window.dispatchEvent(new Event('scroll'));
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join Our Brokerage | Get Home Realty</title>
+<meta name="description" content="Grow your real estate career with Get Home Realty — training, mentorship, documentation support, in-house marketing, pre-construction access and a strong agent support system.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="join.html">
+<div data-gh-header></div>
+
+<section class="hero hero--compact hero--page">
+  <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1920&q=80')"></div>
+  <div class="wrap hero-inner">
+    <nav class="breadcrumb"><a href="index.html">Home</a><span>/</span>Join Our Brokerage</nav>
+    <h1 class="h1">Join Get Home Realty</h1>
+    <p class="lead">Grow your real estate career with training, support, marketing, documentation guidance and a strong brokerage system behind every deal.</p>
+    <div class="hero-ctas"><a class="btn" href="#apply">Apply Now</a><a class="btn btn--outline-light" href="#benefits">See Benefits</a></div>
+  </div>
+</section>
+
+<section class="section"><div class="wrap">
+  <div class="split">
+    <div class="split-media tall" style="background-image:url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1000&q=80')"></div>
+    <div>
+      <p class="eyebrow">Why Join</p>
+      <h2 class="h2">A brokerage built to grow you</h2>
+      <p class="muted" style="margin:1rem 0 1.5rem">Whether you&rsquo;re newly licensed or an established agent, you get the systems, mentorship and lead support to build a real career.</p>
+      <ul class="ticks">
+        <li><span class="tk" data-tk></span><span>Training and mentorship from experienced professionals</span></li>
+        <li><span class="tk" data-tk></span><span>Documentation and compliance support</span></li>
+        <li><span class="tk" data-tk></span><span>In-house marketing support</span></li>
+        <li><span class="tk" data-tk></span><span>Pre-construction project access</span></li>
+        <li><span class="tk" data-tk></span><span>A dedicated agent support system</span></li>
+        <li><span class="tk" data-tk></span><span>Clear path for professional growth</span></li>
+        <li><span class="tk" data-tk></span><span>A collaborative team environment</span></li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section class="section section--mist" id="benefits"><div class="wrap">
+  <div class="section-head center"><p class="eyebrow" style="justify-content:center">Brokerage Benefits</p>
+    <h2 class="h2">Everything you need to close more</h2></div>
+  <div class="grid cols-3" id="benefitGrid"></div>
+</div></section>
+
+<section class="section" id="apply"><div class="wrap">
+  <div class="form-card form-card--wide">
+    <div class="section-head center" style="margin-bottom:1.6rem"><p class="eyebrow" style="justify-content:center">Agent Application</p>
+      <h2 class="h2">Apply to join our team</h2></div>
+    <form class="gh-form">
+      <div class="form-success">Thank you &mdash; your application has been received. Our team will reach out to discuss next steps.</div>
+      <div class="field-row">
+        <div class="field"><label>Name <span class="req">*</span></label><input class="input" type="text" required placeholder="Your full name"><span class="err-msg">Please enter your name.</span></div>
+        <div class="field"><label>Phone <span class="req">*</span></label><input class="input" type="tel" required placeholder="+91 9XXXXXXXXX"><span class="err-msg">Enter a valid phone number.</span></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Email <span class="req">*</span></label><input class="input" type="email" required placeholder="you@example.com"><span class="err-msg">Enter a valid email.</span></div>
+        <div class="field"><label>Are you licensed? <span class="req">*</span></label>
+          <select class="select" required><option value="">Select</option><option>Yes, licensed</option><option>In progress</option><option>Not yet</option></select><span class="err-msg">Please choose an option.</span></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Years of experience</label>
+          <select class="select"><option value="">Select</option><option>New to the industry</option><option>1–3 years</option><option>3–5 years</option><option>5+ years</option></select></div>
+        <div class="field"><label>Service area</label>
+          <select class="select"><option value="">Select</option><option>Hyderabad</option><option>Visakhapatnam</option><option>Canada</option><option>Other</option></select></div>
+      </div>
+      <div class="field"><label>Message</label><textarea class="textarea" placeholder="Tell us about yourself and your goals…"></textarea></div>
+      <div class="field"><label>Upload resume</label>
+        <label class="upload" for="resume" id="uploadLbl">Click to attach your resume (PDF, DOC &mdash; optional)</label>
+        <input id="resume" type="file" accept=".pdf,.doc,.docx" style="display:none"></div>
+      <button class="btn btn--block" type="submit">Apply to Join Get Home Realty</button>
+    </form>
+  </div>
+</div></section>
+
+<section class="section section--tight"><div class="wrap"><div class="cta-band">
+  <h2 class="h2">Build your career with us</h2>
+  <p>Have questions before applying? Our team is happy to talk through the opportunity.</p>
+  <div class="btns"><a class="btn btn--light" href="contact.html">Talk to Our Team</a></div>
+</div></div></section>
+
+<div data-gh-footer></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+window.GHR_PAGE_INIT=function(){
+  const I=window.GHR.ICON;
+  document.querySelectorAll('[data-tk]').forEach(e=>e.innerHTML=I.check);
+  const benefits=[
+    ['doc','Documentation &amp; compliance support','Agreements, RERA paperwork, registration and KYC handled with expert help, so deals close clean and you&rsquo;re never stuck on a technicality.'],
+    ['users','Dedicated agent support group','A responsive in-house team backing you on pricing, negotiation and every client query &mdash; you&rsquo;re never working a deal alone.'],
+    ['megaphone','In-house marketing support','Listing creatives, social campaigns, property shoots and branded collateral produced for you, so your listings stand out without you paying for design.'],
+    ['spark','Pre-construction project access','Bring VIP launches, early allocations and builder inventory to your clients before it hits the public market &mdash; a real edge on conversion.'],
+    ['trophy','Training &amp; mentorship','Ongoing skill-building, market briefings and one-on-one mentorship from experienced professionals, with a clear path for your professional growth.'],
+    ['chart','Lead generation &amp; systems','Qualified leads plus the CRM and follow-up systems to work them, so you spend your time closing instead of cold-chasing.'],
+  ];
+  document.getElementById('benefitGrid').innerHTML=benefits.map(b=>`
+    <article class="card anim-up"><div class="ic">${I[b[0]]}</div><h3>${b[1]}</h3><p>${b[2]}</p></article>`).join('');
+  const fileInput=document.getElementById('resume'), lbl=document.getElementById('uploadLbl');
+  if(fileInput){fileInput.addEventListener('change',()=>{lbl.textContent=fileInput.files.length?fileInput.files[0].name:'Click to attach your resume (PDF, DOC — optional)';});}
+  window.dispatchEvent(new Event('scroll'));
+};
+</script>
+</body>
+</html>

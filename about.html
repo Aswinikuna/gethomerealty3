@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About Us | Get Home Realty</title>
+<meta name="description" content="Get Home Realty is a professional real estate brokerage helping clients buy, sell, lease, invest and access pre-construction across Canada, Hyderabad and Visakhapatnam.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="about.html">
+<div data-gh-header></div>
+
+<section class="hero hero--compact hero--page">
+  <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80')"></div>
+  <div class="wrap hero-inner">
+    <nav class="breadcrumb"><a href="index.html">Home</a><span>/</span>About Us</nav>
+    <h1 class="h1">A real estate partner built on trust</h1>
+    <p class="lead">Guiding clients across Canada, Hyderabad and Visakhapatnam through every property decision with clarity and care.</p>
+  </div>
+</section>
+
+<!-- WHO WE ARE -->
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Who We Are</p>
+      <h2 class="h2">A professional brokerage, end to end</h2>
+      <p class="lead" style="margin-top:1rem">Get Home Realty is a professional real estate brokerage helping clients with buying, selling, leasing, investing, pre-construction and complete property services. We pair local market knowledge with a disciplined, transparent process &mdash; so whether you&rsquo;re a first-time buyer, a seller, an investor, a landlord, a tenant or a pre-construction client, you always know your next step.</p>
+      <p style="margin-top:1rem;color:var(--slate)">Our advisors work across three regions, bringing international standards of service to fast-growing markets in Hyderabad and Visakhapatnam.</p>
+    </div>
+    <div class="split-media tall" style="background-image:url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=900&q=80')"></div>
+  </div>
+</section>
+
+<!-- MISSION / VISION -->
+<section class="section section--mist">
+  <div class="wrap grid cols-2">
+    <div class="card card--accent anim-up"><div class="ic" data-ic="trophy"></div>
+      <h3>Our Mission</h3>
+      <p>To earn trust through transparency. We put client success first &mdash; combining deep market knowledge with honest guidance and complete, end-to-end real estate support at every stage of the journey.</p></div>
+    <div class="card card--accent anim-up"><div class="ic" data-ic="globe"></div>
+      <h3>Our Vision</h3>
+      <p>To become a trusted real estate brand for clients across Canada, Hyderabad and Visakhapatnam &mdash; recognised for service, integrity and results that genuinely change lives.</p></div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head center"><p class="eyebrow" style="justify-content:center">Why Choose Us</p>
+      <h2 class="h2">Seven reasons clients stay with us</h2></div>
+    <div class="grid cols-3" id="whyGrid"></div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section section--mist">
+  <div class="wrap">
+    <div class="section-head center"><p class="eyebrow" style="justify-content:center">Our Team</p>
+      <h2 class="h2">Meet your advisors</h2></div>
+    <div class="grid cols-4" id="teamGrid"></div>
+  </div>
+</section>
+
+<section class="section"><div class="wrap"><div class="cta-band">
+  <h2 class="h2">Let&rsquo;s find your next opportunity</h2>
+  <p>Whatever your goal &mdash; buying, selling, investing or joining us &mdash; our team is ready.</p>
+  <div class="btns"><a class="btn btn--light" href="contact.html">Contact Get Home Realty</a></div>
+</div></div></section>
+
+<div data-gh-footer></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+window.GHR_PAGE_INIT=function(){
+  const I=window.GHR.ICON;
+  document.querySelectorAll('[data-ic]').forEach(e=>e.innerHTML=I[e.dataset.ic]);
+  const why=[
+    ['shield','Experienced Real Estate Guidance','We provide professional support for buying, selling, leasing, pre-construction, and commercial real estate.'],
+    ['handshake','Strong Brokerage Support','Our team supports clients and agents with proper guidance, documentation, follow-ups, and transaction assistance.'],
+    ['pin','Local Market Knowledge','We understand GTA neighborhoods, pricing trends, property types, and client requirements.'],
+    ['users','End-to-End Service','From first consultation to closing, we guide clients through every important step of the real estate process.'],
+    ['megaphone','Marketing &amp; Listing Exposure','We help properties gain attention through professional marketing, listing strategies, and online exposure.'],
+    ['trophy','Training &amp; Mentorship for Agents','Our brokerage provides training, mentorship, marketing help, and documentation support to help agents grow.'],
+    ['spark','Trust, Transparency &amp; Professionalism','We focus on honest communication, organized processes, and a client-first approach.'],
+  ];
+  document.getElementById('whyGrid').innerHTML=why.map(w=>`
+    <article class="card anim-up"><div class="ic">${I[w[0]]}</div><h3>${w[1]}</h3><p>${w[2]}</p></article>`).join('');
+
+  // Advisors. Jay Patel is a real Get Home Realty (GTA) sales representative;
+  // the others are placeholder cards — replace name/role/photo/contact as the
+  // brokerage roster is confirmed.
+  const team=[
+    ['Jay Patel','Sales Representative','Mississauga, GTA','jay','Guides buyers and sellers through every step of the transaction, with a focus on market trends and securing the best deal.'],
+    ['Advisor Name','Sales Representative','Greater Toronto Area','advisor2','Short advisor profile goes here — add bio once confirmed.'],
+    ['Advisor Name','Buyer Specialist','Greater Toronto Area','advisor3','Short advisor profile goes here — add bio once confirmed.'],
+    ['Advisor Name','Leasing &amp; Rentals','Greater Toronto Area','advisor4','Short advisor profile goes here — add bio once confirmed.'],
+  ];
+  const photos=['1560250097-0b93528c311a','1573496359142-b8d87734a5a2','1507003211169-0a1dd7228f2d','1494790108377-be9c29b29330'];
+  document.getElementById('teamGrid').innerHTML=team.map((m,i)=>`
+    <article class="agent anim-up">
+      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-${photos[i]}?auto=format&fit=crop&w=500&q=70')"></div>
+      <div class="agent-body"><h3>${m[0]}</h3><div class="pos">${m[1]}</div>
+        ${m[4]?`<p class="agent-bio">${m[4]}</p>`:''}
+        <div class="agent-meta">
+          <div>${I.pin}${m[2]}</div>
+          <div>${I.mail}${m[3]}@gethomerealty.ca</div>
+        </div>
+        <a class="btn btn--sm btn--block" href="contact.html">Contact Advisor</a></div>
+    </article>`).join('');
+  window.dispatchEvent(new Event('scroll'));
+};
+</script>
+</body>
+</html>

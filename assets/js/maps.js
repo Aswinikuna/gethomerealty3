@@ -21,6 +21,76 @@
     if(d.rateLow<8000) return '5to8';
     return 'gt8';
   }
+  /* ---------------------------------------------------------------
+     Project features — location, built-up area, configuration,
+     property type, project status and completion.
+     Values come only from the record itself or its GHR_DETAILS entry;
+     anything we don't actually have is shown as "On request".
+     ---------------------------------------------------------------- */
+  const NA='On request';
+  function detFact(d,re){
+    const x=detailFor(d); if(!x||!x.facts) return '';
+    const hit=x.facts.find(f=>re.test(f[0]));
+    return hit?String(hit[1]):'';
+  }
+  const DATED=/(?:Q[1-4]\s*)?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s*\d{4}|(?:Q[1-4][\s-]*)?\b(?:19|20)\d{2}\b/i;
+  // `status` mixes state and handover date ("Possession Nov 2027",
+  // "60% complete · Dec 2025"). Split the two — never invent a date.
+  function progress(d){
+    const raw=(d.status&&d.status!=='\u2014')?String(d.status).trim():'';
+    let status='',done='';
+    if(/ready to move/i.test(raw)){ status='Ready to move'; done='Completed'; }
+    else if(/^complet/i.test(raw)){ status='Completed'; done=(raw.match(DATED)||[''])[0]; }
+    else if(raw){
+      const parts=raw.split('\u00b7').map(p=>p.trim()).filter(Boolean);
+      const plain=parts.filter(p=>!DATED.test(p));
+      const dated=parts.filter(p=>DATED.test(p));
+      if(plain.length) status=plain.join(' \u00b7 ');
+      if(dated.length) done=dated.map(p=>p.replace(/^(possession|handover|completion)\s*(by|in|on)?\s*/i,'')).join(' \u00b7 ');
+      if(!status) status='Under construction';
+    }
+    if(!done) done=detFact(d,/possession|completion|handover/i);
+    if(!status&&done) status='Under construction';
+    return {status:status||NA, completion:done||NA};
+  }
+  function typeOf(d){ return d.kind || detFact(d,/^type$/i) || NA; }
+  function configOf(d){
+    if(d.config) return d.config;
+    const f=detFact(d,/^config/i); if(f) return f;
+    const x=detailFor(d);
+    if(x&&x.unitRows){
+      const c=[...new Set(x.unitRows.map(r=>r[0]).filter(v=>/bhk|villa/i.test(v)))];
+      if(c.length) return c.join(' \u00b7 ');
+    }
+    return NA;
+  }
+  // sizes on the record; else the builder's own saleable / built-up figures
+  function builtUp(d){
+    if(d.sizes&&d.sizes!=='\u2014'&&d.sizes!==NA) return d.sizes;
+    const f=detFact(d,/saleable|built-?up|villa sizes|^sizes?$/i); if(f) return f;
+    const x=detailFor(d);
+    if(x&&x.unitHead&&x.unitRows){
+      const i=x.unitHead.findIndex(h=>/size|saleable|built/i.test(h));
+      if(i>=0){
+        const v=[...new Set(x.unitRows.map(r=>r[i]).filter(Boolean))];
+        if(v.length) return v.slice(0,3).join(' \u00b7 ')+(v.length>3?' \u2026':'');
+      }
+    }
+    return NA;
+  }
+  // [label, value, icon] — the six features, in a fixed order on every project.
+  function featuresOf(d){
+    const p=progress(d);
+    return [
+      ['Location', d.area+(d.city?', '+d.city:''), ICON.pin],
+      ['Built-up area', builtUp(d), ICON.area],
+      ['Configuration', configOf(d), ICON.bed],
+      ['Property type', typeOf(d), ICON.home],
+      ['Project status', p.status, ICON.shield],
+      ['Completion', p.completion, ICON.clock]
+    ];
+  }
+
   // --- Representative imagery -------------------------------------------------
   // Real builder photos always win. When a project has no official image, we show
   // a relevant, attractive photo (apartment tower / villa / plot, coastal for Vizag)
@@ -86,38 +156,44 @@
   }
   function devPopupHtml(d){
     const GHR_TEL='+919963206933';
+    const p=progress(d), ty=typeOf(d), cfg=configOf(d);
+    const line2=[ty!==NA?ty:'', (d.scale&&d.scale!=='\u2014')?d.scale:''].filter(Boolean).join(' \u00b7 ');
+    const tags=[];
+    if(p.status!==NA) tags.push(`<span class="pop-tag">${p.status}</span>`);
+    if(p.completion!==NA) tags.push(`<span class="pop-tag pop-tag--soft">${p.completion}</span>`);
     return `<div class="gh-pop gh-pop--dev">
       <div class="pop-img" style="background-image:${bgForDev(d)}"></div>
       <div class="pop-b">
         <div class="pop-kicker">${d.developer}</div>
         <h4>${d.name}</h4>
-        <div class="pop-rate">${d.rate}</div>
-        <div class="pop-meta">${ICON.pin}<b>${d.area}</b>${d.config?` · ${d.config}`:''} · ${d.sizes}</div>
-        ${d.scale && d.scale!=='—' ? `<div class="pop-scale">${d.scale}</div>` : ''}
-        ${d.status && d.status!=='—' ? `<div class="pop-tagrow"><span class="pop-tag">${d.status}</span>${d.exp&&d.exp!=='—'?`<span class="pop-tag pop-tag--soft">${d.exp} exp.</span>`:''}</div>` : ''}
+        <div class="pop-meta">${ICON.pin}<b>${d.area}</b>${cfg!==NA?` · ${cfg}`:''} · ${builtUp(d)}</div>
+        ${line2?`<div class="pop-scale">${line2}</div>`:''}
+        ${tags.length?`<div class="pop-tagrow">${tags.join('')}</div>`:''}
         <div class="pop-actions">
           <a class="primary" href="#" onclick="window.GHR.openProjectModalById('${d.id}');return false;">View Details</a>
           <a href="tel:${GHR_TEL}">Call</a>
         </div>
       </div></div>`;
   }
+  function featCells(items){
+    return items.map(f=>`<div class="dv-feat">${f[2]||''}<div><span>${f[0]}</span><b>${f[1]}</b></div></div>`).join('');
+  }
   function devCard(d){
+    // location already shows above in .dv-meta — the card grid carries the rest
+    const cells=featuresOf(d).slice(1);
+    const st=progress(d).status;
+    if(d.scale&&d.scale!=='\u2014') cells.push(['Project scale',d.scale,ICON.building]);
     return `<div class="dv" data-id="${d.id}" data-area="${d.area}" data-band="${rateBand(d)}">
       <div class="dv-img">
         <div class="dv-img-bg" style="background-image:${bgForDev(d)}"></div>
         ${d.config?`<span class="dv-config">${d.config}</span>`:''}
-        ${d.status && d.status!=='—' ? `<span class="dv-status">${d.status}</span>` : ''}
+        ${st!==NA?`<span class="dv-status">${st}</span>`:''}
       </div>
       <div class="dv-body">
         <div class="dv-dev">${d.developer}</div>
         <h4 class="dv-name">${d.name}</h4>
-        <div class="dv-rate">${d.rate}</div>
         <div class="dv-meta">${ICON.pin}<span>${d.area}</span></div>
-        <div class="dv-specs">
-          <span>${ICON.area}${d.sizes}</span>
-          ${d.scale && d.scale!=='—' ? `<span>${ICON.building}${d.scale}</span>` : ''}
-          ${d.exp && d.exp!=='—' ? `<span>${ICON.shield}${d.exp} experience</span>` : ''}
-        </div>
+        <div class="dv-feats">${featCells(cells)}</div>
         <span class="dv-more">View details ${ICON.arrow}</span>
       </div>
     </div>`;
@@ -135,17 +211,15 @@
     const tags=[];
     if(d.status && d.status!=='—') tags.push(`<span class="pm-tag">${d.status}</span>`);
     if(d.config) tags.push(`<span class="pm-tag pm-tag--soft">${d.config}</span>`);
-    let facts=(x.facts||[]).slice();
-    if(!facts.length){ // fall back to the basic fields we have
-      if(d.area) facts.push(['Locality',d.area]);
-      if(d.config) facts.push(['Configuration',d.config]);
-      if(d.sizes && d.sizes!=='—' && d.sizes!=='On request') facts.push(['Sizes',d.sizes]);
-      if(d.scale && d.scale!=='—') facts.push(['Scale',d.scale]);
-      if(d.rate && d.rate!=='On request') facts.push(['Price',d.rate]);
-    } else if(d.area && !facts.some(f=>/location|locality/i.test(f[0]))){
-      facts.unshift(['Locality',d.area]);
-    }
-    const factsHtml=facts.length?`<div class="pm-facts">${facts.map(f=>`<div class="pm-fact"><span>${f[0]}</span><b>${f[1]}</b></div>`).join('')}</div>`:'';
+    const gridOf=rows=>`<div class="pm-facts">${rows.map(f=>`<div class="pm-fact"><span>${f[0]}</span><b>${f[1]}</b></div>`).join('')}</div>`;
+    // the six standard features, always shown
+    const feats=featuresOf(d).map(f=>[f[0],f[1]]);
+    if(d.scale&&d.scale!=='\u2014') feats.push(['Project scale',d.scale]);
+    if(d.rate&&d.rate!=='\u2014') feats.push(['Price',d.rate]);
+    const featHtml=`<div class="pm-sec"><h4>Project features</h4>${gridOf(feats)}</div>`;
+    // builder-published specifics (RERA, land, structure…) — location lives in the features grid
+    const extra=(x.facts||[]).filter(f=>!/^(locality|location)$/i.test(f[0]));
+    const factsHtml=extra.length?`<div class="pm-sec"><h4>Project details</h4>${gridOf(extra)}</div>`:'';
     let tableHtml='';
     if(x.unitHead && x.unitRows && x.unitRows.length){
       tableHtml=`<div class="pm-sec"><h4>Configurations</h4><div class="pm-tablewrap"><table class="pm-table"><thead><tr>${x.unitHead.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${x.unitRows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
@@ -160,7 +234,6 @@
     const locHtml=(x.location&&x.location.length)?`<div class="pm-sec"><h4>Location highlights</h4><div class="pm-loc">${x.location.map(l=>`<div class="pm-locrow"><span>${l[0]}</span><b>${l[1]}</b></div>`).join('')}</div></div>`:'';
     const specHtml=(x.specs&&x.specs.length)?`<div class="pm-sec"><h4>Specifications</h4><ul class="pm-list">${x.specs.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:'';
     const noteHtml=x.note?`<p class="pm-note">${x.note}</p>`:'';
-    const rate=(d.rate && d.rate!=='On request')?`<div class="pm-rate">${d.rate}</div>`:'';
     const tagline=x.tagline?`<p class="pm-lead">${x.tagline}</p>`:'';
     const callDisp=d.phoneDisp||'';
     const waMsg=encodeURIComponent('Hi, I would like details on '+d.name+' ('+d.area+').');
@@ -180,13 +253,13 @@
         ${dev?`<div class="pm-kicker">${dev}</div>`:''}
         <h3 class="pm-title">${d.name}</h3>
         ${tags.length?`<div class="pm-tags">${tags.join('')}</div>`:''}
-        ${rate}
       </div>
       ${navHtml}
       ${dotsHtml}
     </div>
     <div class="pm-body">
       ${tagline}
+      ${featHtml}
       ${factsHtml}
       ${tableHtml}
       ${clubHtml}

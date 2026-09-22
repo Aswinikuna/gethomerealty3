@@ -12,6 +12,14 @@
     email:'hello@gethomerealty.com',
     whatsapp:'https://wa.me/919876543210',
     addr:'Get Home Realty, Jubilee Hills, Hyderabad, Telangana 500033',
+    // social profiles — add a URL here and the icon appears in the footer
+    social:{
+      yt:'https://www.youtube.com/@gethomerealty7461',
+      ig:'https://www.instagram.com/get_home_realty_india/',
+      fb:'https://www.facebook.com/GetHomeRealty',
+      in:'',
+      x:'',
+    },
   };
   window.GHR_CONFIG = CONFIG;
 
@@ -34,6 +42,14 @@
       <img class="brand-logo brand-logo--header" src="assets/img/ghr-logo-header.png" alt="Get Home Realty — A Tradition of Trust" width="1433" height="440">
       <img class="brand-logo brand-logo--footer" src="assets/img/ghr-logo-footer.png" alt="Get Home Realty — A Tradition of Trust" width="923" height="297">
     </a>`;
+
+  /* Footer social icons: one <a> per configured profile, in this order. */
+  const SOCIAL_ORDER=[['fb','Facebook'],['ig','Instagram'],['in','LinkedIn'],['yt','YouTube'],['x','X']];
+  function socialLinks(){
+    const urls=CONFIG.social||{};
+    return SOCIAL_ORDER.filter(s=>urls[s[0]]).map(s=>
+      `<a href="${urls[s[0]]}" target="_blank" rel="noopener" aria-label="${s[1]}">${SOCIAL[s[0]]}</a>`).join('');
+  }
 
   /* ---------------- HEADER ---------------- */
   function buildHeader(active){
@@ -92,11 +108,7 @@
           ${BRAND}
           <p>A premium real estate brokerage helping buyers, sellers, investors, landlords, tenants and pre-construction clients across Canada, Hyderabad and Visakhapatnam.</p>
           <div class="footer-social" aria-label="Social media">
-            <a href="#" aria-label="Facebook">${SOCIAL.fb}</a>
-            <a href="#" aria-label="Instagram">${SOCIAL.ig}</a>
-            <a href="#" aria-label="LinkedIn">${SOCIAL.in}</a>
-            <a href="#" aria-label="YouTube">${SOCIAL.yt}</a>
-            <a href="#" aria-label="X">${SOCIAL.x}</a>
+            ${socialLinks()}
           </div>
         </div>
         <div class="footer-col"><h4>Quick Links</h4><ul>${quick}</ul></div>

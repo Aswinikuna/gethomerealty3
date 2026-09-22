@@ -368,6 +368,12 @@ ul{margin:0;padding:0;list-style:none}
 .agent:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:transparent}
 .agent .photo{aspect-ratio:1/1;background:var(--mist-2) center/cover;transition:transform .45s ease}
 .agent:hover .photo{transform:scale(1.06)}
+/* advisor without a photograph yet — initials on the brand gradient */
+.agent .photo--initials{display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--navy,#122340),#1c4257 55%,var(--red,#CE1126))}
+.agent .photo--initials span{font-family:var(--ff-display);font-size:3.4rem;font-weight:700;color:#fff;letter-spacing:.04em}
+.agent-meta a{color:inherit}
+.agent-meta a:hover{color:var(--red)}
 .agent:hover .pos{color:var(--red-deep)}
 .agent-body{padding:1.3rem}
 .agent-body h3{font-size:1.15rem}

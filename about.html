@@ -89,24 +89,38 @@ window.GHR_PAGE_INIT=function(){
   document.getElementById('whyGrid').innerHTML=why.map(w=>`
     <article class="card anim-up"><div class="ic">${I[w[0]]}</div><h3>${w[1]}</h3><p>${w[2]}</p></article>`).join('');
 
-  // Advisors. Jay Patel is a real Get Home Realty (GTA) sales representative;
-  // the others are placeholder cards — replace name/role/photo/contact as the
-  // brokerage roster is confirmed.
+  // Advisors. Confirmed people carry their real contact details; entries still
+  // marked placeholder are waiting on the roster. `photo` is a stock portrait and
+  // belongs only on placeholder cards — a real advisor shows an initials avatar
+  // until their own photograph is added.
   const team=[
-    ['Jay Patel','Sales Representative','Mississauga, GTA','jay','Guides buyers and sellers through every step of the transaction, with a focus on market trends and securing the best deal.'],
-    ['Advisor Name','Sales Representative','Greater Toronto Area','advisor2','Short advisor profile goes here — add bio once confirmed.'],
-    ['Advisor Name','Buyer Specialist','Greater Toronto Area','advisor3','Short advisor profile goes here — add bio once confirmed.'],
-    ['Advisor Name','Leasing &amp; Rentals','Greater Toronto Area','advisor4','Short advisor profile goes here — add bio once confirmed.'],
+    {name:'Akhilesh Marpina', role:'Director / Manager', at:'Hyderabad',
+     mail:'Akhilesh', phone:'+91 99632 06933'},
+    {name:'Raju Mudunuri', role:'Regional Sales & Business Development Manager',
+     mail:'mavskraju@gmail.com', phone:'+91 95508 00111'},
+    {name:'Vishnu Rudhraraju', role:'Relationship Manager', phone:'+91 96669 72822'},
+    {name:'Jay Patel', role:'Sales Representative', at:'Mississauga, GTA', mail:'jay',
+     bio:'Guides buyers and sellers through every step of the transaction, with a focus on market trends and securing the best deal.'},
+    {name:'Advisor Name', role:'Sales Representative', at:'Greater Toronto Area', mail:'advisor2',
+     bio:'Short advisor profile goes here — add bio once confirmed.', photo:'1573496359142-b8d87734a5a2'},
+    {name:'Advisor Name', role:'Buyer Specialist', at:'Greater Toronto Area', mail:'advisor3',
+     bio:'Short advisor profile goes here — add bio once confirmed.', photo:'1507003211169-0a1dd7228f2d'},
+    {name:'Advisor Name', role:'Leasing &amp; Rentals', at:'Greater Toronto Area', mail:'advisor4',
+     bio:'Short advisor profile goes here — add bio once confirmed.', photo:'1494790108377-be9c29b29330'},
   ];
-  const photos=['1560250097-0b93528c311a','1573496359142-b8d87734a5a2','1507003211169-0a1dd7228f2d','1494790108377-be9c29b29330'];
-  document.getElementById('teamGrid').innerHTML=team.map((m,i)=>`
+  const initials=n=>n.split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  const mailOf=m=>!m.mail?'':(m.mail.indexOf('@')>-1?m.mail:m.mail+'@gethomerealty.ca');
+  document.getElementById('teamGrid').innerHTML=team.map(m=>`
     <article class="agent anim-up">
-      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-${photos[i]}?auto=format&fit=crop&w=500&q=70')"></div>
-      <div class="agent-body"><h3>${m[0]}</h3><div class="pos">${m[1]}</div>
-        ${m[4]?`<p class="agent-bio">${m[4]}</p>`:''}
+      ${m.photo
+        ? `<div class="photo" style="background-image:url('https://images.unsplash.com/photo-${m.photo}?auto=format&fit=crop&w=500&q=70')"></div>`
+        : `<div class="photo photo--initials" aria-hidden="true"><span>${initials(m.name)}</span></div>`}
+      <div class="agent-body"><h3>${m.name}</h3><div class="pos">${m.role}</div>
+        ${m.bio?`<p class="agent-bio">${m.bio}</p>`:''}
         <div class="agent-meta">
-          <div>${I.pin}${m[2]}</div>
-          <div>${I.mail}${m[3]}@gethomerealty.ca</div>
+          ${m.at?`<div>${I.pin}${m.at}</div>`:''}
+          ${m.phone?`<div>${I.phone}<a href="tel:${m.phone.replace(/\s/g,'')}">${m.phone}</a></div>`:''}
+          ${m.mail?`<div>${I.mail}<a href="mailto:${mailOf(m)}">${mailOf(m)}</a></div>`:''}
         </div>
         <a class="btn btn--sm btn--block" href="contact.html">Contact Advisor</a></div>
     </article>`).join('');

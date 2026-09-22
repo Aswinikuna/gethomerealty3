@@ -73,7 +73,7 @@ window.GHR_PAGE_INIT=function(){
   ];
   document.getElementById('svcGrid').innerHTML=svc.map(s=>`
     <article class="card anim-up"><div class="ic">${I[s[0]]}</div><h3>${s[1]}</h3><p>${s[2]}</p>
-      <a class="card-link" href="${s[3]}">${s[4]} ${I.arrow}</a></article>`).join('');
+      <div class="prop-actions" style="border:0;padding-top:1.2rem;margin-top:auto"><a class="btn btn--sm btn--ghost" href="${s[3]}">${s[4]}</a></div></article>`).join('');
   window.dispatchEvent(new Event('scroll'));
 };
 </script>

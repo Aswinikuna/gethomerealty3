@@ -44,7 +44,6 @@
 
   <!-- sidebar -->
   <aside class="detail-side">
-    <div class="prop-price" id="dPrice" style="font-size:1.8rem"></div>
     <p class="muted" id="dType" style="margin:.2rem 0 1.2rem"></p>
     <a class="btn btn--block" href="#showing" id="scheduleBtn">Schedule a Showing</a>
     <a class="btn btn--ghost btn--block" href="#" id="brochureBtn" style="margin-top:.6rem">Download Brochure</a>
@@ -81,7 +80,6 @@ window.GHR_PAGE_INIT=function(){
   document.getElementById('bcName').textContent=p.name;
   document.getElementById('dName').textContent=p.name;
   document.getElementById('dAddr').innerHTML=`${I.pin}<span>${p.area}, ${p.city}</span>`;
-  document.getElementById('dPrice').textContent=p.priceLabel;
   document.getElementById('dType').textContent=p.type+' · '+p.deal;
   document.getElementById('dDesc').textContent=p.desc+' This property is presented by Get Home Realty with full documentation support and transparent guidance from offer to registration.';
   const st=document.getElementById('dStatus');st.textContent=p.status==='sold'?'Sold':'Available';
@@ -94,7 +92,7 @@ window.GHR_PAGE_INIT=function(){
     [1,2,3,4].map(i=>`<div class="g" style="background-image:url('${img}&v=${i}')"></div>`).join('');
 
   // specs
-  const specs=[['Price',p.priceLabel],['Type',p.type],['Bedrooms',p.beds||'—'],
+  const specs=[['Type',p.type],['Bedrooms',p.beds||'—'],
     ['Bathrooms',p.baths||'—'],['Parking',p.parking||'—'],['Size',p.size]];
   document.getElementById('dSpecs').innerHTML=specs.map(s=>`<div class="s"><small>${s[0]}</small><b>${s[1]}</b></div>`).join('');
 
@@ -105,7 +103,7 @@ window.GHR_PAGE_INIT=function(){
 
   // brochure (generated data file)
   const brochure='data:text/plain;charset=utf-8,'+encodeURIComponent(
-    `GET HOME REALTY — ${p.name}\n${p.area}, ${p.city}\nPrice: ${p.priceLabel}\nType: ${p.type}\nBeds ${p.beds} · Baths ${p.baths} · Parking ${p.parking} · ${p.size}\n\n${p.desc}\n\nContact: hello@gethomerealty.com · +91 98765 43210`);
+    `GET HOME REALTY — ${p.name}\n${p.area}, ${p.city}\nType: ${p.type}\nBeds ${p.beds} · Baths ${p.baths} · Parking ${p.parking} · ${p.size}\n\n${p.desc}\n\nContact: hello@gethomerealty.com · +91 98765 43210`);
   const b=document.getElementById('brochureBtn');b.setAttribute('href',brochure);b.setAttribute('download',p.id+'-brochure.txt');
 
   // map

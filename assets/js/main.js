@@ -236,7 +236,6 @@
         <span class="prop-badge">${p.deal}</span>${status}
       </div>
       <div class="prop-body">
-        <div class="prop-price">${p.priceLabel}</div>
         <div class="prop-addr">${ICON.pin}<span>${p.area}, ${p.city}</span></div>
         <div class="prop-type">${p.type}</div>
         <div class="prop-specs">${rupeeMeta(p)}</div>

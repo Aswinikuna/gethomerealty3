@@ -318,7 +318,7 @@
   </div>
 </section>
 
-<section class="section section--mist" id="quick-inquiry"><div class="wrap">
+<section class="section section--mist" id="quick-inquiry" style="padding-block:clamp(28px,4vw,48px)"><div class="wrap">
   <div class="inquiry-card" style="max-width:920px;margin-inline:auto">
     <h3>Quick Inquiry</h3>
     <p class="muted" style="margin-bottom:1.2rem">Tell us what you&rsquo;re looking for &mdash; we&rsquo;ll get back within one business day.</p>
@@ -334,8 +334,7 @@
           <select class="select" required>
             <option value="">Select an option</option>
             <option>Buying</option><option>Selling</option><option>Leasing</option>
-            <option>Investment</option><option>Hyderabad Services</option>
-            <option>Visakhapatnam Services</option><option>Join Brokerage</option>
+            <option>Investment</option><option>Join Brokerage</option>
           </select><span class="err-msg">Please choose an option.</span></div>
       </div>
       <div class="field"><label>Message</label><textarea class="textarea" placeholder="Budget, locality, timeline, or any details&hellip;"></textarea></div>
@@ -348,7 +347,7 @@
 </div></section>
 
 <!-- STATS -->
-<section class="section section--tight">
+<section class="section section--tight" style="padding-block:clamp(20px,3vw,36px)">
   <div class="wrap">
     <div class="stat-band">
       <div class="stat anim-up"><b>1,200+</b><span>Families Served</span></div>
@@ -438,7 +437,7 @@
 </section>
 
 <!-- TESTIMONIALS -->
-<section class="section section--mist">
+<section class="section section--mist" style="padding-block:clamp(28px,4vw,48px)">
   <div class="wrap">
     <div class="section-head center"><p class="eyebrow" style="justify-content:center">Client Stories</p>
       <h2 class="h2">Real results for buyers, sellers &amp; investors</h2></div>
@@ -475,7 +474,7 @@ window.GHR_PAGE_INIT=function(){
   document.getElementById('homeServices').innerHTML=svc.map(s=>`
     <article class="card anim-up"><div class="ic">${I[s[0]]}</div>
       <h3>${s[1]}</h3><p>${s[2]}</p>
-      <a class="card-link" href="services.html">Learn More ${I.arrow}</a></article>`).join('');
+      <div class="prop-actions" style="border:0;padding-top:1.2rem;margin-top:auto"><a class="btn btn--sm btn--ghost" href="services.html">Learn More</a></div></article>`).join('');
 
   // featured projects (real towers with real images), collage layout
   const featIds=['mk-one','hyd-gamya','mvv-grand','hyd-myhome-akrida','vaisakhi-construction','hyd-aparna-newlands'];

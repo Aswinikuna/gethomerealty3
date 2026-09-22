@@ -31,7 +31,7 @@
         <div class="info-row"><div class="ic" data-ic="phone"></div><div><h4>Phone</h4><a id="cPhone" href="#">&nbsp;</a></div></div>
         <div class="info-row"><div class="ic" data-ic="mail"></div><div><h4>Email</h4><a id="cMail" href="#">&nbsp;</a></div></div>
         <div class="info-row"><div class="ic" data-ic="pin"></div><div><h4>Office address</h4><p id="cAddr">&nbsp;</p></div></div>
-        <div class="info-row"><div class="ic" data-ic="clock"></div><div><h4>Business hours</h4><p>Mon&ndash;Sat: 9:30 AM &ndash; 7:00 PM<br>Sunday: By appointment</p></div></div>
+        <div class="info-row"><div class="ic" data-ic="clock"></div><div><h4>Business hours</h4><p>Open 24/7</p></div></div>
         <div class="info-row"><div class="ic" data-ic="whatsapp"></div><div><h4>WhatsApp</h4><a id="cWa" href="#" target="_blank" rel="noopener">Chat with us</a></div></div>
       </div>
       <div class="info-social" id="cSocial" style="margin-top:1.6rem"></div>
@@ -86,13 +86,15 @@ window.GHR_PAGE_INIT=function(){
     const cc=document.getElementById('ctaCall'); cc.textContent='Call '+C.phone; cc.href='tel:'+C.phone.replace(/\s/g,'');
   }
   const S=window.GHR.SOCIAL;
-  document.getElementById('cSocial').innerHTML=['fb','ig','in','yt','x'].map(k=>`<a href="#" aria-label="${k}">${S[k]}</a>`).join('');
+  const SOC=(window.GHR_CONFIG&&window.GHR_CONFIG.social)||{};
+  document.getElementById('cSocial').innerHTML=['fb','ig','in','yt','x'].filter(k=>SOC[k])
+    .map(k=>`<a href="${SOC[k]}" target="_blank" rel="noopener" aria-label="${k}">${S[k]}</a>`).join('');
   if(window.L){
-    const lat=17.4239, lng=78.4111;
+    const lat=17.4948, lng=78.3040;   // Serilingampally, locality-level
     const map=L.map('map-office',{scrollWheelZoom:false}).setView([lat,lng],14);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
     L.marker([lat,lng],{icon:L.divIcon({className:'gh-marker',html:`<svg width="30" height="40" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.3 0 11.9 0 20.8 12 32 12 32s12-11.2 12-20.1C24 5.3 18.6 0 12 0z" fill="#C8102E"/><circle cx="12" cy="11.6" r="4.4" fill="#fff"/></svg>`,iconSize:[30,40],iconAnchor:[15,40]})}).addTo(map)
-      .bindPopup('<b>Get Home Realty</b><br>Jubilee Hills, Hyderabad');
+      .bindPopup('<b>Get Home Realty</b><br>Old Mumbai Highway, Serilingampally');
   }
   window.dispatchEvent(new Event('scroll'));
 };

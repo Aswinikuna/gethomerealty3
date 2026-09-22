@@ -7,11 +7,12 @@
 
   /* ---- editable contact config (single source of truth) ---- */
   const CONFIG = {
-    phone:'+91 98765 43210',
-    phoneHref:'tel:+919876543210',
-    email:'info@gethomerealty.ca',
-    whatsapp:'https://wa.me/919876543210',
-    addr:'Get Home Realty, Jubilee Hills, Hyderabad, Telangana 500033',
+    phone:'+91 90328 27722',
+    phoneHref:'tel:+919032827722',
+    email:'india@gethomerealty.ca',
+    whatsapp:'https://wa.me/919032827722',
+    addr:'Louis Philippe Serilingampally, 4th Floor, 356 Old Mumbai Highway, Serilingampally (M), Telangana',
+    hours:'Open 24/7',
     // social profiles — add a URL here and the icon appears in the footer
     social:{
       yt:'https://www.youtube.com/@gethomerealty7461',
@@ -122,7 +123,7 @@
           <li>${ICON.pin}<span>${CONFIG.addr}</span></li>
           <li>${ICON.phone}<a href="${CONFIG.phoneHref}">${CONFIG.phone}</a></li>
           <li>${ICON.mail}<a href="mailto:${CONFIG.email}">${CONFIG.email}</a></li>
-          <li>${ICON.clock}<span>Mon–Sat · 9:30 AM – 7:00 PM</span></li>
+          <li>${ICON.clock}<span>${CONFIG.hours}</span></li>
         </ul></div>
       </div>
       <div class="footer-bottom">

@@ -199,6 +199,179 @@
     </div>`;
   }
 
+  /* ---------------- Specifications ----------------
+     A spec entry is [label, description] (a plain string still works and
+     renders without a label). The icon is picked from the label, so new
+     projects only need the text added in data.js.
+     -------------------------------------------------- */
+  const SPEC_MATCH=[
+    [/structure|civil|rcc|masonry/i,'structure'],
+    [/electric|wiring|switch/i,'electrical'],
+    [/paint/i,'paint'],
+    [/plaster|wall/i,'plaster'],
+    [/plumb|water|sanitary ware|geyser/i,'plumbing'],
+    [/kitchen/i,'kitchen'],
+    [/lift|elevator/i,'elevator'],
+    [/window/i,'windows'],
+    [/floor/i,'flooring'],
+    [/connect|intercom|network|internet/i,'connectivity'],
+    [/door/i,'doors'],
+    [/bath|toilet|sanitary/i,'sanitary'],
+    [/security|cctv|surveillance/i,'security'],
+    [/power|generator|backup|solar/i,'power'],
+    [/fire|safety/i,'fire'],
+    [/park/i,'parking'],
+    [/ceiling|slab|height/i,'structure'],
+    [/vaastu|design|facing|orientation/i,'design'],
+    [/green|igbc|leed|rating/i,'green'],
+    [/lobby|lobbies|entrance/i,'doors']
+  ];
+  function specIcon(label){
+    const S=window.GHR.SPEC_ICON||{};
+    const hit=SPEC_MATCH.find(p=>p[0].test(label||''));
+    return (hit&&S[hit[1]])||S.generic||'';
+  }
+  function specPairs(list){
+    return (list||[]).map(s=>Array.isArray(s)?[s[0]||'',s[1]||'']:['',String(s)]);
+  }
+  function specRows(list){
+    return specPairs(list).map(p=>`<div class="pm-spec">${p[0]?specIcon(p[0]):(window.GHR.SPEC_ICON||{}).generic||''}
+      <div><b>${p[0]||''}</b><p>${p[1]}</p></div></div>`).join('');
+  }
+
+  /* ---------------- Project brochure ----------------
+     Built from the project's own data (no stock photos, no invented
+     figures) as a branded print sheet — the browser's print dialog turns
+     it into a PDF via "Save as PDF". If a real builder PDF is ever added
+     (a brochure field on the record or on its GHR_DETAILS entry), the
+     modal links that file directly instead.
+     -------------------------------------------------- */
+  function brochureUrl(d){
+    const x=detailFor(d)||{};
+    return d.brochure||x.brochure||'';
+  }
+  function esc(v){
+    return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function broRows(rows){
+    return rows.map(r=>`<tr><th>${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('');
+  }
+  function brochureHtml(d){
+    const x=detailFor(d)||{};
+    const cfg=window.GHR_CONFIG||{};
+    const feats=featuresOf(d).map(f=>[f[0],f[1]]);
+    if(d.scale&&d.scale!=='—') feats.push(['Project scale',d.scale]);
+    if(d.rate&&d.rate!=='—') feats.push(['Price',d.rate]);
+    if(d.phoneDisp) feats.push(['Builder contact',d.phoneDisp]);
+    // gallery rule: this project's own photos only — never stock, never borrowed
+    const imgs=realImgs(d).filter((u,i,a)=>u&&a.indexOf(u)===i).slice(0,3);
+    const hero=imgs.length
+      ? `<div class="bro-shots">${imgs.map((u,i)=>`<img class="${i?'sm':'lg'}" src="${esc(u)}" alt="${esc(d.name)}">`).join('')}</div>`
+      : `<div class="bro-noimg">${esc(d.name)}</div>`;
+    const sec=(title,body)=>body?`<section class="bro-sec"><h2>${esc(title)}</h2>${body}</section>`:'';
+    const units=(x.unitHead&&x.unitRows&&x.unitRows.length)
+      ? `<table class="bro-units"><thead><tr>${x.unitHead.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${x.unitRows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`
+      : '';
+    const club=(x.clubLevels&&x.clubLevels.length)
+      ? `<dl class="bro-levels">${x.clubLevels.map(l=>`<dt>${esc(l[0])}</dt><dd>${esc(l[1])}</dd>`).join('')}</dl>`
+      : (x.clubhouse?`<p>${esc(x.clubhouse)}</p>`:'');
+    const amen=(x.amenities&&x.amenities.length)
+      ? `<ul class="bro-chips">${x.amenities.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>` : '';
+    const loc=(x.location&&x.location.length)
+      ? `<table class="bro-kv">${broRows(x.location)}</table>` : '';
+    const spec=(x.specs&&x.specs.length)
+      ? `<table class="bro-kv">${broRows(specPairs(x.specs).map(p=>[p[0]||'Specification',p[1]]))}</table>` : '';
+    const note=x.note?`<p class="bro-note">${esc(x.note)}</p>`:'';
+    const when=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+    return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<base href="${esc(location.href)}">
+<title>${esc(d.name)} — Get Home Realty brochure</title>
+<style>
+  @page{size:A4;margin:13mm}
+  *{box-sizing:border-box}
+  body{margin:0;font:13px/1.5 "Inter",Segoe UI,Arial,sans-serif;color:#122340;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sheet{max-width:820px;margin:0 auto;padding:18px}
+  .bro-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:3px solid #CE1126;padding-bottom:10px}
+  .bro-bar img{height:46px;width:auto}
+  .bro-bar span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6B7A90;font-weight:700}
+  h1{font:700 26px/1.2 "Poppins",Georgia,serif;margin:16px 0 2px}
+  .bro-dev{color:#CE1126;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;margin-top:16px}
+  .bro-where{color:#48566B;margin:2px 0 14px}
+  .bro-shots{display:grid;grid-template-columns:2fr 1fr;grid-auto-rows:92px;gap:8px;margin-bottom:16px}
+  .bro-shots img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+  .bro-shots .lg{grid-row:span 2;height:192px}
+  .bro-shots img.lg:only-child{grid-column:span 2}
+  .bro-shots:has(img:nth-child(2):last-child) img.sm{grid-row:span 2}
+  .bro-noimg{height:150px;border-radius:8px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;color:#fff;font:700 20px "Poppins",Georgia,serif;text-align:center;padding:0 20px;background:linear-gradient(135deg,#122340,#1c4257 55%,#CE1126)}
+  .bro-sec{margin-bottom:16px;break-inside:avoid;page-break-inside:avoid}
+  h2{font:700 14px/1.2 "Poppins",Georgia,serif;text-transform:uppercase;letter-spacing:.07em;margin:0 0 8px;padding-bottom:5px;border-bottom:1px solid #E3E7EE}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .bro-kv th{width:38%}
+  .bro-kv th,.bro-kv td,.bro-units th,.bro-units td{border:1px solid #E3E7EE;padding:6px 9px;text-align:left;vertical-align:top}
+  .bro-kv th{background:#F5F7FA;font-weight:700;color:#48566B}
+  .bro-units thead th{background:#122340;color:#fff;font-weight:700}
+  .bro-chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:5px}
+  .bro-chips li{background:#F5F7FA;border:1px solid #E3E7EE;border-radius:20px;padding:3px 10px;font-size:12px}
+  .bro-list{margin:0;padding-left:18px}
+  .bro-levels{margin:0}
+  .bro-levels dt{font-weight:700;margin-top:7px}
+  .bro-levels dd{margin:0;color:#48566B}
+  .bro-note{color:#48566B;font-size:12px;margin:0}
+  .bro-foot{margin-top:20px;border-top:3px solid #CE1126;padding-top:10px;font-size:12px}
+  .bro-foot b{display:block;font:700 15px "Poppins",Georgia,serif;margin-bottom:3px}
+  .bro-fine{color:#6B7A90;font-size:10.5px;margin-top:8px}
+  .no-print{margin:0 auto 14px;max-width:820px;padding:0 18px;display:flex;gap:10px;align-items:center}
+  .no-print button{font:600 13px "Inter",Arial,sans-serif;background:#CE1126;color:#fff;border:0;border-radius:8px;padding:9px 16px;cursor:pointer}
+  .no-print em{color:#6B7A90;font-style:normal;font-size:12px}
+  @media print{.no-print{display:none}.sheet{padding:0}}
+</style></head><body>
+<div class="no-print"><button type="button" onclick="window.print()">Print / Save as PDF</button>
+  <em>Pick &ldquo;Save as PDF&rdquo; as the destination to download this brochure.</em></div>
+<div class="sheet">
+  <div class="bro-bar"><img src="assets/img/ghr-logo-header.png" alt="Get Home Realty"><span>Project Brochure</span></div>
+  <div class="bro-dev">${esc(x.developer||d.developer||'')}</div>
+  <h1>${esc(d.name)}</h1>
+  <div class="bro-where">${esc(d.area)}${d.city?', '+esc(d.city):''}</div>
+  ${hero}
+  ${x.tagline?`<p>${esc(x.tagline)}</p>`:''}
+  ${sec('Project features',`<table class="bro-kv">${broRows(feats)}</table>`)}
+  ${sec('Project details',(x.facts&&x.facts.length)?`<table class="bro-kv">${broRows(x.facts)}</table>`:'')}
+  ${sec('Configurations',units)}
+  ${sec('Clubhouse',club)}
+  ${sec('Amenities',amen)}
+  ${sec('Location highlights',loc)}
+  ${sec('Specifications',spec)}
+  ${note}
+  <div class="bro-foot">
+    <b>Get Home Realty</b>
+    Projects desk: ${esc(GHR_TEL)} &middot; WhatsApp: +${esc(GHR_WA)}${cfg.email?' &middot; '+esc(cfg.email):''}<br>
+    ${cfg.addr?esc(cfg.addr)+'<br>':''}
+    <div class="bro-fine">Prepared ${esc(when)}. Compiled from publicly available builder material and locality-level
+      information; figures, approvals and timelines are indicative and must be verified against the builder's
+      RERA-registered documents before any booking. Get Home Realty is a channel partner, not the developer.</div>
+  </div>
+</div></body></html>`;
+  }
+  function openBrochure(d){
+    const html=brochureHtml(d);
+    const w=window.open('','_blank');
+    if(w){
+      w.document.open(); w.document.write(html); w.document.close();
+      w.onload=function(){ setTimeout(function(){ w.focus(); w.print(); },250); };
+      return;
+    }
+    // popup blocked — print from a hidden iframe instead
+    const fr=document.createElement('iframe');
+    fr.setAttribute('aria-hidden','true');
+    fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';
+    document.body.appendChild(fr);
+    const doc=fr.contentWindow.document;
+    doc.open(); doc.write(html); doc.close();
+    fr.contentWindow.onload=function(){
+      setTimeout(function(){ fr.contentWindow.focus(); fr.contentWindow.print(); document.body.removeChild(fr); },400);
+    };
+  }
+
   /* ---------------- Project details modal ---------------- */
   let _modal=null,_panel=null,_map=null,_markers={},_cluster=null;
   const GHR_TEL='+919963206933', GHR_WA='919963206933';
@@ -232,10 +405,11 @@
     }
     const amenHtml=(x.amenities&&x.amenities.length)?`<div class="pm-sec"><h4>Amenities</h4><div class="pm-chips">${x.amenities.map(a=>`<span class="pm-chip">${a}</span>`).join('')}</div></div>`:'';
     const locHtml=(x.location&&x.location.length)?`<div class="pm-sec"><h4>Location highlights</h4><div class="pm-loc">${x.location.map(l=>`<div class="pm-locrow"><span>${l[0]}</span><b>${l[1]}</b></div>`).join('')}</div></div>`:'';
-    const specHtml=(x.specs&&x.specs.length)?`<div class="pm-sec"><h4>Specifications</h4><ul class="pm-list">${x.specs.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:'';
+    const specHtml=(x.specs&&x.specs.length)?`<div class="pm-sec"><h4>Specifications</h4><div class="pm-specs">${specRows(x.specs)}</div></div>`:'';
     const noteHtml=x.note?`<p class="pm-note">${x.note}</p>`:'';
     const tagline=x.tagline?`<p class="pm-lead">${x.tagline}</p>`:'';
     const callDisp=d.phoneDisp||'';
+    const broHref=brochureUrl(d);
     const waMsg=encodeURIComponent('Hi, I would like details on '+d.name+' ('+d.area+').');
     const imgs=gallerySlides(d);
     const slides=imgs;
@@ -270,6 +444,9 @@
       <div class="pm-cta">
         <a class="btn btn--sm" href="https://wa.me/${GHR_WA}?text=${waMsg}" target="_blank" rel="noopener">${ICON.whatsapp||''}WhatsApp Enquiry</a>
         <a class="btn btn--ghost btn--sm" href="tel:${GHR_TEL}">${ICON.phone||''}Call${callDisp?` · ${callDisp}`:''}</a>
+        ${broHref
+          ? `<a class="btn btn--ghost btn--sm" href="${broHref}" target="_blank" rel="noopener" download>${ICON.doc||''}Download brochure</a>`
+          : `<button type="button" class="btn btn--ghost btn--sm" data-pm-brochure>${ICON.doc||''}Download brochure</button>`}
         ${_map?`<button type="button" class="btn btn--ghost btn--sm" data-pm-locate>${ICON.pin||''}Locate on map</button>`:''}
       </div>
     </div>`;
@@ -322,6 +499,8 @@
     wireGallery(_panel);
     const loc=_panel.querySelector('[data-pm-locate]');
     if(loc) loc.addEventListener('click',()=>locateOnMap(d.id));
+    const bro=_panel.querySelector('[data-pm-brochure]');
+    if(bro) bro.addEventListener('click',()=>openBrochure(d));
   };
   window.GHR.openProjectModalById=function(id){
     const d=(window.GHR.GHR_DEVELOPERS||[]).find(x=>x.id===id);
@@ -397,13 +576,35 @@
           const o=document.createElement('option');o.value=a;o.textContent=a;areaSel.appendChild(o);
         });
       }
+      const devSel=dwrap.querySelector('[data-df="builder"]');
+      if(devSel){
+        [...new Set(devs.map(d=>d.developer))].sort().forEach(b=>{
+          const o=document.createElement('option');o.value=b;o.textContent=b;devSel.appendChild(o);
+        });
+      }
+      // builder chips (name + project count), busiest builders first
+      let chips=null;
+      const counts={};
+      devs.forEach(d=>{counts[d.developer]=(counts[d.developer]||0)+1});
+      const builders=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]||a.localeCompare(b));
+      if(builders.length>1){
+        chips=document.createElement('div');
+        chips.className='dev-chips';
+        chips.innerHTML='<button type="button" class="dev-chip is-on" data-dev="">All builders <b>'+devs.length+'</b></button>'+
+          builders.map(b=>'<button type="button" class="dev-chip" data-dev="'+esc(b)+'">'+esc(b)+' <b>'+counts[b]+'</b></button>').join('');
+        dwrap.insertAdjacentElement('afterend',chips);
+      }
       const dapply=()=>{
-        const fa=dwrap.querySelector('[data-df="area"]'),fb=dwrap.querySelector('[data-df="band"]');
+        const fa=dwrap.querySelector('[data-df="area"]'),fb=dwrap.querySelector('[data-df="band"]'),
+              fd=dwrap.querySelector('[data-df="builder"]');
+        const who=fd?fd.value:'';
+        if(chips) chips.querySelectorAll('.dev-chip').forEach(c=>c.classList.toggle('is-on',c.dataset.dev===who));
         let shown=0;
         devs.forEach(d=>{
           let vis=true;
           if(fa&&fa.value&&d.area!==fa.value)vis=false;
           if(fb&&fb.value&&rateBand(d)!==fb.value)vis=false;
+          if(who&&d.developer!==who)vis=false;
           const m=devMarkers[d.id];if(m){vis?addMk(m):rmMk(m)}
           const card=devList&&devList.querySelector(`.dv[data-id="${d.id}"]`);if(card)card.style.display=vis?'':'none';
           if(vis)shown++;
@@ -412,6 +613,13 @@
         if(empty)empty.style.display=shown?'none':'block';
       };
       dwrap.querySelectorAll('[data-df]').forEach(s=>s.addEventListener('change',dapply));
+      if(chips) chips.addEventListener('click',e=>{
+        const btn=e.target.closest('.dev-chip'); if(!btn) return;
+        if(devSel) devSel.value=btn.dataset.dev;
+        dapply();
+        const list=devList&&devList.parentNode?devList:null;
+        if(list) list.scrollIntoView({behavior:'smooth',block:'nearest'});
+      });
     }
 
     // deep link: ?project=<id> opens that project's modal (e.g. from homepage featured)

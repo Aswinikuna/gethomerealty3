@@ -7,10 +7,10 @@
 
   /* ---- editable contact config (single source of truth) ---- */
   const CONFIG = {
-    phone:'+91 90328 27722',
-    phoneHref:'tel:+919032827722',
+    phone:'+91 99632 06933',
+    phoneHref:'tel:+919963206933',
     email:'india@gethomerealty.ca',
-    whatsapp:'https://wa.me/919032827722',
+    whatsapp:'https://wa.me/919963206933',
     addr:'Louis Philippe Serilingampally, 4th Floor, 356 Old Mumbai Highway, Serilingampally (M), Telangana',
     hours:'Open 24/7',
     // social profiles — add a URL here and the icon appears in the footer

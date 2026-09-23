@@ -774,6 +774,21 @@ ul{margin:0;padding:0;list-style:none}
 .pm-fact span{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--slate-2);font-weight:700;margin-bottom:.15rem}
 .pm-fact b{font-size:.92rem;color:var(--ink);font-weight:600;line-height:1.3}
 .pm-sec{margin-bottom:1.4rem}
+/* pros & cons: two plain-language columns */
+.pm-pc{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.pm-pc-col{border:1px solid var(--line);border-radius:10px;padding:.85rem 1rem;background:var(--mist)}
+.pm-pc-col h5{font-family:var(--ff-display);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;
+  margin:0 0 .5rem;color:var(--slate-2)}
+.pm-pc-col ul{margin:0;padding:0;list-style:none;display:grid;gap:.4rem}
+.pm-pc-col li{position:relative;padding-left:1.15rem;font-size:.88rem;line-height:1.45;color:var(--ink)}
+.pm-pc-col li::before{position:absolute;left:0;top:0;font-weight:700}
+.pm-pc--pro li::before{content:"\2713";color:#1F5E46}
+.pm-pc--con li::before{content:"\0021";color:var(--gold)}
+.pm-pc--pro{background:#F2F7F4;border-color:#DCE9E2}
+.pm-pc--con{background:var(--gold-soft);border-color:#E7DCC8}
+@media(max-width:560px){.pm-pc{grid-template-columns:1fr}}
+/* brochure sheet */
+.bro-sec > b{display:block;font-size:12px;margin:.4rem 0 .2rem}
 /* specification sheet: icon + label + description per row */
 .pm-specs{display:flex;flex-direction:column}
 .pm-spec{display:flex;gap:1rem;align-items:flex-start;padding:.85rem 0;border-bottom:1px solid var(--line)}

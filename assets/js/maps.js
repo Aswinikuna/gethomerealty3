@@ -53,6 +53,13 @@
     if(!status&&done) status='Under construction';
     return {status:status||NA, completion:done||NA};
   }
+  // handover years a project can be filtered by; a phased handover yields several
+  function handoverYears(d){
+    const c=progress(d).completion;
+    if(!c||c===NA) return [];
+    return [...new Set(String(c).match(/(?:19|20)\d{2}/g)||[])];
+  }
+  function isReady(d){ return /ready to move|completed/i.test(progress(d).status); }
   function typeOf(d){ return d.kind || detFact(d,/^type$/i) || NA; }
   function configOf(d){
     if(d.config) return d.config;
@@ -286,6 +293,8 @@
     const spec=(x.specs&&x.specs.length)
       ? `<table class="bro-kv">${broRows(specPairs(x.specs).map(p=>[p[0]||'Specification',p[1]]))}</table>` : '';
     const note=x.note?`<p class="bro-note">${esc(x.note)}</p>`:'';
+    const proscons=((x.pros&&x.pros.length)?`<b>Pros</b><ul class="bro-list">${x.pros.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>`:'')+
+      ((x.cons&&x.cons.length)?`<b>Good to know</b><ul class="bro-list">${x.cons.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>`:'');
     const when=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
     return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <base href="${esc(location.href)}">
@@ -340,6 +349,7 @@
   ${x.tagline?`<p>${esc(x.tagline)}</p>`:''}
   ${sec('Project features',`<table class="bro-kv">${broRows(feats)}</table>`)}
   ${sec('Project details',(x.facts&&x.facts.length)?`<table class="bro-kv">${broRows(x.facts)}</table>`:'')}
+  ${sec('Pros & cons',proscons)}
   ${sec('Configurations',units)}
   ${sec('Clubhouse',club)}
   ${sec('Amenities',amen)}
@@ -410,6 +420,11 @@
     } else if(x.clubhouse){
       clubHtml=`<div class="pm-sec"><h4>Clubhouse</h4><p class="pm-text">${x.clubhouse}</p></div>`;
     }
+    // pros / cons — plain statements drawn from the project's own material
+    const pcCol=(cls,title,items)=>`<div class="pm-pc-col pm-pc--${cls}"><h5>${title}</h5><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`;
+    const hasPros=x.pros&&x.pros.length, hasCons=x.cons&&x.cons.length;
+    const pcHtml=(hasPros||hasCons)?`<div class="pm-sec"><h4>Pros &amp; cons</h4><div class="pm-pc">` +
+      (hasPros?pcCol('pro','Pros',x.pros):'') + (hasCons?pcCol('con','Good to know',x.cons):'') + `</div></div>`:'';
     const amenHtml=(x.amenities&&x.amenities.length)?`<div class="pm-sec"><h4>Amenities</h4><div class="pm-chips">${x.amenities.map(a=>`<span class="pm-chip">${a}</span>`).join('')}</div></div>`:'';
     const locHtml=(x.location&&x.location.length)?`<div class="pm-sec"><h4>Location highlights</h4><div class="pm-loc">${x.location.map(l=>`<div class="pm-locrow"><span>${l[0]}</span><b>${l[1]}</b></div>`).join('')}</div></div>`:'';
     const specHtml=(x.specs&&x.specs.length)?`<div class="pm-sec"><h4>Specifications</h4><div class="pm-specs">${specRows(x.specs)}</div></div>`:'';
@@ -441,6 +456,7 @@
     <div class="pm-body">
       ${tagline}
       ${featHtml}
+      ${pcHtml}
       ${factsHtml}
       ${tableHtml}
       ${clubHtml}
@@ -589,6 +605,14 @@
           const o=document.createElement('option');o.value=b;o.textContent=b;devSel.appendChild(o);
         });
       }
+      const yearSel=dwrap.querySelector('[data-df="year"]');
+      if(yearSel){
+        const ready=devs.filter(isReady).length, tally={};
+        devs.forEach(d=>handoverYears(d).forEach(y=>{tally[y]=(tally[y]||0)+1}));
+        const opt=(v,label)=>{const o=document.createElement('option');o.value=v;o.textContent=label;yearSel.appendChild(o)};
+        if(ready) opt('ready','Ready to move ('+ready+')');
+        Object.keys(tally).sort().forEach(y=>opt(y,'Handover '+y+' ('+tally[y]+')'));
+      }
       // builder chips (name + project count), busiest builders first
       let chips=null;
       const counts={};
@@ -603,8 +627,8 @@
       }
       const dapply=()=>{
         const fa=dwrap.querySelector('[data-df="area"]'),fb=dwrap.querySelector('[data-df="band"]'),
-              fd=dwrap.querySelector('[data-df="builder"]');
-        const who=fd?fd.value:'';
+              fd=dwrap.querySelector('[data-df="builder"]'),fy=dwrap.querySelector('[data-df="year"]');
+        const who=fd?fd.value:'', when=fy?fy.value:'';
         if(chips) chips.querySelectorAll('.dev-chip').forEach(c=>c.classList.toggle('is-on',c.dataset.dev===who));
         let shown=0;
         devs.forEach(d=>{
@@ -612,6 +636,7 @@
           if(fa&&fa.value&&d.area!==fa.value)vis=false;
           if(fb&&fb.value&&rateBand(d)!==fb.value)vis=false;
           if(who&&d.developer!==who)vis=false;
+          if(when) vis=vis&&(when==='ready'?isReady(d):handoverYears(d).indexOf(when)>-1);
           const m=devMarkers[d.id];if(m){vis?addMk(m):rmMk(m)}
           const card=devList&&devList.querySelector(`.dv[data-id="${d.id}"]`);if(card)card.style.display=vis?'':'none';
           if(vis)shown++;

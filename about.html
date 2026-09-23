@@ -89,31 +89,28 @@ window.GHR_PAGE_INIT=function(){
   document.getElementById('whyGrid').innerHTML=why.map(w=>`
     <article class="card anim-up"><div class="ic">${I[w[0]]}</div><h3>${w[1]}</h3><p>${w[2]}</p></article>`).join('');
 
-  // Advisors. Confirmed people carry their real contact details; entries still
-  // marked placeholder are waiting on the roster. `photo` is a stock portrait and
-  // belongs only on placeholder cards — a real advisor shows an initials avatar
-  // until their own photograph is added.
+  // Advisors. Every field except name and role is optional — a row is left out
+  // rather than filled with a guess. `photo` is a path to the advisor's own
+  // photograph (e.g. 'assets/img/team/akhilesh.jpg'); without one the card shows
+  // a branded initials avatar.
   const team=[
     {name:'Akhilesh Marpina', role:'Director / Manager', at:'Hyderabad',
-     mail:'Akhilesh', phone:'+91 99632 06933'},
+     mail:'Akhilesh', phone:'+91 99632 06933',
+     bio:'Heads the India desk — builder tie-ups, project selection and closings across Hyderabad and Visakhapatnam. The first call for site visits, pricing and negotiation.'},
     {name:'Raju Mudunuri', role:'Regional Sales & Business Development Manager',
-     mail:'mavskraju@gmail.com', phone:'+91 95508 00111'},
-    {name:'Vishnu Rudhraraju', role:'Relationship Manager', phone:'+91 96669 72822'},
+     mail:'mavskraju@gmail.com', phone:'+91 95508 00111',
+     bio:'Builds the builder and channel-partner network across the region, and works with buyers to shortlist projects that fit their budget, locality and possession timeline.'},
+    {name:'Vishnu Rudhraraju', role:'Relationship Manager', phone:'+91 96669 72822',
+     bio:'Stays with clients through the journey — site visits, booking paperwork, home-loan coordination and follow-through to handover.'},
     {name:'Jay Patel', role:'Sales Representative', at:'Mississauga, GTA', mail:'jay',
      bio:'Guides buyers and sellers through every step of the transaction, with a focus on market trends and securing the best deal.'},
-    {name:'Advisor Name', role:'Sales Representative', at:'Greater Toronto Area', mail:'advisor2',
-     bio:'Short advisor profile goes here — add bio once confirmed.', photo:'1573496359142-b8d87734a5a2'},
-    {name:'Advisor Name', role:'Buyer Specialist', at:'Greater Toronto Area', mail:'advisor3',
-     bio:'Short advisor profile goes here — add bio once confirmed.', photo:'1507003211169-0a1dd7228f2d'},
-    {name:'Advisor Name', role:'Leasing &amp; Rentals', at:'Greater Toronto Area', mail:'advisor4',
-     bio:'Short advisor profile goes here — add bio once confirmed.', photo:'1494790108377-be9c29b29330'},
   ];
   const initials=n=>n.split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
   const mailOf=m=>!m.mail?'':(m.mail.indexOf('@')>-1?m.mail:m.mail+'@gethomerealty.ca');
   document.getElementById('teamGrid').innerHTML=team.map(m=>`
     <article class="agent anim-up">
       ${m.photo
-        ? `<div class="photo" style="background-image:url('https://images.unsplash.com/photo-${m.photo}?auto=format&fit=crop&w=500&q=70')"></div>`
+        ? `<div class="photo" style="background-image:url('${m.photo}')"></div>`
         : `<div class="photo photo--initials" aria-hidden="true"><span>${initials(m.name)}</span></div>`}
       <div class="agent-body"><h3>${m.name}</h3><div class="pos">${m.role}</div>
         ${m.bio?`<p class="agent-bio">${m.bio}</p>`:''}

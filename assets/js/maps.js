@@ -221,6 +221,8 @@
     [/power|generator|backup|solar/i,'power'],
     [/fire|safety/i,'fire'],
     [/park/i,'parking'],
+    [/gas\b/i,'fire'],
+    [/landscap|garden/i,'green'],
     [/ceiling|slab|height/i,'structure'],
     [/vaastu|design|facing|orientation/i,'design'],
     [/green|igbc|leed|rating/i,'green'],

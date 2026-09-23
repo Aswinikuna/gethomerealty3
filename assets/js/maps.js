@@ -182,7 +182,10 @@
     // location already shows above in .dv-meta — the card grid carries the rest
     const cells=featuresOf(d).slice(1);
     const st=progress(d).status;
+    if(d.rate&&d.rate!=='\u2014') cells.splice(1,0,['Price',d.rate,ICON.tag]);
     if(d.scale&&d.scale!=='\u2014') cells.push(['Project scale',d.scale,ICON.building]);
+    // a figure we don't have is left out rather than shown as a placeholder
+    const known=cells.filter(c=>c[1]&&c[1]!==NA);
     return `<div class="dv" data-id="${d.id}" data-area="${d.area}" data-band="${rateBand(d)}">
       <div class="dv-img">
         <div class="dv-img-bg" style="background-image:${bgForDev(d)}"></div>
@@ -193,7 +196,7 @@
         <div class="dv-dev">${d.developer}</div>
         <h4 class="dv-name">${d.name}</h4>
         <div class="dv-meta">${ICON.pin}<span>${d.area}</span></div>
-        <div class="dv-feats">${featCells(cells)}</div>
+        <div class="dv-feats">${featCells(known)}</div>
         <span class="dv-more">View details ${ICON.arrow}</span>
       </div>
     </div>`;
@@ -261,10 +264,9 @@
   function brochureHtml(d){
     const x=detailFor(d)||{};
     const cfg=window.GHR_CONFIG||{};
-    const feats=featuresOf(d).map(f=>[f[0],f[1]]);
+    const feats=featuresOf(d).map(f=>[f[0],f[1]]).filter(f=>f[1]&&f[1]!==NA);
+    if(d.rate&&d.rate!=='—'&&d.rate!==NA) feats.splice(2,0,['Price',d.rate]);
     if(d.scale&&d.scale!=='—') feats.push(['Project scale',d.scale]);
-    if(d.rate&&d.rate!=='—') feats.push(['Price',d.rate]);
-    if(d.phoneDisp) feats.push(['Builder contact',d.phoneDisp]);
     // gallery rule: this project's own photos only — never stock, never borrowed
     const imgs=realImgs(d).filter((u,i,a)=>u&&a.indexOf(u)===i).slice(0,3);
     const hero=imgs.length
@@ -377,6 +379,8 @@
   /* ---------------- Project details modal ---------------- */
   let _modal=null,_panel=null,_map=null,_markers={},_cluster=null;
   const GHR_TEL='+919963206933', GHR_WA='919963206933';
+  // what the Call button shows — our projects desk, never the builder's line
+  const GHR_TEL_DISP='+91 99632 06933';
 
   function detailFor(d){ return (window.GHR.GHR_DETAILS||{})[d.id]||null; }
 
@@ -389,9 +393,10 @@
     const gridOf=rows=>`<div class="pm-facts">${rows.map(f=>`<div class="pm-fact"><span>${f[0]}</span><b>${f[1]}</b></div>`).join('')}</div>`;
     // the six standard features, always shown
     const feats=featuresOf(d).map(f=>[f[0],f[1]]);
+    if(d.rate&&d.rate!=='\u2014') feats.splice(2,0,['Price',d.rate]);
     if(d.scale&&d.scale!=='\u2014') feats.push(['Project scale',d.scale]);
-    if(d.rate&&d.rate!=='\u2014') feats.push(['Price',d.rate]);
-    const featHtml=`<div class="pm-sec"><h4>Project features</h4>${gridOf(feats)}</div>`;
+    const shown=feats.filter(f=>f[1]&&f[1]!==NA);
+    const featHtml=`<div class="pm-sec"><h4>Project features</h4>${gridOf(shown)}</div>`;
     // builder-published specifics (RERA, land, structure…) — location lives in the features grid
     const extra=(x.facts||[]).filter(f=>!/^(locality|location)$/i.test(f[0]));
     const factsHtml=extra.length?`<div class="pm-sec"><h4>Project details</h4>${gridOf(extra)}</div>`:'';
@@ -410,7 +415,7 @@
     const specHtml=(x.specs&&x.specs.length)?`<div class="pm-sec"><h4>Specifications</h4><div class="pm-specs">${specRows(x.specs)}</div></div>`:'';
     const noteHtml=x.note?`<p class="pm-note">${x.note}</p>`:'';
     const tagline=x.tagline?`<p class="pm-lead">${x.tagline}</p>`:'';
-    const callDisp=d.phoneDisp||'';
+    const callDisp=GHR_TEL_DISP;
     const broHref=brochureUrl(d);
     const waMsg=encodeURIComponent('Hi, I would like details on '+d.name+' ('+d.area+').');
     const imgs=gallerySlides(d);

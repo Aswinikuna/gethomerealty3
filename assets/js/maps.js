@@ -74,7 +74,7 @@
   // sizes on the record; else the builder's own saleable / built-up figures
   function builtUp(d){
     if(d.sizes&&d.sizes!=='\u2014'&&d.sizes!==NA) return d.sizes;
-    const f=detFact(d,/saleable|built-?up|villa sizes|^sizes?$/i); if(f) return f;
+    const f=detFact(d,/^(?:saleable|built-?up|villa sizes|sizes?)$/i); if(f) return f;
     const x=detailFor(d);
     if(x&&x.unitHead&&x.unitRows){
       const i=x.unitHead.findIndex(h=>/size|saleable|built/i.test(h));
@@ -186,13 +186,10 @@
     return items.map(f=>`<div class="dv-feat">${f[2]||''}<div><span>${f[0]}</span><b>${f[1]}</b></div></div>`).join('');
   }
   function devCard(d){
-    // location already shows above in .dv-meta — the card grid carries the rest
-    const cells=featuresOf(d).slice(1);
+    // a short info line only — the full detail lives in the modal
     const st=progress(d).status;
-    if(d.rate&&d.rate!=='\u2014') cells.splice(1,0,['Price',d.rate,ICON.tag]);
-    if(d.scale&&d.scale!=='\u2014') cells.push(['Project scale',d.scale,ICON.building]);
-    // a figure we don't have is left out rather than shown as a placeholder
-    const known=cells.filter(c=>c[1]&&c[1]!==NA);
+    const price=(d.rate&&d.rate!=='\u2014'&&d.rate!==NA)?d.rate:'';
+    const bits=[configOf(d),builtUp(d)].filter(v=>v&&v!==NA);
     return `<div class="dv" data-id="${d.id}" data-area="${d.area}" data-band="${rateBand(d)}">
       <div class="dv-img">
         <div class="dv-img-bg" style="background-image:${bgForDev(d)}"></div>
@@ -203,10 +200,43 @@
         <div class="dv-dev">${d.developer}</div>
         <h4 class="dv-name">${d.name}</h4>
         <div class="dv-meta">${ICON.pin}<span>${d.area}</span></div>
-        <div class="dv-feats">${featCells(known)}</div>
+        <div class="dv-info">${price?`<b>${price}</b>`:''}${bits.length?`<span>${bits.join(' \u00b7 ')}</span>`:''}</div>
         <span class="dv-more">View details ${ICON.arrow}</span>
       </div>
     </div>`;
+  }
+
+  /* ---------------- Amenities ----------------
+     Amenity lists are grouped for reading. A project can carry its own
+     groups — either {Group:[items]} or [[group,[items]]] — and a plain list
+     is sorted into these buckets by what each item says.
+     -------------------------------------------------- */
+  const AMEN_GROUPS=[
+    ['Swimming & water',/pool|jacuzzi|aqua|wade|water plaza|lotus|koi|fish pond|water feature|fountain|outdoor shower/i],
+    ['Sports & fitness',/gym|tennis|badminton|squash|basketball|volleyball|cricket|skat|table tennis|jog|cycl|walking track|golf|yoga|meditat|aerobic|pickleball|reflexolog|boxing|futsal|sport|fitness|trampoline|climb|workout|shuttle|chess|hopscotch/i],
+    ['Clubhouse & recreation',/club|banquet|multi.?purpose|theatre|theater|library|billiard|indoor games|lounge|party|karaoke|arcade|gaming|music|dance|hobb|board game|spa|sauna|steam|silent disco|sky bar|simulator|cards|preview|reading|movie screen|sculpture/i],
+    ['Family & community',/kid|child|cr[e\u00e8]che|play area|sand ?pit|toddler|tuition|day care|nann|senior|elder|swing|pet park|creative|school/i],
+    ['Outdoors & landscape',/garden|landscap|park|lawn|barbeque|bbq|gazebo|pergola|deck|terrace|sky ?walk|walkway|seating|courtyard|temple|zen|palm|tot.?lot|treehouse|camping|star.?gaz|observatory|maze|greener|hardscape|bird|aroma|floral|herbal|butterfly|bonsai|amphitheatre|open.?air|barbecue|corner/i],
+    ['Convenience & services',/supermarket|grocer|store|restaurant|caf|food|atm|laundry|clinic|doctor|pharmac|first aid|guest room|concierge|valet|mailbox|locker|car wash|charging|parking|washroom|dormitor|cowork|business|meeting|conference|pantry|reception|aquarium|shop|boutique|salon|kitchen|dining/i],
+    ['Safety & utilities',/secur|cctv|camera|surveillance|gated|boom barrier|intercom|fire|power back|generator|backup|water supply|stp|sewage|rain ?water|harvest|lift|elevator|panic|grab rail|wheelchair|stretcher|access|energy|drain|footpath|internal road|meter|wi-?fi|common wall|entry|exit|first.?aid/i]
+  ];
+  function amenityGroups(list){
+    if(!list) return [];
+    if(!Array.isArray(list)) return Object.keys(list).map(k=>[k,list[k]]);
+    if(list.length&&Array.isArray(list[0])) return list;
+    const flat=list.filter(Boolean);
+    if(flat.length<6) return [['',flat]];
+    const buckets={};
+    flat.forEach(a=>{
+      const hit=AMEN_GROUPS.find(p=>p[1].test(a));
+      const g=hit?hit[0]:'More amenities';
+      (buckets[g]=buckets[g]||[]).push(a);
+    });
+    return AMEN_GROUPS.map(p=>p[0]).concat(['More amenities']).filter(g=>buckets[g]).map(g=>[g,buckets[g]]);
+  }
+  function hasAmenities(list){
+    if(!list) return false;
+    return Array.isArray(list) ? list.length>0 : Object.keys(list).length>0;
   }
 
   /* ---------------- Specifications ----------------
@@ -233,6 +263,8 @@
     [/park/i,'parking'],
     [/gas\b/i,'fire'],
     [/landscap|garden/i,'green'],
+    [/tile|dado|cladding/i,'flooring'],
+    [/wardrobe|storage|cupboard/i,'doors'],
     [/ceiling|slab|height/i,'structure'],
     [/vaastu|design|facing|orientation/i,'design'],
     [/green|igbc|leed|rating/i,'green'],
@@ -283,11 +315,20 @@
     const units=(x.unitHead&&x.unitRows&&x.unitRows.length)
       ? `<table class="bro-units"><thead><tr>${x.unitHead.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${x.unitRows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`
       : '';
+    const broPlans=(x.plans||[]).filter(pp=>pp&&pp[1]);
+    const planSheet=broPlans.length?`<section class="bro-sec"><h2>Floor plans</h2><div class="bro-plans">` +
+      broPlans.map(pp=>`<figure><img src="${esc(pp[1])}" alt="${esc((pp[0]||d.name)+' floor plan')}">` +
+      (pp[0]?`<figcaption>${esc(pp[0])}</figcaption>`:'')+'</figure>').join('')+`</div></section>`:'';
+    const broTables=(x.tables||[]).map(t=>
+      `<section class="bro-sec"><h2>${esc(t.title)}</h2><table class="bro-units">` +
+      `<thead><tr>${t.head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead>` +
+      `<tbody>${t.rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></section>`).join('');
     const club=(x.clubLevels&&x.clubLevels.length)
       ? `<dl class="bro-levels">${x.clubLevels.map(l=>`<dt>${esc(l[0])}</dt><dd>${esc(l[1])}</dd>`).join('')}</dl>`
       : (x.clubhouse?`<p>${esc(x.clubhouse)}</p>`:'');
-    const amen=(x.amenities&&x.amenities.length)
-      ? `<ul class="bro-chips">${x.amenities.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>` : '';
+    const amen=hasAmenities(x.amenities)
+      ? amenityGroups(x.amenities).map(g=>
+          `${g[0]?`<b>${esc(g[0])}</b>`:''}<ul class="bro-chips">${g[1].map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`).join('') : '';
     const loc=(x.location&&x.location.length)
       ? `<table class="bro-kv">${broRows(x.location)}</table>` : '';
     const spec=(x.specs&&x.specs.length)
@@ -323,6 +364,10 @@
   .bro-kv th,.bro-kv td,.bro-units th,.bro-units td{border:1px solid #E3E7EE;padding:6px 9px;text-align:left;vertical-align:top}
   .bro-kv th{background:#F5F7FA;font-weight:700;color:#48566B}
   .bro-units thead th{background:#122340;color:#fff;font-weight:700}
+  .bro-plans{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .bro-plans figure{margin:0;border:1px solid #E3E7EE;border-radius:6px;padding:6px;background:#fff;break-inside:avoid}
+  .bro-plans img{width:100%;height:auto;display:block}
+  .bro-plans figcaption{font-size:11px;color:#48566B;margin-top:4px;text-align:center}
   .bro-chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:5px}
   .bro-chips li{background:#F5F7FA;border:1px solid #E3E7EE;border-radius:20px;padding:3px 10px;font-size:12px}
   .bro-list{margin:0;padding-left:18px}
@@ -349,12 +394,14 @@
   ${x.tagline?`<p>${esc(x.tagline)}</p>`:''}
   ${sec('Project features',`<table class="bro-kv">${broRows(feats)}</table>`)}
   ${sec('Project details',(x.facts&&x.facts.length)?`<table class="bro-kv">${broRows(x.facts)}</table>`:'')}
-  ${sec('Pros & cons',proscons)}
   ${sec('Configurations',units)}
+  ${planSheet}
+  ${broTables}
   ${sec('Clubhouse',club)}
   ${sec('Amenities',amen)}
   ${sec('Location highlights',loc)}
   ${sec('Specifications',spec)}
+  ${sec('Pros & cons',proscons)}
   ${note}
   <div class="bro-foot">
     <b>Get Home Realty</b>
@@ -414,6 +461,21 @@
     if(x.unitHead && x.unitRows && x.unitRows.length){
       tableHtml=`<div class="pm-sec"><h4>Configurations</h4><div class="pm-tablewrap"><table class="pm-table"><thead><tr>${x.unitHead.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${x.unitRows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
     }
+    // any further tables the project carries — cost sheet, payment plan
+    const moreTables=(x.tables||[]).map(t=>
+      `<div class="pm-sec"><h4>${t.title}</h4><div class="pm-tablewrap"><table class="pm-table">` +
+      `<thead><tr>${t.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead>` +
+      `<tbody>${t.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`).join('');
+    // floor plans: drawings when we hold them, otherwise a link to the plan set
+    const planPics=(x.plans||[]).filter(p=>p&&p[1]);
+    const planPdf=x.plansPdf||d.brochure||'';
+    const planLink=planPdf?`<a class="pm-planlink" href="${planPdf}" target="_blank" rel="noopener">${ICON.doc||''}` +
+      `${x.plansPdf?'All floor plans (PDF)':'Floor plans are in the project brochure (PDF)'}</a>`:'';
+    const plansHtml=(planPics.length||planLink)?`<div class="pm-sec"><h4>Floor plans</h4>` +
+      (planPics.length?`<div class="pm-plans">${planPics.map(pp=>
+        `<a class="pm-plan" href="${pp[1]}" target="_blank" rel="noopener">` +
+        `<img src="${pp[1]}" alt="${(pp[0]||d.name)+' floor plan'}" loading="lazy">` +
+        `${pp[0]?`<span>${pp[0]}</span>`:''}</a>`).join('')}</div>`:'') + planLink + `</div>`:'';
     let clubHtml='';
     if(x.clubLevels && x.clubLevels.length){
       clubHtml=`<div class="pm-sec"><h4>Clubhouse</h4><div class="pm-levels">${x.clubLevels.map(l=>`<div class="pm-level"><span>${l[0]}</span><p>${l[1]}</p></div>`).join('')}</div></div>`;
@@ -425,7 +487,8 @@
     const hasPros=x.pros&&x.pros.length, hasCons=x.cons&&x.cons.length;
     const pcHtml=(hasPros||hasCons)?`<div class="pm-sec"><h4>Pros &amp; cons</h4><div class="pm-pc">` +
       (hasPros?pcCol('pro','Pros',x.pros):'') + (hasCons?pcCol('con','Good to know',x.cons):'') + `</div></div>`:'';
-    const amenHtml=(x.amenities&&x.amenities.length)?`<div class="pm-sec"><h4>Amenities</h4><div class="pm-chips">${x.amenities.map(a=>`<span class="pm-chip">${a}</span>`).join('')}</div></div>`:'';
+    const amenHtml=hasAmenities(x.amenities)?`<div class="pm-sec"><h4>Amenities</h4>${amenityGroups(x.amenities).map(g=>
+      `<div class="pm-amgroup">${g[0]?`<h5>${g[0]}</h5>`:''}<div class="pm-chips">${g[1].map(a=>`<span class="pm-chip">${a}</span>`).join('')}</div></div>`).join('')}</div>`:'';
     const locHtml=(x.location&&x.location.length)?`<div class="pm-sec"><h4>Location highlights</h4><div class="pm-loc">${x.location.map(l=>`<div class="pm-locrow"><span>${l[0]}</span><b>${l[1]}</b></div>`).join('')}</div></div>`:'';
     const specHtml=(x.specs&&x.specs.length)?`<div class="pm-sec"><h4>Specifications</h4><div class="pm-specs">${specRows(x.specs)}</div></div>`:'';
     const noteHtml=x.note?`<p class="pm-note">${x.note}</p>`:'';
@@ -456,13 +519,15 @@
     <div class="pm-body">
       ${tagline}
       ${featHtml}
-      ${pcHtml}
       ${factsHtml}
       ${tableHtml}
+      ${plansHtml}
+      ${moreTables}
       ${clubHtml}
       ${amenHtml}
       ${locHtml}
       ${specHtml}
+      ${pcHtml}
       ${noteHtml}
       <div class="pm-cta">
         <a class="btn btn--sm" href="https://wa.me/${GHR_WA}?text=${waMsg}" target="_blank" rel="noopener">${ICON.whatsapp||''}WhatsApp Enquiry</a>
@@ -605,6 +670,14 @@
           const o=document.createElement('option');o.value=b;o.textContent=b;devSel.appendChild(o);
         });
       }
+      const statusSel=dwrap.querySelector('[data-df="status"]');
+      if(statusSel){
+        const tally={};
+        devs.forEach(d=>{const s=progress(d).status; if(s&&s!==NA) tally[s]=(tally[s]||0)+1});
+        Object.keys(tally).sort((a,b)=>tally[b]-tally[a]||a.localeCompare(b)).forEach(s=>{
+          const o=document.createElement('option');o.value=s;o.textContent=s+' ('+tally[s]+')';statusSel.appendChild(o);
+        });
+      }
       const yearSel=dwrap.querySelector('[data-df="year"]');
       if(yearSel){
         const ready=devs.filter(isReady).length, tally={};
@@ -627,8 +700,9 @@
       }
       const dapply=()=>{
         const fa=dwrap.querySelector('[data-df="area"]'),fb=dwrap.querySelector('[data-df="band"]'),
-              fd=dwrap.querySelector('[data-df="builder"]'),fy=dwrap.querySelector('[data-df="year"]');
-        const who=fd?fd.value:'', when=fy?fy.value:'';
+              fd=dwrap.querySelector('[data-df="builder"]'),fy=dwrap.querySelector('[data-df="year"]'),
+              fs=dwrap.querySelector('[data-df="status"]');
+        const who=fd?fd.value:'', when=fy?fy.value:'', stage=fs?fs.value:'';
         if(chips) chips.querySelectorAll('.dev-chip').forEach(c=>c.classList.toggle('is-on',c.dataset.dev===who));
         let shown=0;
         devs.forEach(d=>{
@@ -637,6 +711,7 @@
           if(fb&&fb.value&&rateBand(d)!==fb.value)vis=false;
           if(who&&d.developer!==who)vis=false;
           if(when) vis=vis&&(when==='ready'?isReady(d):handoverYears(d).indexOf(when)>-1);
+          if(stage&&progress(d).status!==stage)vis=false;
           const m=devMarkers[d.id];if(m){vis?addMk(m):rmMk(m)}
           const card=devList&&devList.querySelector(`.dv[data-id="${d.id}"]`);if(card)card.style.display=vis?'':'none';
           if(vis)shown++;

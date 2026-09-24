@@ -261,7 +261,7 @@ ul{margin:0;padding:0;list-style:none}
 .prop:hover .prop-media-bg{transform:scale(1.06)}
 .prop-badge,.prop-status{z-index:2}
 /* featured-projects collage (homepage) */
-.feat-collage{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:230px;gap:16px}
+.feat-collage{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:150px;gap:12px}
 .feat-card{position:relative;display:block;border-radius:var(--radius);overflow:hidden;text-decoration:none;color:#fff;box-shadow:var(--shadow-sm);background:#0e2a3a}
 .feat-card--lead{grid-row:span 2;grid-column:span 1}
 @media(min-width:880px){.feat-card--lead{grid-column:span 2}}
@@ -273,11 +273,11 @@ ul{margin:0;padding:0;list-style:none}
 .feat-city{display:inline-flex;align-items:center;gap:.38rem;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.96)}
 .feat-city svg{width:16px;height:16px;color:#fff}
 .feat-name{font-family:var(--ff-display);font-size:1.32rem;line-height:1.1;color:#fff;margin:.05rem 0}
-.feat-card--lead .feat-name{font-size:1.85rem}
+.feat-card--lead .feat-name{font-size:1.35rem}
 .feat-dev{font-size:.82rem;color:rgba(255,255,255,.78)}
 .feat-card::after{content:"";position:absolute;inset:0;border:2px solid transparent;border-radius:var(--radius);transition:border-color .2s}
 .feat-card:hover::after{border-color:var(--red)}
-@media(max-width:720px){.feat-collage{grid-template-columns:1fr 1fr;grid-auto-rows:180px}.feat-card--lead{grid-column:span 2}}
+@media(max-width:720px){.feat-collage{grid-template-columns:1fr 1fr;grid-auto-rows:130px}.feat-card--lead{grid-column:span 2}}
 @media(max-width:460px){.feat-collage{grid-template-columns:1fr}.feat-card--lead{grid-column:span 1;grid-row:span 1}}
 .prop-badge{position:absolute;top:12px;left:12px;background:var(--red);color:#fff;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.3rem .65rem;border-radius:6px}
 .prop-status{position:absolute;top:12px;right:12px;background:rgba(20,17,15,.82);color:#fff;font-size:.7rem;font-weight:600;padding:.3rem .6rem;border-radius:6px;text-transform:uppercase;letter-spacing:.05em}
@@ -638,16 +638,15 @@ ul{margin:0;padding:0;list-style:none}
 .dv-status{position:absolute;right:12px;top:12px;z-index:2;font-size:.66rem;font-weight:700;padding:.24rem .55rem;border-radius:6px;background:rgba(255,255,255,.94);color:var(--red-deep);white-space:nowrap}
 .dv-body{padding:1.05rem 1.2rem 1.2rem;display:flex;flex-direction:column;flex:1}
 .dv-dev{font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;color:var(--gold);font-weight:700}
-.dv-name{font-family:var(--ff-display);font-size:1.18rem;margin:.25rem 0 .25rem;line-height:1.2}
+.dv-name{font-family:var(--ff-display);font-size:1.18rem;margin:.25rem 0;line-height:1.2}
 .dv-rate{color:var(--red);font-weight:700;font-size:1.02rem;font-variant-numeric:tabular-nums}
 .dv-meta{display:flex;gap:.45rem;align-items:center;color:var(--ink);font-size:1.04rem;font-weight:600;margin:.5rem 0 .75rem}
 .dv-meta svg{width:18px;height:18px;color:var(--red);flex:none}
 /* project feature grid: built-up area, configuration, property type, status, completion */
-.dv-feats{display:grid;grid-template-columns:1fr 1fr;gap:.6rem .7rem;padding:.85rem 0 .1rem;border-top:1px solid var(--line);margin-top:auto}
-.dv-feat{display:flex;gap:.45rem;align-items:flex-start;min-width:0}
-.dv-feat svg{width:15px;height:15px;color:var(--red);flex:none;margin-top:3px}
-.dv-feat span{display:block;font-size:.63rem;text-transform:uppercase;letter-spacing:.07em;color:var(--slate-2);font-weight:700}
-.dv-feat b{display:block;font-size:.82rem;color:var(--ink);font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.dv-info{display:flex;flex-wrap:wrap;gap:.2rem .6rem;align-items:baseline;padding-top:.85rem;
+  border-top:1px solid var(--line);margin-top:auto}
+.dv-info b{font-size:1rem;font-weight:700;color:var(--ink)}
+.dv-info span{font-size:.85rem;color:var(--slate);overflow-wrap:anywhere}
 .dv-actions{display:flex;flex-wrap:wrap;gap:.5rem 1.1rem;padding-top:.85rem;border-top:1px solid var(--line)}
 .dv-link{display:inline-flex;gap:.4rem;align-items:center;font-size:.84rem;font-weight:600;color:var(--red)}
 .dv-link svg{width:14px;height:14px}
@@ -769,11 +768,27 @@ ul{margin:0;padding:0;list-style:none}
 .pm-rate{margin-top:.5rem;font-weight:700;color:#fff;font-size:1.05rem}
 .pm-body{padding:clamp(1.2rem,3vw,1.8rem)}
 .pm-lead{color:var(--slate);font-size:1.02rem;line-height:1.55;margin:0 0 1.2rem}
-.pm-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.7rem;margin-bottom:1.4rem}
-.pm-fact{background:var(--mist);border:1px solid var(--line);border-radius:10px;padding:.6rem .75rem}
-.pm-fact span{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--slate-2);font-weight:700;margin-bottom:.15rem}
-.pm-fact b{font-size:.92rem;color:var(--ink);font-weight:600;line-height:1.3}
+/* facts read as a tight label / value list rather than boxes */
+.pm-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 1.8rem}
+.pm-fact{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+  padding:.38rem 0;border-bottom:1px solid var(--line)}
+.pm-fact span{flex:none;font-size:.8rem;color:var(--slate);font-weight:500}
+.pm-fact b{font-size:.85rem;color:var(--ink);font-weight:600;line-height:1.35;text-align:right;overflow-wrap:anywhere}
 .pm-sec{margin-bottom:1.4rem}
+/* floor plans */
+.pm-plans{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.8rem;margin-bottom:.8rem}
+.pm-plan{display:block;border:1px solid var(--line);border-radius:10px;padding:.5rem;background:#fff;
+  text-decoration:none;transition:border-color .2s ease,box-shadow .2s ease}
+.pm-plan:hover{border-color:var(--red);box-shadow:var(--shadow-sm)}
+.pm-plan img{width:100%;height:150px;object-fit:contain;display:block;background:#fff}
+.pm-plan span{display:block;font-size:.78rem;color:var(--slate);text-align:center;margin-top:.4rem;line-height:1.35}
+.pm-planlink{display:inline-flex;align-items:center;gap:.45rem;font-size:.88rem;font-weight:600;color:var(--red);text-decoration:none}
+.pm-planlink:hover{text-decoration:underline}
+.pm-planlink svg{width:16px;height:16px}
+/* amenity groups */
+.pm-amgroup+.pm-amgroup{margin-top:.75rem}
+.pm-amgroup h5{font-size:.68rem;text-transform:uppercase;letter-spacing:.09em;color:var(--slate-2);
+  font-weight:700;margin:0 0 .35rem}
 /* pros & cons: two plain-language columns */
 .pm-pc{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
 .pm-pc-col{border:1px solid var(--line);border-radius:10px;padding:.85rem 1rem;background:var(--mist)}
@@ -863,9 +878,6 @@ ul{margin:0;padding:0;list-style:none}
 .dv:hover .dv-img-bg,.dv.active .dv-img-bg{transform:scale(1.08)}
 .dv-name{transition:color .2s ease}
 .dv:hover .dv-name{color:var(--red-deep)}
-.dv-img::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(to top,rgba(11,12,16,.30),rgba(11,12,16,0) 55%);opacity:.55;transition:opacity .3s ease}
-.dv:hover .dv-img::after{opacity:1}
 
 /* property cards — deeper lift + shadow to match */
 .prop{transition:transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease, border-color .3s ease}
@@ -893,7 +905,7 @@ svg{max-width:100%}                    /* decorative SVGs never exceed their con
   :root{--gutter:16px}
   .hero-ctas .btn,.cta-band .btns .btn{flex:1 1 100%}
   .stat-band{grid-template-columns:1fr 1fr}
-  .pm-facts{grid-template-columns:1fr 1fr}
+  .pm-facts{grid-template-columns:1fr}
   .brand-logo--header{height:44px}
   .map-filters select{min-width:0;flex:1 1 46%}
   .footer-bottom .legal{gap:.75rem 1rem}
@@ -999,7 +1011,7 @@ body.nav-open{position:fixed;left:0;right:0;width:100%;overflow:hidden}
    ========================================================= */
 
 /* ---- Featured Properties: premium collage + staggered reveal ---- */
-.feat-collage{gap:18px}
+.feat-collage{gap:12px}
 .feat-card{
   opacity:0;                                   /* hidden until revealed */
   translate:0 40px; scale:.955;                /* longhands so :hover transform stays free */
@@ -1059,10 +1071,6 @@ body.nav-open{position:fixed;left:0;right:0;width:100%;overflow:hidden}
 .btn:not(.btn--ghost):not(.btn--light):not(.btn--outline-light):hover::after{background-position:-80% 0}
 
 /* ---- Project cards (.dv): smoother lift + image zoom ---- */
-.dv{transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease}
-.dv .dv-img-bg{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
-.dv:hover{transform:translateY(-6px)}
-.dv:hover .dv-img-bg{transform:scale(1.07)}
 .dv:hover .dv-more{color:var(--red)}
 .dv-more{transition:color .2s ease,gap .2s ease}
 

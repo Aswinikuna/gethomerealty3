@@ -28,15 +28,15 @@
   </svg>
   <div class="wrap hero2-grid">
     <div class="hero2-left">
-      <p class="hero2-kicker">Canada &middot; Hyderabad &middot; Visakhapatnam</p>
+      <p class="hero2-kicker" data-cms="hero-kicker">Canada &middot; Hyderabad &middot; Visakhapatnam</p>
       <div class="hero2-stage">
-        <h1 class="hero2-title is-active" data-slide="0"><span class="ln">FIND YOUR</span><span class="ln outline">DREAM</span><span class="ln">HOME</span></h1>
+        <h1 class="hero2-title is-active" data-slide="0" data-cms="hero-title"><span class="ln">FIND YOUR</span><span class="ln outline">DREAM</span><span class="ln">HOME</span></h1>
       </div>
-      <p class="hero2-lead">Trusted real estate guidance for buying, selling, investing and leasing across Canada, Hyderabad &amp; Visakhapatnam.</p>
-      <a class="hero2-cta" href="services.html">DISCOVER PROPERTIES <span aria-hidden="true">&rarr;</span></a>
+      <p class="hero2-lead" data-cms="hero-lead">Trusted real estate guidance for buying, selling, investing and leasing across Canada, Hyderabad &amp; Visakhapatnam.</p>
+      <a class="hero2-cta" href="services.html" data-cms="hero-cta">DISCOVER PROPERTIES <span aria-hidden="true">&rarr;</span></a>
     </div>
     <div class="hero2-right">
-      <div class="hero2-art"><svg class="towers" viewBox="0 0 608 620" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <div class="hero2-art" data-cms="hero-art"><svg class="towers" viewBox="0 0 608 620" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <g class="tw-wins">
 <rect class="tw-win" x="68" y="186" width="14" height="15" rx="1.5"/>
 <rect class="tw-win" x="96" y="186" width="14" height="15" rx="1.5"/>
@@ -349,7 +349,7 @@
 <!-- STATS -->
 <section class="section section--tight" style="padding-block:clamp(20px,3vw,36px)">
   <div class="wrap">
-    <div class="stat-band">
+    <div class="stat-band" data-cms="stats">
       <div class="stat anim-up"><b>1,200+</b><span>Families Served</span></div>
       <div class="stat anim-up"><b>3</b><span>Regions Covered</span></div>
       <div class="stat anim-up"><b>₹600 Cr+</b><span>Property Value Handled</span></div>
@@ -436,6 +436,15 @@
   </div>
 </section>
 
+<!-- VIDEOS (shown only when the admin has active videos) -->
+<section class="section" data-cms="videos" hidden>
+  <div class="wrap">
+    <div class="section-head center"><p class="eyebrow" style="justify-content:center">Watch</p>
+      <h2 class="h2">Videos from Get Home Realty</h2></div>
+    <div class="grid cols-3" data-cms="video-grid"></div>
+  </div>
+</section>
+
 <!-- TESTIMONIALS -->
 <section class="section section--mist" style="padding-block:clamp(28px,4vw,48px)">
   <div class="wrap">
@@ -458,6 +467,8 @@
 
 <div data-gh-footer></div>
 <script src="assets/js/data.js"></script>
+<script src="/api/public/content.js"></script>
+<script src="assets/js/cms.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
 window.GHR_PAGE_INIT=function(){
@@ -477,8 +488,9 @@ window.GHR_PAGE_INIT=function(){
       <div class="prop-actions" style="border:0;padding-top:1.2rem;margin-top:auto"><a class="btn btn--sm btn--ghost" href="services.html">Learn More</a></div></article>`).join('');
 
   // featured projects (real towers with real images), collage layout
-  const featIds=['mk-one','hyd-gamya','mvv-grand','hyd-myhome-akrida','vaisakhi-construction','hyd-aparna-newlands'];
-  const devById=Object.fromEntries(window.GHR.GHR_DEVELOPERS.map(d=>[d.id,d]));
+  const CMSF=window.GHR.featuredProjects;
+  const featIds=CMSF&&CMSF.length?CMSF.map(d=>d.id):['mk-one','hyd-gamya','mvv-grand','hyd-myhome-akrida','vaisakhi-construction','hyd-aparna-newlands'];
+  const devById=Object.fromEntries(window.GHR.GHR_DEVELOPERS.concat(CMSF||[]).map(d=>[d.id,d]));
   const IMG=window.GHR.GHR_IMAGES||{};
   const feat=featIds.map(id=>devById[id]).filter(Boolean);
   document.getElementById('featuredGrid').innerHTML=feat.map((d,i)=>{

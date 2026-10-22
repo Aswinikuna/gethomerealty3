@@ -13,6 +13,11 @@
     whatsapp:'https://wa.me/919963206933',
     addr:'Louis Philippe Serilingampally, 4th Floor, 356 Old Mumbai Highway, Serilingampally (M), Telangana',
     hours:'Open 24/7',
+    // Where enquiry forms are saved (the admin app). Normally the site is served BY the
+    // admin app, so the same-origin '/api/public/leads' is used. If these pages are ever
+    // hosted elsewhere, put the admin app's address here, e.g. 'https://gethomerealty.ca'
+    // (and add this site's address to PUBLIC_FORM_ORIGINS in the admin app).
+    leadsApi:'',
     // social profiles — add a URL here and the icon appears in the footer
     social:{
       yt:'https://www.youtube.com/@gethomerealty7461',
@@ -22,8 +27,6 @@
       x:'',
     },
   };
-  window.GHR_CONFIG = CONFIG;
-
   const NAV = [
     {label:'Home', href:'index.html'},
     {label:'About Us', href:'about.html'},
@@ -37,6 +40,18 @@
     {label:'Join Our Brokerage', href:'join.html'},
     {label:'Contact', href:'contact.html'},
   ];
+
+  /* ---- admin-managed overrides (assets/js/cms.js); absent → built-in values above ---- */
+  const CMS = window.GHR.cmsConfig;
+  if(CMS){
+    Object.keys(CMS).forEach(k=>{ if(k!=='nav'&&k!=='social') CONFIG[k]=CMS[k]; });
+    if(CMS.social) CONFIG.social=CMS.social;
+    if(CMS.nav&&CMS.nav.length){
+      const builtIn=NAV.splice(0,NAV.length);
+      CMS.nav.forEach(n=>{ const o=builtIn.find(x=>x.href===n.href); NAV.push(o&&o.sub?{label:n.label,href:n.href,sub:o.sub}:n); });
+    }
+  }
+  window.GHR_CONFIG = CONFIG;
 
   const BRAND = `
     <a class="brand" href="index.html" aria-label="Get Home Realty — A Tradition of Trust">
@@ -67,11 +82,11 @@
 
     return `
     <div class="topbar"><div class="wrap">
-      <div class="topbar-tag">Canada · Hyderabad · Visakhapatnam</div>
+      <div class="topbar-tag">${CONFIG.tag||'Canada · Hyderabad · Visakhapatnam'}</div>
       <div class="topbar-right">
-        <a href="${CONFIG.phoneHref}" aria-label="Call us">${ICON.phone}<span class="tb-text">${CONFIG.phone}</span></a>
-        <a href="${CONFIG.whatsapp}" target="_blank" rel="noopener" aria-label="Message us on WhatsApp">${ICON.whatsapp}<span class="tb-text">WhatsApp</span></a>
-        <a href="mailto:${CONFIG.email}" aria-label="Email us">${ICON.mail}<span class="tb-text">${CONFIG.email}</span></a>
+        <a href="${CONFIG.tbPhoneHref||CONFIG.phoneHref}" aria-label="Call us">${ICON.phone}<span class="tb-text">${CONFIG.tbPhone||CONFIG.phone}</span></a>
+        <a href="${CONFIG.tbWhatsapp||CONFIG.whatsapp}" target="_blank" rel="noopener" aria-label="Message us on WhatsApp">${ICON.whatsapp}<span class="tb-text">WhatsApp</span></a>
+        <a href="mailto:${CONFIG.tbEmail||CONFIG.email}" aria-label="Email us">${ICON.mail}<span class="tb-text">${CONFIG.tbEmail||CONFIG.email}</span></a>
       </div>
     </div></div>
     <header class="site-header" id="siteHeader"><div class="wrap"><nav class="nav" aria-label="Primary">
@@ -202,10 +217,77 @@
     els.forEach(e=>io.observe(e));
   }
 
-  /* ---------------- form validation ---------------- */
+  /* ---------------- form validation + lead submission ---------------- */
+  const FORM_SOURCE={'index.html':'Homepage — Quick Inquiry','contact.html':'Contact page','buyers.html':'Buyers page',
+    'sellers.html':'Sellers page','investors.html':'Investors page','join.html':'Join Our Brokerage page',
+    'property-detail.html':'Property detail page'};
+  const FORM_TYPE={'buyers.html':'Buying','sellers.html':'Selling','investors.html':'Investment',
+    'join.html':'Join Brokerage','property-detail.html':'Property enquiry'};
+  const labelOf=f=>{const l=f.closest('.field')&&f.closest('.field').querySelector('label');
+    return l?l.textContent.replace(/\*/g,'').trim():(f.name||f.type||'Field')};
+
+  /* Collect a form into a lead: name/phone/email/message by field type, the
+     "I am interested in" choice as the inquiry type, everything else as details. */
+  function leadFrom(form,page){
+    const lead={name:'',phone:'',email:'',message:'',inquiry_type:FORM_TYPE[page]||'',
+      source:FORM_SOURCE[page]||page,details:{},website:''};
+    form.querySelectorAll('input,select,textarea').forEach(f=>{
+      if(f.name==='website'){lead.website=f.value;return}
+      const label=labelOf(f);
+      if(f.type==='file'){if(f.files&&f.files[0])lead.details[label]=f.files[0].name+' (file not uploaded — request by email)';return}
+      const v=(f.value||'').trim();if(!v)return;
+      if(f.type==='email'&&!lead.email)lead.email=v;
+      else if(f.type==='tel'&&!lead.phone)lead.phone=v;
+      else if(f.tagName==='TEXTAREA'&&!lead.message)lead.message=v;
+      else if(f.type==='text'&&!lead.name&&/name/i.test(label))lead.name=v;
+      else if(f.tagName==='SELECT'&&/interested/i.test(label))lead.inquiry_type=v;
+      else lead.details[label.slice(0,80)]=v.slice(0,500);
+    });
+    const pid=new URLSearchParams(location.search).get('id');
+    if(page==='property-detail.html'&&pid)lead.reference={type:'property',id:pid};
+    // forms on /properties/… and /projects/… pages say what they're about
+    const ds=form.dataset;
+    if(ds.refType&&ds.refId)lead.reference={type:ds.refType,id:ds.refId};
+    if(ds.source)lead.source=ds.source+(document.querySelector('h1')?': '+document.querySelector('h1').textContent.trim().slice(0,80):'');
+    if(ds.inquiry&&!lead.inquiry_type)lead.inquiry_type=ds.inquiry;
+    return lead;
+  }
+
+  /* Save an enquiry in the admin app. Tries this site's own /api first; if this page is
+     served by something that has no API (a static host, VS Code Live Server, file://),
+     falls back to the admin app's address so the enquiry is still saved. */
+  function leadEndpoints(){
+    const list=[];
+    if(/^https?:$/.test(location.protocol)) list.push('/api/public/leads');
+    if(CONFIG.leadsApi) list.push(CONFIG.leadsApi.replace(/\/+$/,'')+'/api/public/leads');
+    // local preview on another port → the admin app's dev server
+    if(/^(localhost|127\.0\.0\.1|)$/.test(location.hostname)&&location.port!=='3000') list.push('http://localhost:3000/api/public/leads');
+    return list.filter((u,i,a)=>a.indexOf(u)===i);
+  }
+  function sendLead(lead){
+    const urls=leadEndpoints();
+    const attempt=i=>{
+      if(i>=urls.length) return Promise.reject(new Error(''));
+      return fetch(urls[i],{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lead)})
+        .then(r=>{
+          // no API here (404/405/HTML page) → try the next address
+          const isJson=(r.headers.get('content-type')||'').indexOf('application/json')>-1;
+          if(!isJson&&[404,405,501].indexOf(r.status)>-1) return attempt(i+1);
+          return r.json().catch(()=>({})).then(d=>{ if(!r.ok) throw Object.assign(new Error(d.error||''),{final:true}); return d; });
+        },err=>attempt(i+1));   // network error / blocked → next address
+    };
+    return attempt(0);
+  }
+
   function wireForms(){
+    const page=document.body.getAttribute('data-page')||'index.html';
     document.querySelectorAll('form.gh-form').forEach(form=>{
       form.setAttribute('novalidate','');
+      // spam trap: invisible to people, filled in by bots
+      const trap=document.createElement('input');
+      trap.type='text';trap.name='website';trap.tabIndex=-1;trap.autocomplete='off';trap.setAttribute('aria-hidden','true');
+      trap.style.cssText='position:absolute;left:-9999px;width:1px;height:1px;opacity:0';
+      form.appendChild(trap);
       form.addEventListener('submit',e=>{
         e.preventDefault();let ok=true;
         form.querySelectorAll('[required]').forEach(f=>{
@@ -217,12 +299,27 @@
           field&&field.classList.toggle('show-err',!valid);
           if(!valid&&ok){ok=false;f.focus()}
         });
-        if(ok){
-          const note=form.querySelector('.form-success');
-          if(note){note.classList.add('show');note.scrollIntoView({behavior:'smooth',block:'center'})}
-          form.reset();
-          form.querySelectorAll('.invalid').forEach(f=>f.classList.remove('invalid'));
-        }
+        if(!ok)return;
+        const btn=form.querySelector('[type=submit]'),btnText=btn&&btn.textContent;
+        let err=form.querySelector('.form-error');
+        if(!err){err=document.createElement('div');err.className='form-error';err.setAttribute('role','alert');
+          err.style.cssText='display:none;margin:0 0 1rem;padding:.8rem 1rem;border-radius:10px;background:#fdecee;color:#8f0c1b;font-weight:500';
+          form.insertBefore(err,form.firstChild)}
+        err.style.display='none';
+        if(btn){btn.disabled=true;btn.textContent='Sending…'}
+        sendLead(leadFrom(form,page))
+          .then(()=>{
+            const note=form.querySelector('.form-success');
+            if(note){note.classList.add('show');note.scrollIntoView({behavior:'smooth',block:'center'})}
+            form.reset();
+            form.querySelectorAll('.invalid').forEach(f=>f.classList.remove('invalid'));
+          })
+          .catch(e=>{
+            err.textContent=(e&&e.message?e.message+' ':'We couldn’t send your message just now. ')+
+              'You can also call '+(CONFIG.phone||'us')+' or message us on WhatsApp.';
+            err.style.display='block';err.scrollIntoView({behavior:'smooth',block:'center'});
+          })
+          .finally(()=>{if(btn){btn.disabled=false;btn.textContent=btnText}});
       });
       form.querySelectorAll('input,select,textarea').forEach(f=>{
         f.addEventListener('input',()=>{f.classList.remove('invalid');const fl=f.closest('.field');fl&&fl.classList.remove('show-err')});
@@ -262,6 +359,7 @@
   }
   // deterministic placeholder image per property (Unsplash source by keyword)
   function imgFor(p){
+    if(p.image)return p.image; // uploaded in the admin
     const seeds={Apartment:'1545324418-cc1a3fa10c00',Villa:'1613490493576-7fde63acd811',
       Plot:'1500382017468-9049fed747ef',Commercial:'1486406146926-c627a92ad1ab'};
     const id=seeds[p.type]||'1564013799919-ab600027ffc6';
@@ -310,6 +408,7 @@
     const f=document.querySelector('[data-gh-footer]');if(f)f.innerHTML=buildFooter();
     wireNav();wireForms();renderProperties();wireWhatsApp();
     if(window.GHR_PAGE_INIT)window.GHR_PAGE_INIT();
+    if(window.GHR.applyCms)window.GHR.applyCms(page); // admin-managed text/images (cms.js)
     wireReveal(); // run after page-specific content (e.g. What We Do / Client Stories) is injected
   });
 

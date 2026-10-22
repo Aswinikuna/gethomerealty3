@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.data/
+.env
+.env.local
+*.tsbuildinfo
+next-env.d.ts
+# copied in from ../ by scripts/sync-site.mjs — the originals live at the repo root
+public/*.html
+public/assets/
+site-pages/
+# local-dev uploads (production uploads go to Supabase Storage)
+public/uploads/

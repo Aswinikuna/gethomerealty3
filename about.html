@@ -26,11 +26,11 @@
   <div class="wrap split">
     <div>
       <p class="eyebrow">Who We Are</p>
-      <h2 class="h2">A professional brokerage, end to end</h2>
-      <p class="lead" style="margin-top:1rem">Get Home Realty is a professional real estate brokerage helping clients with buying, selling, leasing, investing, pre-construction and complete property services. We pair local market knowledge with a disciplined, transparent process &mdash; so whether you&rsquo;re a first-time buyer, a seller, an investor, a landlord, a tenant or a pre-construction client, you always know your next step.</p>
-      <p style="margin-top:1rem;color:var(--slate)">Our advisors work across three regions, bringing international standards of service to fast-growing markets in Hyderabad and Visakhapatnam.</p>
+      <h2 class="h2" data-cms="about-heading">A professional brokerage, end to end</h2>
+      <p class="lead" style="margin-top:1rem" data-cms="about-short">Get Home Realty is a professional real estate brokerage helping clients with buying, selling, leasing, investing, pre-construction and complete property services. We pair local market knowledge with a disciplined, transparent process &mdash; so whether you&rsquo;re a first-time buyer, a seller, an investor, a landlord, a tenant or a pre-construction client, you always know your next step.</p>
+      <p style="margin-top:1rem;color:var(--slate)" data-cms="about-company">Our advisors work across three regions, bringing international standards of service to fast-growing markets in Hyderabad and Visakhapatnam.</p>
     </div>
-    <div class="split-media tall" style="background-image:url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=900&q=80')"></div>
+    <div class="split-media tall" data-cms="about-image" style="background-image:url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=900&q=80')"></div>
   </div>
 </section>
 
@@ -72,6 +72,8 @@
 
 <div data-gh-footer></div>
 <script src="assets/js/data.js"></script>
+<script src="/api/public/content.js"></script>
+<script src="assets/js/cms.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
 window.GHR_PAGE_INIT=function(){
@@ -93,7 +95,7 @@ window.GHR_PAGE_INIT=function(){
   // rather than filled with a guess. `photo` is a path to the advisor's own
   // photograph (e.g. 'assets/img/team/akhilesh.jpg'); without one the card shows
   // a branded initials avatar.
-  const team=[
+  const team=(window.GHR.cmsAgents&&window.GHR.cmsAgents.length)?window.GHR.cmsAgents:[
     {name:'Akhilesh Marpina', role:'Director / Manager', at:'Hyderabad',
      mail:'Akhilesh', phone:'+91 99632 06933',
      bio:'Heads the India desk — builder tie-ups, project selection and closings across Hyderabad and Visakhapatnam. The first call for site visits, pricing and negotiation.'},
@@ -102,7 +104,7 @@ window.GHR_PAGE_INIT=function(){
      bio:'Builds the builder and channel-partner network across the region, and works with buyers to shortlist projects that fit their budget, locality and possession timeline.'},
     {name:'Vishnu Rudhraraju', role:'Relationship Manager', phone:'+91 96669 72822',
      bio:'Stays with clients through the journey — site visits, booking paperwork, home-loan coordination and follow-through to handover.'},
-    {name:'Jay Patel', role:'Sales Representative', at:'Mississauga, GTA', mail:'jay',
+    {name:'Santhosh Reddy Nara', role:'Sales Representative', mail:'santhoshreddynarra36@gmail.com',
      bio:'Guides buyers and sellers through every step of the transaction, with a focus on market trends and securing the best deal.'},
   ];
   const initials=n=>n.split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();

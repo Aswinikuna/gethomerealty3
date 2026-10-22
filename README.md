@@ -54,6 +54,10 @@ ghr/
 
 ## 3. Editing content
 
+> **Admin panel:** content is now managed at **`/admin`** (see [`admin-app/README.md`](admin-app/README.md)).
+> The admin's database overrides the built-in values described below. Those values remain
+> the fallback whenever the admin API isn't available (e.g. opening the files directly).
+
 ### Contact details (phone, email, WhatsApp, address)
 One place: the `CONFIG` object at the top of `assets/js/main.js`. Updates the header, footer, contact page and WhatsApp button everywhere.
 
@@ -102,9 +106,9 @@ The home hero uses a CSS entrance animation (staggered fade-up of the headline/s
 
 ## 5. Forms
 
-All forms use `class="gh-form"` and are **validated client-side** (required fields, email and phone format) by `main.js`. On success they show an inline confirmation message.
+All forms use `class="gh-form"` and are **validated client-side** (required fields, email and phone format) by `main.js`.
 
-**They do not yet submit anywhere** — there is no backend. To make them live, in `main.js` find the form `submit` handler and POST the form data to your endpoint (e.g. Formspree, a serverless function, or your CRM). The marked success block is where to trigger on a successful response.
+Valid submissions are POSTed to `/api/public/leads` and appear under **Leads / Enquiries** in the admin panel. The inline confirmation only shows once the lead is saved. If the API can't be reached, the form shows an error with the phone number instead.
 
 ---
 

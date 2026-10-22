@@ -1089,7 +1089,8 @@ body.nav-open{position:fixed;left:0;right:0;width:100%;overflow:hidden}
   color:var(--ink);border-bottom:1px solid var(--line);transition:color .15s,padding-left .15s}
 .m-links .m-link:hover,.m-links .m-link:focus-visible{color:var(--red);padding-left:.6rem}
 .m-links .m-link.active{color:var(--red)}
-.mobile-nav .m-cta{margin-top:1.5rem;width:100%}
+.mobile-nav .m-cta{margin-top:1.5rem;width:100%;flex:none;min-height:52px;padding:.85rem 1.5rem;font-size:1rem;gap:.6rem}
+.mobile-nav .m-cta svg{width:18px;height:18px;flex:none}
 
 /* never render the mobile overlay on desktop */
 @media(min-width:1121px){ .mobile-nav,.scrim{display:none!important} }

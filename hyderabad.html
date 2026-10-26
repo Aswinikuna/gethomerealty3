@@ -29,7 +29,7 @@
 <section class="section"><div class="wrap">
   <div class="section-head center"><p class="eyebrow" style="justify-content:center">How We Help in Hyderabad</p>
     <h2 class="h2">Full support, every property type</h2></div>
-  <div class="grid cols-4" id="hydSvc"></div>
+  <div class="grid cols-4" id="hydSvc" data-gap-cta="Talk to our Hyderabad desk|Tell us your budget and preferred area &mdash; we&rsquo;ll shortlist the right projects for you."></div>
 </div></section>
 
 <!-- MAP -->
@@ -71,16 +71,18 @@
 window.GHR_PAGE_INIT=function(){
   const I=window.GHR.ICON;
   const svc=[
-    ['home','Residential buying support','Find the right Hyderabad home by budget, locality and lifestyle &mdash; from Kokapet and Tellapur to Gachibowli and the Financial District &mdash; with honest pricing guidance.'],
-    ['building','Apartment projects','Curated access to the city&rsquo;s premium gated towers, with floor plans, pricing and possession timelines compared side by side.'],
-    ['home','Villa projects','Gated villa communities across Tukkuguda, Kollur and the ORR belt, matched to your space, privacy and budget.'],
-    ['chart','Investment property guidance','Rental-yield and appreciation analysis on Hyderabad&rsquo;s fastest-growing pockets, so your capital goes where the returns are.'],
-    ['handshake','Builder / project coordination','We work directly with developers on your behalf &mdash; bookings, allocations, documentation and follow-ups handled for you.'],
-    ['shield','End-to-end property assistance','One team from first site visit through negotiation, paperwork and registration &mdash; nothing left for you to chase.'],
-    ['spark','Pre-construction access','Early allocations and launch-day pricing on new Hyderabad projects before they reach public listings.'],
+    ['home','Residential buying support','Find the right Hyderabad home by budget, locality and lifestyle &mdash; from Kokapet and Tellapur to Gachibowli and the Financial District &mdash; with honest pricing guidance.',['See all projects','#projects']],
+    ['building','Apartment projects','Curated access to the city&rsquo;s premium gated towers, with floor plans, pricing and possession timelines compared side by side.',['Browse apartments','#projects']],
+    ['home','Villa projects','Gated villa communities across Tukkuguda, Kollur and the ORR belt, matched to your space, privacy and budget.',['Explore villas','#projects']],
+    ['chart','Investment property guidance','Rental-yield and appreciation analysis on Hyderabad&rsquo;s fastest-growing pockets, so your capital goes where the returns are.',['Investor guidance','investors.html']],
+    ['handshake','Builder / project coordination','We work directly with developers on your behalf &mdash; bookings, allocations, documentation and follow-ups handled for you.',['Talk to our desk','contact.html']],
+    ['shield','End-to-end property assistance','One team from first site visit through negotiation, paperwork and registration &mdash; nothing left for you to chase.',['How buying works','buyers.html']],
+    ['spark','Pre-construction access','Early allocations and launch-day pricing on new Hyderabad projects before they reach public listings.',['See new launches','#projects']],
   ];
-  document.getElementById('hydSvc').innerHTML=svc.map(s=>`
-    <article class="card anim-up"><div class="ic">${I[s[0]]}</div><h3 style="font-size:1.05rem">${s[1]}</h3><p>${s[2]}</p></article>`).join('');
+  document.getElementById('hydSvc').innerHTML=svc.map((s,i)=>`
+    <article class="card card--rich anim-up"><span class="card-num" aria-hidden="true">${String(i+1).padStart(2,'0')}</span>
+      <div class="ic">${I[s[0]]}</div><h3 style="font-size:1.05rem">${s[1]}</h3><p>${s[2]}</p>
+      <a class="card-link" href="${s[3][1]}">${s[3][0]} <span aria-hidden="true">&rarr;</span></a></article>`).join('');
   window.GHR.initCityMap({mapId:'map-hyd',center:[17.46,78.36],city:'Hyderabad',devListId:'hydDevList',devFiltersId:'hydDevFilters',devEmptyId:'hydDevEmpty'});
   window.dispatchEvent(new Event('scroll'));
 };

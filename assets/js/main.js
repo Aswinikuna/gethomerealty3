@@ -411,7 +411,35 @@
     if(window.GHR_PAGE_INIT)window.GHR_PAGE_INIT();
     if(window.GHR.applyCms)window.GHR.applyCms(page); // admin-managed text/images (cms.js)
     wireReveal(); // run after page-specific content (e.g. What We Do / Client Stories) is injected
+    fillGridGaps();
   });
+
+  /* Grids marked data-gap-cta="Title|Text" get a "talk to an advisor" card that fills
+     whatever space the last row leaves empty (recomputed when the column count changes). */
+  function fillGridGaps(){
+    const grids=[...document.querySelectorAll('[data-gap-cta]')]; if(!grids.length) return;
+    const C=window.GHR_CONFIG||CONFIG, I=window.GHR.ICON||{};
+    const tel='tel:+'+String(C.phone||'').replace(/\D/g,'');
+    grids.forEach(g=>{
+      const [title,text]=(g.getAttribute('data-gap-cta')||'').split('|');
+      const el=document.createElement('article');
+      el.className='gap-cta'; el.setAttribute('data-gap-fill','');
+      el.innerHTML=`<span class="gap-cta-ic" aria-hidden="true">${I.phone||''}</span>
+        <h3>${title||'Talk to an advisor'}</h3><p>${text||''}</p>
+        <div class="gap-cta-btns"><a class="btn btn--light btn--sm" href="${tel}">${I.phone||''}Call us</a>
+          <a class="btn btn--outline-light btn--sm" href="${C.whatsapp}" target="_blank" rel="noopener">WhatsApp</a></div>`;
+      g.appendChild(el);
+    });
+    const fit=()=>grids.forEach(g=>{
+      const el=g.querySelector(':scope > [data-gap-fill]'); if(!el) return;
+      const cols=getComputedStyle(g).gridTemplateColumns.split(' ').filter(Boolean).length||1;
+      const n=[...g.children].filter(c=>c!==el&&c.offsetParent!==null).length;
+      const rem=n%cols;
+      el.style.display=rem||cols===1?'':'none';
+      el.style.gridColumn=rem?'span '+(cols-rem):'';
+    });
+    fit(); let t; window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(fit,120)});
+  }
 
   function wireWhatsApp(){
     const w=document.getElementById('waWidget');if(!w)return;

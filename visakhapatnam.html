@@ -28,7 +28,7 @@
 <section class="section"><div class="wrap">
   <div class="section-head center"><p class="eyebrow" style="justify-content:center">How We Help in Visakhapatnam</p>
     <h2 class="h2">Full support, every property type</h2></div>
-  <div class="grid cols-4" id="vskpSvc"></div>
+  <div class="grid cols-4" id="vskpSvc" data-gap-cta="Talk to our Vizag desk|Tell us your budget and preferred area &mdash; we&rsquo;ll shortlist the right projects for you."></div>
 </div></section>
 
 <section class="section" id="map"><div class="wrap">
@@ -68,16 +68,18 @@
 window.GHR_PAGE_INIT=function(){
   const I=window.GHR.ICON;
   const svc=[
-    ['home','Residential buying support','Find the right home in Vizag by budget, locality and lifestyle &mdash; from Madhurawada and Yendada to MVP Colony and Beach Road &mdash; with honest pricing guidance.'],
-    ['building','Apartment projects','Curated access to the city&rsquo;s gated high-rise communities, with floor plans, pricing and availability compared side by side.'],
-    ['home','Villa projects','Independent and gated villas across the hill and coastal pockets, matched to your space, privacy and budget needs.'],
-    ['chart','Investment property guidance','Yield and appreciation analysis on Vizag&rsquo;s fastest-moving localities, so you buy where the returns actually are.'],
-    ['handshake','Builder / project coordination','We deal directly with developers on your behalf &mdash; bookings, allocations, documentation and follow-ups handled for you.'],
-    ['shield','End-to-end property assistance','One team from first site visit through negotiation, paperwork and registration &mdash; nothing left for you to chase.'],
-    ['spark','Pre-construction access','Early allocations and launch-day pricing on new Vizag projects before they reach public listings.'],
+    ['home','Residential buying support','Find the right home in Vizag by budget, locality and lifestyle &mdash; from Madhurawada and Yendada to MVP Colony and Beach Road &mdash; with honest pricing guidance.',['See all projects','#projects']],
+    ['building','Apartment projects','Curated access to the city&rsquo;s gated high-rise communities, with floor plans, pricing and availability compared side by side.',['Browse apartments','#projects']],
+    ['home','Villa projects','Independent and gated villas across the hill and coastal pockets, matched to your space, privacy and budget needs.',['Explore villas','#projects']],
+    ['chart','Investment property guidance','Yield and appreciation analysis on Vizag&rsquo;s fastest-moving localities, so you buy where the returns actually are.',['Investor guidance','investors.html']],
+    ['handshake','Builder / project coordination','We deal directly with developers on your behalf &mdash; bookings, allocations, documentation and follow-ups handled for you.',['Talk to our desk','contact.html']],
+    ['shield','End-to-end property assistance','One team from first site visit through negotiation, paperwork and registration &mdash; nothing left for you to chase.',['How buying works','buyers.html']],
+    ['spark','Pre-construction access','Early allocations and launch-day pricing on new Vizag projects before they reach public listings.',['See new launches','#projects']],
   ];
-  document.getElementById('vskpSvc').innerHTML=svc.map(s=>`
-    <article class="card anim-up"><div class="ic">${I[s[0]]}</div><h3 style="font-size:1.05rem">${s[1]}</h3><p>${s[2]}</p></article>`).join('');
+  document.getElementById('vskpSvc').innerHTML=svc.map((s,i)=>`
+    <article class="card card--rich anim-up"><span class="card-num" aria-hidden="true">${String(i+1).padStart(2,'0')}</span>
+      <div class="ic">${I[s[0]]}</div><h3 style="font-size:1.05rem">${s[1]}</h3><p>${s[2]}</p>
+      <a class="card-link" href="${s[3][1]}">${s[3][0]} <span aria-hidden="true">&rarr;</span></a></article>`).join('');
   window.GHR.initCityMap({mapId:'map-vskp',center:[17.78,83.34],city:'Visakhapatnam',devListId:'vskpDevList',devFiltersId:'vskpDevFilters',devEmptyId:'vskpDevEmpty'});
   window.dispatchEvent(new Event('scroll'));
 };

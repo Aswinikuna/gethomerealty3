@@ -1467,3 +1467,52 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
 .steps .gap-cta h3{font-size:1.08rem;margin:0}
 .steps .gap-cta-btns{margin-top:.35rem}
 .card--rich .card-link{white-space:nowrap}
+
+/* =====================================================================
+   Luxury navbar: deep top strip with a gold hairline, ivory glass header,
+   gold-to-red animated underlines, refined dropdown and a shimmering CTA.
+   Self-contained — delete this block to return to the previous navbar.
+   ===================================================================== */
+:root{--gold-line:linear-gradient(90deg,rgba(176,141,87,0) 0%,#C9A46A 20%,#E8D3A6 50%,#C9A46A 80%,rgba(176,141,87,0) 100%)}
+.topbar{background:linear-gradient(90deg,#0d0b0a 0%,#1b1512 50%,#0d0b0a 100%);position:relative}
+.topbar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold-line);opacity:.75}
+.topbar-tag{color:#D9BC86;letter-spacing:.2em}
+.topbar a{opacity:.86;transition:color .2s,opacity .2s}
+.topbar a:hover{color:#E8D3A6;opacity:1}
+.topbar .ico,.topbar a svg{color:#D9BC86}
+
+.site-header{background:rgba(255,253,249,.86);border-bottom:0;
+  backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px)}
+.site-header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold-line);opacity:.9}
+.site-header.is-stuck{background:rgba(255,253,249,.95);box-shadow:0 14px 34px rgba(18,17,15,.10)}
+.site-header .brand-logo--header{transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.site-header .brand:hover .brand-logo--header{transform:scale(1.03)}
+
+/* links: refined weight, gold→red underline that grows from the centre */
+.nav-list > li > a,.nav-toggle-sub{position:relative;font-weight:600;letter-spacing:.015em;color:#1d1a17;background:none!important;
+  padding:.6rem clamp(.55rem,.9vw,.9rem)}
+.nav-list > li > a::after,.nav-toggle-sub::after{content:"";position:absolute;left:18%;right:18%;bottom:.28rem;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,#C9A46A,#CE1126);transform:scaleX(0);transform-origin:center;transition:transform .28s cubic-bezier(.2,.7,.2,1)}
+.nav-list > li > a:hover,.nav-toggle-sub:hover{color:var(--red-deep)}
+.nav-list > li > a:hover::after,.nav-toggle-sub:hover::after,.nav-list > li > a.active::after{transform:scaleX(1)}
+.nav-list > li > a.active{color:var(--red)}
+.has-sub > a.active::after{right:calc(18% + 14px)}
+
+/* dropdown: ivory card with a gold top edge */
+.submenu{border:1px solid rgba(176,141,87,.25);border-radius:16px;padding:.55rem;background:rgba(255,253,249,.98);
+  box-shadow:0 22px 48px rgba(18,17,15,.16);overflow:hidden}
+.submenu::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#C9A46A,#CE1126)}
+.submenu li a{position:relative;font-weight:500;transition:background .2s,color .2s,padding-left .2s}
+.submenu li a:hover{background:linear-gradient(90deg,#FFF1F3,#FFF8F0);color:var(--red-deep);padding-left:1rem}
+
+/* call-to-action: deep red with a gold inner ring and a light sweep on hover */
+.nav-cta .btn{position:relative;overflow:hidden;letter-spacing:.02em;
+  background:linear-gradient(135deg,#E0263C 0%,#B30F27 55%,#8B0A20 100%)!important;
+  box-shadow:inset 0 0 0 1px rgba(232,211,166,.55),0 10px 24px rgba(165,13,31,.32)!important}
+.nav-cta .btn::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:45%;transform:skewX(-20deg);
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.45),rgba(255,255,255,0));transition:left .6s ease}
+.nav-cta .btn:hover::after{left:120%}
+.nav-cta .btn:hover{box-shadow:inset 0 0 0 1px rgba(232,211,166,.85),0 14px 30px rgba(165,13,31,.42)!important}
+.burger{border-color:rgba(176,141,87,.35)!important}
+
+@media(prefers-reduced-motion:reduce){.nav-cta .btn::after,.nav-list > li > a::after,.nav-toggle-sub::after{transition:none}}

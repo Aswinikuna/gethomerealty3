@@ -1764,3 +1764,29 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
 .gt-form .input:focus,.gt-form .textarea:focus{border-color:rgba(232,211,166,.65);box-shadow:0 0 0 3px rgba(206,17,38,.25)}
 .gt-btn{background:linear-gradient(135deg,#E0263C 0%,#CE1126 50%,#A50D1F 100%);box-shadow:inset 0 0 0 1px rgba(232,211,166,.45),0 14px 32px rgba(206,17,38,.35)}
 .gt-btn:hover{box-shadow:inset 0 0 0 1px rgba(232,211,166,.8),0 18px 40px rgba(206,17,38,.45)}
+/* Get in Touch — red & white: cherry-red section, white cards, red accents */
+.gt-sec{background:radial-gradient(90% 80% at 50% 0%,#E0263C 0%,#CE1126 45%,#9E0B1F 100%);color:var(--ink)}
+.gt-glow span:first-child{background:#ff6b7d;opacity:.35}
+.gt-glow span:last-child{background:#7a0716;opacity:.45}
+.gt-sec::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent)}
+.gt-sec::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.08;
+  background-image:radial-gradient(rgba(255,255,255,.9) 1px,transparent 1.2px);background-size:22px 22px}
+.gt-label{color:#fff}
+.gt-card{background:#fff;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 26px 60px rgba(70,4,14,.35)}
+.gt-card::before{display:none}
+.gt-card::after{left:0;right:0;bottom:auto;top:0;height:4px;border-radius:0;filter:none;background:linear-gradient(90deg,#CE1126,#E0263C)}
+.gt-title{color:var(--ink)}
+.gt-title::after{background:#CE1126}
+.gt-lead{color:var(--slate)}
+.gt-list li,.gt-list a{color:var(--ink)}
+.gt-list a:hover{color:var(--red)}
+.gt-ic{background:#FFF1F3;border-color:rgba(206,17,38,.18);color:var(--red)}
+.gt-social a{background:#FFF1F3;border-color:rgba(206,17,38,.18);color:var(--red)}
+.gt-social a:hover{background:var(--red);border-color:var(--red);color:#fff}
+.gt-form .input,.gt-form .textarea{background:#fff;color:var(--ink);border:1.5px solid rgba(206,17,38,.25)}
+.gt-form .input::placeholder,.gt-form .textarea::placeholder{color:#8b8580}
+.gt-form .input:focus,.gt-form .textarea:focus{background:#fff;border-color:var(--red);box-shadow:0 0 0 3px rgba(206,17,38,.14)}
+.gt-form .err-msg{color:#b00d22}
+.gt-form .form-success{background:#ecfbf2;color:#14653a;border-color:#bfe9d0}
+.gt-btn{background:linear-gradient(135deg,#E0263C,#A50D1F);box-shadow:0 14px 30px rgba(206,17,38,.32)}
+.gt-btn:hover{box-shadow:0 18px 38px rgba(206,17,38,.42)}

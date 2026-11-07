@@ -91,7 +91,15 @@
     </div></div>
     <header class="site-header" id="siteHeader"><div class="wrap"><nav class="nav" aria-label="Primary">
       ${BRAND}
-      <ul class="nav-list">${navItems}</ul>
+      <div class="nav-main">
+        <div class="nav-util">
+          <div class="nav-social" aria-label="Social media">${socialLinks()}</div>
+          <a class="nav-util-link" href="${CONFIG.tbPhoneHref||CONFIG.phoneHref}">${ICON.phone}<span>${CONFIG.tbPhone||CONFIG.phone}</span></a>
+          <a class="nav-util-link" href="mailto:${CONFIG.tbEmail||CONFIG.email}">${ICON.mail}<span>${CONFIG.tbEmail||CONFIG.email}</span></a>
+          <a class="btn btn--sm nav-util-btn" href="contact.html">Get Started</a>
+        </div>
+        <ul class="nav-list">${navItems}</ul>
+      </div>
       <div class="nav-cta">
         <a class="btn btn--sm" href="contact.html">Get Started</a>
         <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav"><span></span></button>

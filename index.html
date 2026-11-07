@@ -378,6 +378,7 @@
       <h2 class="h2">Everything You Need</h2>
       <p class="lead" style="margin-top:.4rem">The comforts our Hyderabad &amp; Visakhapatnam projects are built around &mdash; wellness, play and everyday convenience, in the communities we help you buy into.</p>
     </div>
+    <div class="amen-marquee" aria-hidden="true"><div class="amen-track" id="amenTrack"></div></div>
     <div class="amen-tabs" role="tablist" aria-label="Filter amenities">
       <button type="button" class="amen-tab is-on" data-amen-cat="" role="tab" aria-selected="true">All</button>
       <button type="button" class="amen-tab" data-amen-cat="wellness" role="tab" aria-selected="false">Wellness</button>
@@ -535,6 +536,9 @@ window.GHR_PAGE_INIT=function(){
         <h3>${a[1]}</h3><p>${a[2]}</p>
         ${n?`<span class="amen-count"><b>${n}</b> project${n===1?'':'s'}</span>`:''}
       </article>`;}).join('');
+    // right-to-left ticker: the list twice, so the loop is seamless
+    const track=document.getElementById('amenTrack');
+    if(track){ const chips=AM.map(a=>`<span class="amen-chip">${a[4]}${a[1]}</span>`).join(''); track.innerHTML=chips+chips; }
     const total=document.querySelector('[data-amen-total]'); if(total) total.textContent=AM.length+' amenities';
     document.querySelectorAll('.amen-tab').forEach(t=>t.addEventListener('click',()=>{
       const cat=t.dataset.amenCat;

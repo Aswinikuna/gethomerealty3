@@ -1551,3 +1551,14 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
 @media(max-width:760px){.amen-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}.amen-card{padding:1.15rem 1rem}.amen-num{font-size:2.1rem}}
 @media(max-width:380px){.amen-grid{grid-template-columns:1fr}}
 @media(max-width:560px){.amen-card:hover{transform:none}}
+
+/* amenity ticker: chips scroll right-to-left in a loop, pause on hover */
+.amen-marquee{position:relative;overflow:hidden;margin:0 auto 1.6rem;padding:.4rem 0;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.amen-track{display:flex;gap:.75rem;width:max-content;animation:amen-scroll 38s linear infinite}
+.amen-marquee:hover .amen-track{animation-play-state:paused}
+.amen-chip{display:inline-flex;align-items:center;gap:.5rem;flex:none;padding:.55rem 1.05rem;border-radius:999px;white-space:nowrap;
+  background:#fff;border:1px solid rgba(206,17,38,.16);box-shadow:0 4px 12px rgba(18,35,64,.05);font-weight:600;font-size:.88rem;color:var(--ink)}
+.amen-chip svg{width:18px;height:18px;color:var(--red);flex:none}
+@keyframes amen-scroll{from{transform:translateX(0)}to{transform:translateX(calc(-50% - .375rem))}}
+@media(prefers-reduced-motion:reduce){.amen-track{animation:none}.amen-marquee{overflow-x:auto}}

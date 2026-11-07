@@ -1790,3 +1790,8 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
 .gt-form .form-success{background:#ecfbf2;color:#14653a;border-color:#bfe9d0}
 .gt-btn{background:linear-gradient(135deg,#E0263C,#A50D1F);box-shadow:0 14px 30px rgba(206,17,38,.32)}
 .gt-btn:hover{box-shadow:0 18px 38px rgba(206,17,38,.42)}
+/* Get in Touch — linear red gradient (bright cherry → deep wine) instead of a flat red */
+.gt-sec{background:linear-gradient(120deg,#F04A5D 0%,#CE1126 38%,#9E0B1F 72%,#5E0613 100%)}
+.gt-sec::before{opacity:.06}
+.gt-glow span:first-child{background:#ff8a98;opacity:.25}
+.gt-glow span:last-child{background:#3a0410;opacity:.35}

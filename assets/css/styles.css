@@ -1795,3 +1795,26 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
 .gt-sec::before{opacity:.06}
 .gt-glow span:first-child{background:#ff8a98;opacity:.25}
 .gt-glow span:last-child{background:#3a0410;opacity:.35}
+/* Get in Touch — transparent frosted-glass boxes on the red gradient (reference design) */
+.gt-sec{color:#fff}
+.gt-card{background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.32);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 28px 60px rgba(60,3,12,.35),inset 0 1px 0 rgba(255,255,255,.35)}
+.gt-card::before{display:block;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.10),rgba(255,255,255,0))}
+.gt-card::after{top:auto;bottom:-1px;left:12%;right:12%;height:2px;border-radius:2px;filter:blur(.5px);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent)}
+.gt-title{color:#fff}
+.gt-title::after{background:#fff}
+.gt-lead{color:rgba(255,255,255,.88)}
+.gt-list li,.gt-list a{color:#fff}
+.gt-list a:hover{color:#FFE1E5}
+.gt-ic{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.30);color:#fff}
+.gt-social a{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.30);color:#fff}
+.gt-social a:hover{background:#fff;border-color:#fff;color:var(--red)}
+.gt-form .input,.gt-form .textarea{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.30)}
+.gt-form .input::placeholder,.gt-form .textarea::placeholder{color:rgba(255,255,255,.78)}
+.gt-form .input:focus,.gt-form .textarea:focus{background:rgba(255,255,255,.22);border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+.gt-form .input.invalid{border-color:#FFE08A}
+.gt-form .err-msg{color:#FFE08A}
+.gt-form .form-success{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.4)}
+.gt-btn{background:#fff;color:var(--red);box-shadow:0 14px 30px rgba(60,3,12,.35)}
+.gt-btn:hover{background:#FFF1F3;color:var(--red-deep);box-shadow:0 18px 38px rgba(60,3,12,.45)}

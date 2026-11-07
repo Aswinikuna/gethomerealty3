@@ -370,6 +370,25 @@
   </div>
 </section>
 
+<!-- EVERYTHING YOU NEED: amenities across the projects we list (counts come from the project data) -->
+<section class="section amen-sec" id="amenities">
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="eyebrow" style="justify-content:center">Life inside <span class="amen-pill" data-amen-total>12 amenities</span></p>
+      <h2 class="h2">Everything You Need</h2>
+      <p class="lead" style="margin-top:.4rem">The comforts our Hyderabad &amp; Visakhapatnam projects are built around &mdash; wellness, play and everyday convenience, in the communities we help you buy into.</p>
+    </div>
+    <div class="amen-tabs" role="tablist" aria-label="Filter amenities">
+      <button type="button" class="amen-tab is-on" data-amen-cat="" role="tab" aria-selected="true">All</button>
+      <button type="button" class="amen-tab" data-amen-cat="wellness" role="tab" aria-selected="false">Wellness</button>
+      <button type="button" class="amen-tab" data-amen-cat="social" role="tab" aria-selected="false">Fun &amp; Social</button>
+      <button type="button" class="amen-tab" data-amen-cat="facilities" role="tab" aria-selected="false">Facilities</button>
+    </div>
+    <div class="amen-grid" id="amenGrid"></div>
+    <p class="amen-note">Counts show how many of the projects we list mention each amenity. <a href="hyderabad.html#projects">Explore Hyderabad projects</a> &middot; <a href="visakhapatnam.html#projects">Explore Visakhapatnam projects</a></p>
+  </div>
+</section>
+
 <!-- INVESTORS HIGHLIGHT -->
 <section class="section section--ink">
   <div class="wrap split">
@@ -486,6 +505,43 @@ window.GHR_PAGE_INIT=function(){
     <article class="card anim-up"><div class="ic">${I[s[0]]}</div>
       <h3>${s[1]}</h3><p>${s[2]}</p>
       <div class="prop-actions" style="border:0;padding-top:1.2rem;margin-top:auto"><a class="btn btn--sm btn--ghost" href="services.html">Learn More</a></div></article>`).join('');
+
+
+  // "Everything You Need" — amenity cards; each shows how many listed projects mention it
+  (function(){
+    const grid=document.getElementById('amenGrid'); if(!grid) return;
+    const sv=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+    const AM=[
+      ['wellness','Swimming Pool','Resort-style pools with separate kids&rsquo; splash areas.',/\bswimming\b|\bpools?\b/,sv('<path d="M2 17c2 0 2-1.5 4-1.5S8 17 10 17s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 21c2 0 2-1.5 4-1.5S8 21 10 21s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M8 14V5a2 2 0 0 1 4 0M16 14V5a2 2 0 0 0-4 0M8 9h8"/>')],
+      ['wellness','Gym &amp; Fitness','Fully equipped gyms and fitness studios on site.',/\bgym|\bfitness/,sv('<path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"/>')],
+      ['wellness','Yoga &amp; Meditation','Quiet decks and studios for yoga and mindfulness.',/\byoga|meditation/,sv('<circle cx="12" cy="5" r="2"/><path d="M12 7v6M7 21l5-8 5 8M4 12l8 1 8-1"/>')],
+      ['wellness','Jogging &amp; Cycling Tracks','Landscaped tracks for a run, walk or ride.',/jogging|walking track|cycling track|running track/,sv('<circle cx="14" cy="4.5" r="2"/><path d="M6 21l3.5-6 3 2.5V22M9.5 15l1.5-5.5 4 2 3 3M11 9.5 8 11l-2 3"/>')],
+      ['social','Clubhouse','Grand clubhouses with lounges, caf&eacute;s and party spaces.',/club ?house/,sv('<path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/>')],
+      ['social','Kids&rsquo; Play Area','Safe, soft-floored play zones for little ones.',/\bkids|children|play ?area|toddler/,sv('<circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="9" cy="10" r=".6" fill="currentColor"/><circle cx="15" cy="10" r=".6" fill="currentColor"/>')],
+      ['social','Sports Courts','Tennis, badminton, basketball and cricket practice.',/tennis|badminton|basketball|cricket|squash|\bcourts?\b/,sv('<circle cx="12" cy="12" r="9"/><path d="M3.5 9c4 1 6 4 6 12M20.5 15c-4-1-6-4-6-12"/>')],
+      ['social','Indoor Games','Billiards, table tennis and gaming lounges.',/indoor games?|games? room|gaming|billiards?|snooker|table tennis/,sv('<rect x="2" y="7" width="20" height="11" rx="4"/><path d="M7 11v3M5.5 12.5h3"/><circle cx="16" cy="11.5" r=".8" fill="currentColor"/><circle cx="18" cy="13.5" r=".8" fill="currentColor"/>')],
+      ['facilities','24/7 Security','Gated communities with CCTV and on-site security.',/cctv|security|surveillance|gated/,sv('<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/>')],
+      ['facilities','Power Backup','Generator backup for common areas and homes.',/power back ?up|\bdg\b|generator/,sv('<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/>')],
+      ['facilities','Green Spaces','Landscaped gardens, parks and open lawns.',/landscap|\bparks?\b|garden|green/,sv('<path d="M12 22V12M12 12c0-4 3-7 7-7 0 4-3 7-7 7zM12 15c0-3-2.5-5.5-6-5.5 0 3.5 2.5 5.5 6 5.5z"/>')],
+      ['facilities','Covered Parking','Dedicated, covered parking for residents.',/parking/,sv('<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>')],
+    ];
+    const devs=window.GHR.GHR_DEVELOPERS||[], DET=window.GHR.GHR_DETAILS||{};
+    const text=devs.map(d=>DET[d.id]?JSON.stringify(DET[d.id]).toLowerCase():'');
+    grid.innerHTML=AM.map((a,i)=>{
+      const n=text.filter(t=>t&&a[3].test(t)).length;
+      return `<article class="amen-card anim-up" data-cat="${a[0]}">
+        <span class="amen-num">${String(i+1).padStart(2,'0')}</span>
+        <span class="amen-ic">${a[4]}</span>
+        <h3>${a[1]}</h3><p>${a[2]}</p>
+        ${n?`<span class="amen-count"><b>${n}</b> project${n===1?'':'s'}</span>`:''}
+      </article>`;}).join('');
+    const total=document.querySelector('[data-amen-total]'); if(total) total.textContent=AM.length+' amenities';
+    document.querySelectorAll('.amen-tab').forEach(t=>t.addEventListener('click',()=>{
+      const cat=t.dataset.amenCat;
+      document.querySelectorAll('.amen-tab').forEach(x=>{const on=x===t;x.classList.toggle('is-on',on);x.setAttribute('aria-selected',on)});
+      grid.querySelectorAll('.amen-card').forEach(c=>{c.hidden=!!cat&&c.dataset.cat!==cat});
+    }));
+  })();
 
   // featured projects (real towers with real images), collage layout
   const CMSF=window.GHR.featuredProjects;

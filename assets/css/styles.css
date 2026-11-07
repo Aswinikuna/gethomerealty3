@@ -1516,3 +1516,38 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
 .burger{border-color:rgba(176,141,87,.35)!important}
 
 @media(prefers-reduced-motion:reduce){.nav-cta .btn::after,.nav-list > li > a::after,.nav-toggle-sub::after{transition:none}}
+
+/* =====================================================================
+   Home: "Everything You Need" amenity showcase (filter tabs + numbered cards)
+   ===================================================================== */
+.amen-sec{background:radial-gradient(1200px 400px at 50% 0,#FFF4F6 0%,rgba(255,244,246,0) 70%)}
+.amen-pill{display:inline-block;margin-left:.6rem;padding:.18rem .6rem;border-radius:999px;background:var(--red-grad,#CE1126);color:#fff;
+  font-size:.68rem;letter-spacing:.08em;vertical-align:middle}
+.amen-tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:.5rem;margin:0 auto 2rem}
+.amen-tab{font:inherit;font-size:.88rem;font-weight:600;padding:.6rem 1.25rem;border-radius:999px;border:1.5px solid rgba(206,17,38,.2);
+  background:#fff;color:var(--ink);cursor:pointer;transition:background .2s,color .2s,border-color .2s,box-shadow .2s}
+.amen-tab:hover{border-color:var(--red);color:var(--red-deep)}
+.amen-tab.is-on{background:linear-gradient(135deg,#E0263C,#A50D1F);border-color:transparent;color:#fff;box-shadow:0 8px 20px rgba(206,17,38,.28)}
+.amen-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.1rem}
+.amen-card{position:relative;overflow:hidden;isolation:isolate;display:flex;flex-direction:column;gap:.45rem;padding:1.5rem 1.35rem 1.35rem;
+  border-radius:var(--card-r,18px);border:1px solid var(--card-line,rgba(18,35,64,.08));box-shadow:var(--card-shadow,0 8px 24px rgba(18,35,64,.06));
+  background:linear-gradient(180deg,#fff 0%,#fff 60%,#FFF8F9 100%);transition:transform .32s cubic-bezier(.2,.7,.2,1),box-shadow .32s,border-color .3s}
+.amen-card[hidden]{display:none}
+.amen-card:hover{transform:translateY(-6px);box-shadow:var(--card-shadow-hover,0 24px 48px rgba(206,17,38,.14));border-color:rgba(206,17,38,.22)}
+.amen-num{position:absolute;right:1rem;top:.6rem;z-index:-1;font-family:var(--ff-display);font-weight:800;font-size:2.8rem;line-height:1;
+  color:transparent;-webkit-text-stroke:1.5px rgba(206,17,38,.16);transition:-webkit-text-stroke-color .3s}
+.amen-card:hover .amen-num{-webkit-text-stroke-color:rgba(206,17,38,.4)}
+.amen-ic{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;color:var(--red);
+  background:linear-gradient(135deg,#FFF3F5,#FFE0E6);box-shadow:inset 0 0 0 1px rgba(206,17,38,.1);transition:background .3s,color .3s,box-shadow .3s}
+.amen-ic svg{width:26px;height:26px}
+.amen-card:hover .amen-ic{background:linear-gradient(135deg,#E0263C,#A50D1F);color:#fff;box-shadow:0 10px 22px rgba(206,17,38,.32)}
+.amen-card h3{font-size:1.05rem;margin:.35rem 0 0}
+.amen-card p{color:var(--slate);font-size:.9rem;margin:0}
+.amen-count{margin-top:auto;padding-top:.7rem;font-size:.78rem;font-weight:600;color:var(--gold,#B08D57);letter-spacing:.02em}
+.amen-count b{color:var(--red-deep);font-size:.95rem}
+.amen-note{text-align:center;margin:1.6rem 0 0;font-size:.85rem;color:var(--slate)}
+.amen-note a{color:var(--red);font-weight:600}
+@media(max-width:1000px){.amen-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.amen-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}.amen-card{padding:1.15rem 1rem}.amen-num{font-size:2.1rem}}
+@media(max-width:380px){.amen-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.amen-card:hover{transform:none}}

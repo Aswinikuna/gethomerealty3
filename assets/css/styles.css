@@ -1689,3 +1689,13 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
   .nav-list > li > a::after{left:.42rem;right:.42rem}
   .nav-util{gap:.9rem}.nav-util-link{font-size:.84rem}
 }
+
+/* featured collage: six cards fill the desktop layout; phones (2 columns) show five so no gap is left */
+@media(max-width:720px) and (min-width:461px){#featuredGrid .feat-card:nth-child(n+6){display:none}}
+@media(max-width:720px) and (min-width:461px){
+  .feat-collage{grid-auto-rows:160px}
+  #featuredGrid .feat-card:not(.feat-card--lead) .feat-name{font-size:1rem}
+  #featuredGrid .feat-card:not(.feat-card--lead) .feat-city{font-size:.6rem}
+  #featuredGrid .feat-card:not(.feat-card--lead) .feat-dev{font-size:.7rem}
+  #featuredGrid .feat-card:not(.feat-card--lead) .feat-meta{padding:.8rem .85rem}
+}

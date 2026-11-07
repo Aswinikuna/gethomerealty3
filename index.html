@@ -564,13 +564,22 @@ window.GHR_PAGE_INIT=function(){
   const featIds=CMSF&&CMSF.length?CMSF.map(d=>d.id):['mk-one','hyd-gamya','mvv-grand','hyd-myhome-akrida','vaisakhi-construction','hyd-aparna-newlands'];
   const devById=Object.fromEntries(window.GHR.GHR_DEVELOPERS.concat(CMSF||[]).map(d=>[d.id,d]));
   const IMG=window.GHR.GHR_IMAGES||{};
-  const feat=featIds.map(id=>devById[id]).filter(Boolean);
-  document.getElementById('featuredGrid').innerHTML=feat.map((d,i)=>{
-    const img=(IMG[d.id]||[])[0]||'';
+  // photos stored on this site first (they can't break); builder-hosted links after
+  const pics=id=>(IMG[id]||[]).slice().sort((a,b)=>(/^https?:/.test(a)?1:0)-(/^https?:/.test(b)?1:0));
+  const FEAT_N=6;   // the collage is designed for six: one large card + five
+  const local=id=>pics(id).some(u=>!/^https?:/.test(u));
+  const used=new Set(), feat=[];
+  featIds.forEach(id=>{ const d=devById[id]; if(d&&!used.has(d.id)&&feat.length<FEAT_N){ feat.push(d); used.add(d.id); } });
+  // spare projects with photos stored on this site: top up the six, and stand in for any pick whose photos all fail
+  const spares=window.GHR.GHR_DEVELOPERS.filter(d=>!used.has(d.id)&&local(d.id));
+  const nextSpare=()=>{ while(spares.length){ const d=spares.shift(); if(!used.has(d.id)){ used.add(d.id); return d; } } return null; };
+  while(feat.length<FEAT_N){ const d=nextSpare(); if(!d) break; feat.push(d); }
+  const cardHtml=(d,i)=>{
+    const img=pics(d.id)[0]||'';
     const page=d.city==='Hyderabad'?'hyderabad.html':'visakhapatnam.html';
     const big=i===0?' feat-card--lead':'';
     return `<a class="feat-card${big}" href="${page}?project=${d.id}" style="--i:${i}">
-      <div class="feat-img"${img?` style="background-image:url('${img}')"`:' data-noimg'}></div>
+      <div class="feat-img" data-pid="${d.id}"${img?` style="background-image:url('${img}')"`:' data-noimg'}></div>
       <div class="feat-tint"></div>
       <span class="feat-sheen" aria-hidden="true"></span>
       <div class="feat-meta">
@@ -580,7 +589,25 @@ window.GHR_PAGE_INIT=function(){
         <span class="feat-go">View details ${I.arrow||'→'}</span>
       </div>
     </a>`;
-  }).join('');
+  };
+  const fgrid=document.getElementById('featuredGrid');
+  fgrid.innerHTML=feat.map(cardHtml).join('');
+  // each card tries its photos in turn (a builder site may block one); if none load,
+  // the card is replaced by the next project that has photos stored on this site
+  const verify=(card,i)=>{
+    const el=card.querySelector('.feat-img[data-pid]'); const list=pics(el.dataset.pid); let k=0;
+    const giveUp=()=>{ const d=nextSpare();
+      if(!d){ el.style.backgroundImage=''; el.setAttribute('data-noimg',''); return; }
+      const tmp=document.createElement('div'); tmp.innerHTML=cardHtml(d,i).trim();
+      const fresh=tmp.firstElementChild; if(card.classList.contains('feat-in')) fresh.classList.add('feat-in');
+      card.replaceWith(fresh); verify(fresh,i); };
+    const tryNext=()=>{ if(k>=list.length) return giveUp();
+      const u=list[k++], im=new Image();
+      im.onload=()=>{ el.removeAttribute('data-noimg'); el.style.backgroundImage=`url('${u}')`; };
+      im.onerror=tryNext; im.src=u; };
+    tryNext();
+  };
+  [...fgrid.children].forEach(verify);
   // Featured Properties — staggered scroll-reveal entrance
   (function(){
     const cards=document.querySelectorAll('#featuredGrid .feat-card');

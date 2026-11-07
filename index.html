@@ -300,7 +300,7 @@
       <div class="hero2-float hero2-float--b" aria-hidden="true"><i></i><span>Hyderabad &middot; Vizag</span></div>
     </div>
   </div>
-  <a class="hero2-scroll" href="#quick-inquiry" aria-label="Scroll down"><span></span></a>
+  <a class="hero2-scroll" href="#get-in-touch" aria-label="Scroll down"><span></span></a>
 </section>
 
 <!-- FEATURED PROJECTS -->
@@ -323,33 +323,36 @@
   </div>
 </section>
 
-<section class="section section--mist" id="quick-inquiry" style="padding-block:clamp(28px,4vw,48px)"><div class="wrap">
-  <div class="inquiry-card" style="max-width:920px;margin-inline:auto">
-    <h3>Quick Inquiry</h3>
-    <p class="muted" style="margin-bottom:1.2rem">Tell us what you&rsquo;re looking for &mdash; we&rsquo;ll get back within one business day.</p>
-    <form class="gh-form">
-      <div class="form-success">Thank you &mdash; your inquiry has been received. A Get Home Realty advisor will contact you shortly.</div>
-      <div class="field-row">
-        <div class="field"><label>Name <span class="req">*</span></label><input class="input" type="text" required placeholder="Your full name"><span class="err-msg">Please enter your name.</span></div>
-        <div class="field"><label>Phone <span class="req">*</span></label><input class="input" type="tel" required placeholder="+91 9XXXXXXXXX"><span class="err-msg">Enter a valid phone number.</span></div>
+<!-- GET IN TOUCH — glass contact panel + enquiry form (saves to Admin → Leads) -->
+<section class="gt-sec" id="get-in-touch">
+  <div class="gt-glow" aria-hidden="true"><span></span><span></span></div>
+  <div class="wrap">
+    <div class="gt-grid">
+      <div class="gt-col">
+        <p class="gt-label">Contact info</p>
+        <div class="gt-card gt-info">
+          <h2 class="gt-title">Get in Touch</h2>
+          <p class="gt-lead">We&rsquo;re here to help you buy, sell, invest or lease across Hyderabad, Visakhapatnam and Canada &mdash; with honest advice from first call to handover.</p>
+          <ul class="gt-list" data-gt-list></ul>
+          <div class="gt-social" data-gt-social aria-label="Social media"></div>
+        </div>
       </div>
-      <div class="field-row">
-        <div class="field"><label>Email <span class="req">*</span></label><input class="input" type="email" required placeholder="you@example.com"><span class="err-msg">Enter a valid email.</span></div>
-        <div class="field"><label>I am interested in <span class="req">*</span></label>
-          <select class="select" required>
-            <option value="">Select an option</option>
-            <option>Buying</option><option>Selling</option><option>Leasing</option>
-            <option>Investment</option><option>Join Brokerage</option>
-          </select><span class="err-msg">Please choose an option.</span></div>
+      <div class="gt-col">
+        <p class="gt-label">Send an enquiry</p>
+        <div class="gt-card">
+          <form class="gh-form gt-form" data-inquiry="General enquiry">
+            <div class="form-success">Thank you &mdash; your enquiry has been received. An advisor will contact you shortly.</div>
+            <div class="field"><label class="gt-sr" for="gt-name">Name</label><input id="gt-name" class="input" type="text" required autocomplete="name" placeholder="Your Name *"><span class="err-msg">Please enter your name.</span></div>
+            <div class="field"><label class="gt-sr" for="gt-phone">Phone</label><input id="gt-phone" class="input" type="tel" required autocomplete="tel" placeholder="Phone Number *"><span class="err-msg">Enter a valid phone number.</span></div>
+            <div class="field"><label class="gt-sr" for="gt-email">Email</label><input id="gt-email" class="input" type="email" required autocomplete="email" placeholder="Email Address *"><span class="err-msg">Enter a valid email.</span></div>
+            <div class="field"><label class="gt-sr" for="gt-msg">Message</label><textarea id="gt-msg" class="textarea" rows="3" placeholder="Write your message&hellip;"></textarea></div>
+            <button class="gt-btn" type="submit">Send Message</button>
+          </form>
+        </div>
       </div>
-      <div class="field"><label>Message</label><textarea class="textarea" placeholder="Budget, locality, timeline, or any details&hellip;"></textarea></div>
-      <div class="inquiry-actions" style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:stretch">
-        <button class="btn" style="flex:1 1 220px" type="submit">Submit Inquiry</button>
-       
-      </div>
-    </form>
+    </div>
   </div>
-</div></section>
+</section>
 
 <!-- STATS -->
 <section class="section section--tight" style="padding-block:clamp(20px,3vw,36px)">
@@ -493,37 +496,6 @@
       <h2 class="h2">Ready to buy, sell, invest, or join our brokerage?</h2>
       <p>Talk to a Get Home Realty advisor and get a clear, honest plan for your next move.</p>
       <div class="btns"><a class="btn btn--light" href="contact.html">Contact Get Home Realty</a></div>
-    </div>
-  </div>
-</section>
-
-<!-- GET IN TOUCH — glass contact panel + enquiry form (saves to Admin → Leads) -->
-<section class="gt-sec" id="get-in-touch">
-  <div class="gt-glow" aria-hidden="true"><span></span><span></span></div>
-  <div class="wrap">
-    <div class="gt-grid">
-      <div class="gt-col">
-        <p class="gt-label">Contact info</p>
-        <div class="gt-card gt-info">
-          <h2 class="gt-title">Get in Touch</h2>
-          <p class="gt-lead">We&rsquo;re here to help you buy, sell, invest or lease across Hyderabad, Visakhapatnam and Canada &mdash; with honest advice from first call to handover.</p>
-          <ul class="gt-list" data-gt-list></ul>
-          <div class="gt-social" data-gt-social aria-label="Social media"></div>
-        </div>
-      </div>
-      <div class="gt-col">
-        <p class="gt-label">Send an enquiry</p>
-        <div class="gt-card">
-          <form class="gh-form gt-form" data-inquiry="General enquiry">
-            <div class="form-success">Thank you &mdash; your enquiry has been received. An advisor will contact you shortly.</div>
-            <div class="field"><label class="gt-sr" for="gt-name">Name</label><input id="gt-name" class="input" type="text" required autocomplete="name" placeholder="Your Name *"><span class="err-msg">Please enter your name.</span></div>
-            <div class="field"><label class="gt-sr" for="gt-phone">Phone</label><input id="gt-phone" class="input" type="tel" required autocomplete="tel" placeholder="Phone Number *"><span class="err-msg">Enter a valid phone number.</span></div>
-            <div class="field"><label class="gt-sr" for="gt-email">Email</label><input id="gt-email" class="input" type="email" required autocomplete="email" placeholder="Email Address *"><span class="err-msg">Enter a valid email.</span></div>
-            <div class="field"><label class="gt-sr" for="gt-msg">Message</label><textarea id="gt-msg" class="textarea" rows="3" placeholder="Write your message&hellip;"></textarea></div>
-            <button class="gt-btn" type="submit">Send Message</button>
-          </form>
-        </div>
-      </div>
     </div>
   </div>
 </section>

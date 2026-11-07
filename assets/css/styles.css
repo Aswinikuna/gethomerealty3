@@ -1818,3 +1818,62 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
 .gt-form .form-success{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.4)}
 .gt-btn{background:#fff;color:var(--red);box-shadow:0 14px 30px rgba(60,3,12,.35)}
 .gt-btn:hover{background:#FFF1F3;color:var(--red-deep);box-shadow:0 18px 38px rgba(60,3,12,.45)}
+
+/* =====================================================================
+   Home page — phone layout: headline first, swipeable card rows instead of
+   long vertical stacks, tighter stats. (max 560px wide)
+   ===================================================================== */
+@media(max-width:560px){
+  /* hero: headline and button first, skyline below and smaller */
+  .hero2{padding-top:1.6rem;padding-bottom:2.6rem}
+  .hero2-right{order:2;min-height:250px;margin-top:.6rem}
+  .hero2-left{order:1}
+  .hero2-kicker{font-size:.66rem;letter-spacing:.16em;margin-bottom:.9rem}
+  .hero2-kicker::before{display:none}
+  .hero2-stage{height:clamp(8.2rem,40vw,10rem)}
+  .hero2-title{font-size:clamp(2.5rem,12vw,3.2rem)}
+  .hero2-lead{margin-top:1rem;font-size:.98rem}
+  .hero2-cta{margin-top:1.3rem;padding:.95rem 1.5rem;font-size:.76rem}
+  .hero2-badge{width:150px;padding:.8rem .95rem}
+  .hero2-badge b{font-size:1.15rem}
+
+  /* swipeable rows: one card + a peek of the next, snapping */
+  #featuredGrid,#homeServices,#investHighlights,#testimonials{
+    display:flex!important;grid-template-columns:none!important;gap:.85rem!important;overflow-x:auto;scroll-snap-type:x mandatory;
+    margin-inline:-16px;padding:.3rem 16px 1rem;scroll-padding-inline:16px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  #featuredGrid::-webkit-scrollbar,#homeServices::-webkit-scrollbar,#investHighlights::-webkit-scrollbar,#testimonials::-webkit-scrollbar{display:none}
+  #featuredGrid > *,#homeServices > *,#investHighlights > *,#testimonials > *{flex:0 0 84%;scroll-snap-align:start;min-width:0}
+  #featuredGrid > .feat-card{height:230px;grid-row:auto!important;grid-column:auto!important;display:block!important}
+  #featuredGrid .feat-card--lead .feat-name{font-size:1.2rem}
+  #homeServices .card,#investHighlights .card,#testimonials .story{height:auto}
+  #investHighlights > *{flex-basis:78%}
+  .swipe-hint{display:flex;align-items:center;justify-content:center;gap:.4rem;margin:-.2rem 0 0;font-size:.74rem;font-weight:600;color:var(--slate)}
+  .swipe-hint::after{content:"→";color:var(--red)}
+  .section--ink .swipe-hint{color:rgba(255,255,255,.6)}
+
+  /* stats: keep "₹600 Cr+" on one line */
+  .stat-band .stat b{font-size:1.7rem;white-space:nowrap}
+  .stat-band .stat span{font-size:.68rem;letter-spacing:.08em}
+  .stat-band .stat{padding:1.1rem .6rem}
+
+  /* contact section: a little tighter */
+  .gt-sec{padding:2.8rem 0}
+  .gt-card{padding:1.35rem}
+  .gt-title{font-size:1.9rem}
+  .gt-lead{font-size:.93rem;margin-bottom:1.1rem}
+  .gt-list{gap:.75rem}
+}
+@media(min-width:561px){.swipe-hint{display:none}}
+@media(max-width:560px){
+  #hydSvc,#vskpSvc,#svcGrid,#whyGrid{
+    display:flex!important;grid-template-columns:none!important;gap:.85rem!important;overflow-x:auto;scroll-snap-type:x mandatory;
+    margin-inline:-16px;padding:.3rem 16px 1rem;scroll-padding-inline:16px;scrollbar-width:none}
+  #hydSvc::-webkit-scrollbar,#vskpSvc::-webkit-scrollbar,#svcGrid::-webkit-scrollbar,#whyGrid::-webkit-scrollbar{display:none}
+  #hydSvc > *,#vskpSvc > *,#svcGrid > *,#whyGrid > *{flex:0 0 84%;scroll-snap-align:start;min-width:0;grid-column:auto!important}
+  .split-media.tall{min-height:0;height:240px;aspect-ratio:auto}
+}
+@media(max-width:560px){
+  /* swipe rows: every card in a row is the same height as the tallest */
+  #featuredGrid,#homeServices,#investHighlights,#testimonials,#hydSvc,#vskpSvc,#svcGrid,#whyGrid{align-items:stretch}
+  #homeServices > *,#investHighlights > *,#testimonials > *,#hydSvc > *,#vskpSvc > *,#svcGrid > *,#whyGrid > *{height:auto!important}
+}

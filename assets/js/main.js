@@ -412,7 +412,38 @@
     if(window.GHR.applyCms)window.GHR.applyCms(page); // admin-managed text/images (cms.js)
     wireReveal(); // run after page-specific content (e.g. What We Do / Client Stories) is injected
     fillGridGaps();
+    heroMotion();
   });
+
+  /* Home hero: windows lighting up across the skyline, a live project count,
+     and a gentle mouse parallax. Skipped when the visitor prefers reduced motion. */
+  function heroMotion(){
+    const hero=document.getElementById('home-hero'); if(!hero) return;
+    const n=hero.querySelector('[data-hero-projects]');
+    const total=(window.GHR.GHR_DEVELOPERS||[]).length;
+    const calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(n&&total){
+      if(calm) n.textContent=total+'+';
+      else{ const t0=performance.now()+1500, dur=1400;
+        const tick=t=>{ const k=Math.min(1,Math.max(0,(t-t0)/dur)); n.textContent=Math.round(total*(1-Math.pow(1-k,3)))+(k===1?'+':'');
+          if(k<1) requestAnimationFrame(tick); };
+        requestAnimationFrame(tick); }
+    }
+    if(calm) return;
+    const wins=[...hero.querySelectorAll('.tw-win')];
+    if(wins.length){
+      wins.forEach(w=>{ if(Math.random()<.32) w.classList.add('lit'); });
+      setInterval(()=>{ if(document.hidden) return;
+        for(let i=0;i<3;i++) wins[Math.floor(Math.random()*wins.length)].classList.toggle('lit'); },700);
+    }
+    if(matchMedia('(hover: hover) and (pointer: fine)').matches){
+      let raf=0;
+      hero.addEventListener('mousemove',e=>{ const r=hero.getBoundingClientRect();
+        const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+        cancelAnimationFrame(raf); raf=requestAnimationFrame(()=>{ hero.style.setProperty('--mx',x.toFixed(3)); hero.style.setProperty('--my',y.toFixed(3)); }); });
+      hero.addEventListener('mouseleave',()=>{ hero.style.setProperty('--mx',0); hero.style.setProperty('--my',0); });
+    }
+  }
 
   /* Grids marked data-gap-cta="Title|Text" get a "talk to an advisor" card that fills
      whatever space the last row leaves empty (recomputed when the column count changes). */

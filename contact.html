@@ -22,11 +22,23 @@
   </div>
 </section>
 
-<section class="section"><div class="wrap">
-  <div class="split" style="align-items:start">
-    <div>
-      <p class="eyebrow">Get In Touch</p>
-      <h2 class="h2">Contact information</h2>
+<!-- quick actions -->
+<div class="wrap cq-wrap">
+  <div class="cq-grid">
+    <a class="cq" id="qCall" href="#"><span class="cq-ic" data-ic="phone"></span><b>Call us</b><span class="cq-sub" id="qCallTxt">&nbsp;</span><span class="cq-go">Call now &rarr;</span></a>
+    <a class="cq" id="qWa" href="#" target="_blank" rel="noopener"><span class="cq-ic" data-ic="whatsapp"></span><b>WhatsApp</b><span class="cq-sub">Quick replies, any time</span><span class="cq-go">Start chat &rarr;</span></a>
+    <a class="cq" id="qMail" href="#"><span class="cq-ic" data-ic="mail"></span><b>Email</b><span class="cq-sub" id="qMailTxt">&nbsp;</span><span class="cq-go">Write to us &rarr;</span></a>
+    <a class="cq" id="qDir" href="#map" ><span class="cq-ic" data-ic="pin"></span><b>Visit the office</b><span class="cq-sub">Serilingampally, Hyderabad</span><span class="cq-go">Get directions &rarr;</span></a>
+  </div>
+</div>
+
+<section class="gt-sec cp-sec" id="contact-form">
+  <div class="gt-glow" aria-hidden="true"><span></span><span></span></div>
+  <div class="wrap">
+  <div class="gt-grid cp-grid">
+    <div class="gt-card cp-info">
+      <p class="cp-kicker">Get in touch</p>
+      <h2 class="gt-title">Contact information</h2>
       <div class="info-list" style="margin-top:1.4rem">
         <div class="info-row"><div class="ic" data-ic="phone"></div><div><h4>Phone</h4><a id="cPhone" href="#">&nbsp;</a></div></div>
         <div class="info-row"><div class="ic" data-ic="mail"></div><div><h4>Email</h4><a id="cMail" href="#">&nbsp;</a></div></div>
@@ -34,11 +46,13 @@
         <div class="info-row"><div class="ic" data-ic="clock"></div><div><h4>Business hours</h4><p id="cHours">Open 24/7</p></div></div>
         <div class="info-row"><div class="ic" data-ic="whatsapp"></div><div><h4>WhatsApp</h4><a id="cWa" href="#" target="_blank" rel="noopener">Chat with us</a></div></div>
       </div>
-      <div class="info-social" id="cSocial" style="margin-top:1.6rem"></div>
+      <div class="info-social gt-social" id="cSocial" style="margin-top:1.6rem"></div>
     </div>
 
-    <div class="form-card">
-      <form class="gh-form">
+    <div class="gt-card cp-form">
+      <h3 class="cp-form-title">Send us a message</h3>
+      <p class="cp-form-sub">We reply within one business day &mdash; usually much sooner.</p>
+      <form class="gh-form gt-form">
         <div class="form-success">Thank you &mdash; your message has been received. A Get Home Realty advisor will contact you shortly.</div>
         <div class="field-row">
           <div class="field"><label>Name <span class="req">*</span></label><input class="input" type="text" required placeholder="Your full name"><span class="err-msg">Please enter your name.</span></div>
@@ -53,15 +67,38 @@
             <option>Join Brokerage</option><option>General Inquiry</option>
           </select><span class="err-msg">Please choose an option.</span></div>
         <div class="field"><label>Message</label><textarea class="textarea" placeholder="How can we help?"></textarea></div>
-        <button class="btn btn--block" type="submit">Contact Us Today</button>
+        <button class="gt-btn" type="submit">Contact Us Today</button>
       </form>
     </div>
   </div>
-</div></section>
+  </div>
+</section>
 
-<section class="section section--tight"><div class="wrap">
+<!-- what happens next -->
+<section class="section section--tight cp-next">
+  <div class="wrap">
+    <div class="section-head center"><p class="eyebrow" style="justify-content:center">What happens next</p><h2 class="h2">From first message to your new home</h2></div>
+    <div class="cp-steps">
+      <div class="cp-step"><span class="cp-n">01</span><span class="cp-step-ic" data-ic="phone"></span><h3>We reach out</h3><p>An advisor calls or messages you within one business day to understand what you need.</p></div>
+      <div class="cp-step"><span class="cp-n">02</span><span class="cp-step-ic" data-ic="users"></span><h3>Free consultation</h3><p>Budget, locality, timeline and financing &mdash; we map out the right plan with you, at no cost.</p></div>
+      <div class="cp-step"><span class="cp-n">03</span><span class="cp-step-ic" data-ic="building"></span><h3>Shortlist &amp; site visits</h3><p>A curated shortlist of projects, with site visits arranged and every question answered.</p></div>
+      <div class="cp-step"><span class="cp-n">04</span><span class="cp-step-ic" data-ic="key"></span><h3>Keys in hand</h3><p>Negotiation, paperwork, registration and handover &mdash; handled end to end.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" id="map"><div class="wrap">
   <div class="section-head"><p class="eyebrow">Find Us</p><h2 class="h2">Our office</h2></div>
-  <div class="map-frame" style="height:420px;position:relative;top:auto"><div id="map-office" style="width:100%;height:100%"></div></div>
+  <div class="cp-mapwrap">
+    <div class="map-frame" style="height:440px;position:relative;top:auto"><div id="map-office" style="width:100%;height:100%"></div></div>
+    <div class="cp-office">
+      <img src="/assets/img/ghr-icon-192.png" alt="" width="44" height="44">
+      <h3>Get Home Realty &mdash; Hyderabad</h3>
+      <p id="cOfficeAddr">&nbsp;</p>
+      <p class="cp-office-hrs"><span data-ic="clock"></span><span id="cOfficeHrs">Open 24/7</span></p>
+      <a class="btn btn--sm" id="cDirections" href="#" target="_blank" rel="noopener">Get directions</a>
+    </div>
+  </div>
 </div></section>
 
 <section class="section"><div class="wrap"><div class="cta-band">
@@ -86,7 +123,16 @@ window.GHR_PAGE_INIT=function(){
     document.getElementById('cAddr').textContent=C.addr;
     document.getElementById('cWa').href=C.whatsapp;
     const cc=document.getElementById('ctaCall'); cc.textContent='Call '+C.phone; cc.href='tel:'+C.phone.replace(/\s/g,'');
+    const tel='tel:'+C.phone.replace(/\s/g,'');
+    document.getElementById('qCall').href=tel; document.getElementById('qCallTxt').textContent=C.phone;
+    document.getElementById('qWa').href=C.whatsapp;
+    document.getElementById('qMail').href='mailto:'+C.email; document.getElementById('qMailTxt').textContent=C.email;
+    document.getElementById('cOfficeAddr').textContent=C.addr;
+    if(C.hours){ document.getElementById('cHours').textContent=C.hours; document.getElementById('cOfficeHrs').textContent=C.hours; }
   }
+  const DIR='https://www.google.com/maps/dir/?api=1&destination=17.4730013,78.3280442';
+  document.getElementById('cDirections').href=DIR;
+  document.getElementById('qDir').href=DIR; document.getElementById('qDir').target='_blank'; document.getElementById('qDir').rel='noopener';
   const S=window.GHR.SOCIAL;
   const SOC=(window.GHR_CONFIG&&window.GHR_CONFIG.social)||{};
   document.getElementById('cSocial').innerHTML=['fb','ig','in','yt','x'].filter(k=>SOC[k])

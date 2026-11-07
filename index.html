@@ -497,6 +497,37 @@
   </div>
 </section>
 
+<!-- GET IN TOUCH — glass contact panel + enquiry form (saves to Admin → Leads) -->
+<section class="gt-sec" id="get-in-touch">
+  <div class="gt-glow" aria-hidden="true"><span></span><span></span></div>
+  <div class="wrap">
+    <div class="gt-grid">
+      <div class="gt-col">
+        <p class="gt-label">Contact info</p>
+        <div class="gt-card gt-info">
+          <h2 class="gt-title">Get in Touch</h2>
+          <p class="gt-lead">We&rsquo;re here to help you buy, sell, invest or lease across Hyderabad, Visakhapatnam and Canada &mdash; with honest advice from first call to handover.</p>
+          <ul class="gt-list" data-gt-list></ul>
+          <div class="gt-social" data-gt-social aria-label="Social media"></div>
+        </div>
+      </div>
+      <div class="gt-col">
+        <p class="gt-label">Send an enquiry</p>
+        <div class="gt-card">
+          <form class="gh-form gt-form" data-inquiry="General enquiry">
+            <div class="form-success">Thank you &mdash; your enquiry has been received. An advisor will contact you shortly.</div>
+            <div class="field"><label class="gt-sr" for="gt-name">Name</label><input id="gt-name" class="input" type="text" required autocomplete="name" placeholder="Your Name *"><span class="err-msg">Please enter your name.</span></div>
+            <div class="field"><label class="gt-sr" for="gt-phone">Phone</label><input id="gt-phone" class="input" type="tel" required autocomplete="tel" placeholder="Phone Number *"><span class="err-msg">Enter a valid phone number.</span></div>
+            <div class="field"><label class="gt-sr" for="gt-email">Email</label><input id="gt-email" class="input" type="email" required autocomplete="email" placeholder="Email Address *"><span class="err-msg">Enter a valid email.</span></div>
+            <div class="field"><label class="gt-sr" for="gt-msg">Message</label><textarea id="gt-msg" class="textarea" rows="3" placeholder="Write your message&hellip;"></textarea></div>
+            <button class="gt-btn" type="submit">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <div data-gh-footer></div>
 <script src="assets/js/data.js"></script>
 <script src="/api/public/content.js"></script>
@@ -557,6 +588,23 @@ window.GHR_PAGE_INIT=function(){
       document.querySelectorAll('.amen-tab').forEach(x=>{const on=x===t;x.classList.toggle('is-on',on);x.setAttribute('aria-selected',on)});
       grid.querySelectorAll('.amen-card').forEach(c=>{c.hidden=!!cat&&c.dataset.cat!==cat});
     }));
+  })();
+
+
+  // Get in Touch: contact details and social icons from the site settings (admin-managed)
+  (function(){
+    const list=document.querySelector('[data-gt-list]'); if(!list) return;
+    const C=window.GHR_CONFIG||{}, I=window.GHR.ICON||{}, S=window.GHR.SOCIAL||{};
+    const rows=[
+      C.email&&[I.mail,`<a href="mailto:${C.email}">${C.email}</a>`],
+      C.addr&&[I.pin,`<span>${C.addr}</span>`],
+      C.phone&&[I.phone,`<a href="${C.phoneHref||'tel:'+C.phone}">${C.phone}</a>`],
+      C.whatsapp&&[I.whatsapp,`<a href="${C.whatsapp}" target="_blank" rel="noopener">Chat on WhatsApp</a>`],
+    ].filter(Boolean);
+    list.innerHTML=rows.map(r=>`<li><span class="gt-ic">${r[0]||''}</span>${r[1]}</li>`).join('');
+    const soc=C.social||{}, names={fb:'Facebook',ig:'Instagram',in:'LinkedIn',yt:'YouTube',x:'X'};
+    document.querySelector('[data-gt-social]').innerHTML=Object.keys(names).filter(k=>soc[k]&&S[k])
+      .map(k=>`<a href="${soc[k]}" target="_blank" rel="noopener" aria-label="${names[k]}">${S[k]}</a>`).join('');
   })();
 
   // featured projects (real towers with real images), collage layout

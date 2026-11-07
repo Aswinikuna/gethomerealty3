@@ -1562,3 +1562,38 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
 .amen-chip svg{width:18px;height:18px;color:var(--red);flex:none}
 @keyframes amen-scroll{from{transform:translateX(0)}to{transform:translateX(calc(-50% - .375rem))}}
 @media(prefers-reduced-motion:reduce){.amen-track{animation:none}.amen-marquee{overflow-x:auto}}
+
+/* amenities — reference layout: full-width badge rule, split header (big heading left,
+   tabs bottom-right), edge-to-edge ticker with shining chips, then the card grid */
+.amen-sec{padding-top:clamp(36px,4.5vw,56px)}
+.amen-rule{display:flex;align-items:center;gap:1rem;padding:0 clamp(16px,3vw,48px);margin-bottom:clamp(1.4rem,3vw,2.4rem)}
+.amen-rule::before,.amen-rule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(201,164,106,0),rgba(201,164,106,.75))}
+.amen-rule::after{background:linear-gradient(90deg,rgba(201,164,106,.75),rgba(201,164,106,0))}
+.amen-badge{flex:none;padding:.32rem .95rem;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--red-deep);background:#fff;border:1px solid rgba(201,164,106,.6);box-shadow:0 4px 14px rgba(176,141,87,.15)}
+.amen-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem 2.5rem;flex-wrap:wrap;margin-bottom:1.6rem}
+.amen-head-txt{max-width:30rem}
+.amen-title{font-family:var(--ff-display);font-weight:800;font-size:clamp(2.4rem,5.2vw,4.4rem);line-height:.98;letter-spacing:-.02em;margin:.4rem 0 0;color:var(--ink)}
+.amen-you{background:linear-gradient(135deg,#C9A46A,#E8D3A6 45%,#B08D57);-webkit-background-clip:text;background-clip:text;color:transparent}
+.amen-need{color:transparent;-webkit-text-stroke:2px var(--red)}
+.amen-lead{margin:.9rem 0 0;color:var(--slate);font-size:.98rem;line-height:1.6}
+.amen-head .amen-tabs{margin:0;justify-content:flex-end}
+.amen-tab{padding:.55rem 1.15rem;font-size:.85rem}
+.amen-sec .amen-marquee{margin:0 0 2rem;padding:.6rem 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.amen-chip{position:relative;overflow:hidden;padding:.6rem 1.15rem .6rem .6rem;gap:.6rem}
+.amen-chip-ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#FFF3F5,#FFE0E6);flex:none}
+.amen-chip-ic svg{width:17px;height:17px}
+.amen-shine{position:absolute;top:0;bottom:0;left:-60%;width:45%;transform:skewX(-20deg);pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.85),rgba(255,255,255,0));animation:amen-shine 4.2s ease-in-out infinite}
+.amen-chip:nth-child(3n+2) .amen-shine{animation-delay:1.4s}
+.amen-chip:nth-child(3n) .amen-shine{animation-delay:2.8s}
+@keyframes amen-shine{0%,60%{left:-60%}100%{left:130%}}
+@media(max-width:760px){
+  .amen-head{flex-direction:column;align-items:flex-start;margin-bottom:1.2rem}
+  .amen-head .amen-tabs{flex-wrap:nowrap;overflow-x:auto;max-width:100%;padding-bottom:.3rem;justify-content:flex-start;scrollbar-width:none}
+  .amen-head .amen-tabs::-webkit-scrollbar{display:none}
+  .amen-tab{flex:none}
+  .amen-need{-webkit-text-stroke-width:1.5px}
+}
+@media(prefers-reduced-motion:reduce){.amen-shine{animation:none;display:none}}

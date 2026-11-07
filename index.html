@@ -372,19 +372,26 @@
 
 <!-- EVERYTHING YOU NEED: amenities across the projects we list (counts come from the project data) -->
 <section class="section amen-sec" id="amenities">
+  <!-- full-width rule with the count badge -->
+  <div class="amen-rule"><span class="amen-badge" data-amen-total>12 Amenities</span></div>
   <div class="wrap">
-    <div class="section-head center">
-      <p class="eyebrow" style="justify-content:center">Life inside <span class="amen-pill" data-amen-total>12 amenities</span></p>
-      <h2 class="h2">Everything You Need</h2>
-      <p class="lead" style="margin-top:.4rem">The comforts our Hyderabad &amp; Visakhapatnam projects are built around &mdash; wellness, play and everyday convenience, in the communities we help you buy into.</p>
+    <div class="amen-head">
+      <div class="amen-head-txt">
+        <p class="eyebrow">Life inside</p>
+        <h2 class="amen-title">Everything<br><span class="amen-you">You</span> <span class="amen-need">Need</span></h2>
+        <p class="amen-lead">The comforts our Hyderabad &amp; Visakhapatnam projects are built around &mdash; wellness, play and everyday convenience, in the communities we help you buy into.</p>
+      </div>
+      <div class="amen-tabs" role="tablist" aria-label="Filter amenities">
+        <button type="button" class="amen-tab is-on" data-amen-cat="" role="tab" aria-selected="true">All</button>
+        <button type="button" class="amen-tab" data-amen-cat="wellness" role="tab" aria-selected="false">Wellness</button>
+        <button type="button" class="amen-tab" data-amen-cat="social" role="tab" aria-selected="false">Fun &amp; Social</button>
+        <button type="button" class="amen-tab" data-amen-cat="facilities" role="tab" aria-selected="false">Facilities</button>
+      </div>
     </div>
-    <div class="amen-marquee" aria-hidden="true"><div class="amen-track" id="amenTrack"></div></div>
-    <div class="amen-tabs" role="tablist" aria-label="Filter amenities">
-      <button type="button" class="amen-tab is-on" data-amen-cat="" role="tab" aria-selected="true">All</button>
-      <button type="button" class="amen-tab" data-amen-cat="wellness" role="tab" aria-selected="false">Wellness</button>
-      <button type="button" class="amen-tab" data-amen-cat="social" role="tab" aria-selected="false">Fun &amp; Social</button>
-      <button type="button" class="amen-tab" data-amen-cat="facilities" role="tab" aria-selected="false">Facilities</button>
-    </div>
+  </div>
+  <!-- edge-to-edge ticker -->
+  <div class="amen-marquee" aria-hidden="true"><div class="amen-track" id="amenTrack"></div></div>
+  <div class="wrap">
     <div class="amen-grid" id="amenGrid"></div>
     <p class="amen-note">Counts show how many of the projects we list mention each amenity. <a href="hyderabad.html#projects">Explore Hyderabad projects</a> &middot; <a href="visakhapatnam.html#projects">Explore Visakhapatnam projects</a></p>
   </div>
@@ -538,8 +545,8 @@ window.GHR_PAGE_INIT=function(){
       </article>`;}).join('');
     // right-to-left ticker: the list twice, so the loop is seamless
     const track=document.getElementById('amenTrack');
-    if(track){ const chips=AM.map(a=>`<span class="amen-chip">${a[4]}${a[1]}</span>`).join(''); track.innerHTML=chips+chips; }
-    const total=document.querySelector('[data-amen-total]'); if(total) total.textContent=AM.length+' amenities';
+    if(track){ const chips=AM.map(a=>`<span class="amen-chip"><span class="amen-chip-ic">${a[4]}</span>${a[1]}<span class="amen-shine"></span></span>`).join(''); track.innerHTML=chips+chips; }
+    const total=document.querySelector('[data-amen-total]'); if(total) total.textContent=AM.length+' Amenities';
     document.querySelectorAll('.amen-tab').forEach(t=>t.addEventListener('click',()=>{
       const cat=t.dataset.amenCat;
       document.querySelectorAll('.amen-tab').forEach(x=>{const on=x===t;x.classList.toggle('is-on',on);x.setAttribute('aria-selected',on)});

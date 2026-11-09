@@ -2102,3 +2102,7 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
   .tm2-card{flex:0 0 calc(84vw - 16px)}
 }
 @media(prefers-reduced-motion:reduce){.tm2-track{transition:none}}
+
+/* testimonials section without reviews: service cards, not quotes */
+.tm2--services .tm2-q{display:none}
+.tm2--services .tm2-box{padding-top:2.2rem}

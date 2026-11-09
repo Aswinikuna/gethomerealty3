@@ -105,12 +105,15 @@ window.GHR_PAGE_INIT=function(){
       document.querySelector('[data-tm-count]').textContent=reviews.length+' review'+(reviews.length===1?'':'s');
       document.querySelector('[data-tm-score]').hidden=false;
     } else {
-      document.querySelector('[data-tm-eyebrow]').textContent='How we help our clients';
-      document.querySelector('[data-tm-title]').textContent='Client Stories';
-      items=[['home','Buying','First-Time Home Buyer Success','A first-time buyer was looking for an affordable home. Our team helped them understand the market, compare options, and secure a property that matched their budget and lifestyle.'],
-        ['tag','Selling','Smooth Property Sale','A homeowner wanted to sell with confidence. We helped with pricing strategy, listing preparation, marketing, showings and negotiation to complete a smooth sale.'],
-        ['spark','Pre-Construction','Pre-Construction Investment Guidance','An investor was exploring new projects. Our advisors compared options, reviewed incentives and deposit structures, and helped choose a project with strong potential.'],
-        ['key','Leasing','Lease Support for Landlords','A landlord needed the right tenant. We handled marketing, tenant screening, documentation and lease support for a professional rental process.']]
+      // no approved reviews yet: describe the services honestly (not presented as client stories)
+      document.querySelector('[data-tm-eyebrow]').textContent='What we do for you';
+      document.querySelector('[data-tm-title]').textContent='How We Help';
+      stage.classList.add('tm2--services');
+      items=[['home','Buying','Buying a home','We help you understand the market, compare options and secure a property that matches your budget, location and lifestyle.'],
+        ['tag','Selling','Selling your property','Pricing strategy, listing preparation, marketing, showings and negotiation — so you sell with confidence.'],
+        ['spark','Pre-construction','Pre-construction projects','We compare new projects, explain incentives and deposit structures, and help you choose one with strong potential.'],
+        ['key','Leasing','Leasing & rentals','For landlords and tenants: marketing, tenant screening, documentation and lease support for a smooth rental.'],
+        ['chart','Investing','Investment guidance','Rental-yield and appreciation analysis on high-growth corridors, so your capital goes where the returns are.']]
         .map(x=>({icon:x[0],role:x[1],name:x[2],text:x[3]}));
     }
     const cards=items.map((it,i)=>{

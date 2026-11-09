@@ -65,11 +65,21 @@
   </div>
 </section>
 
-<section class="section"><div class="wrap"><div class="cta-band">
-  <h2 class="h2">Let&rsquo;s find your next opportunity</h2>
-  <p>Whatever your goal &mdash; buying, selling, investing or joining us &mdash; our team is ready.</p>
-  <div class="btns"><a class="btn btn--light" href="contact.html">Contact Get Home Realty</a></div>
-</div></div></section>
+<!-- TESTIMONIALS — approved reviews from Admin > Reviews; client stories until reviews exist -->
+<section class="section tm-sec" id="testimonials-about">
+  <div class="wrap">
+    <div class="tm-head">
+      <div>
+        <p class="eyebrow" data-tm-eyebrow>Testimonials</p>
+        <h2 class="h2" data-tm-title>What our clients say</h2>
+      </div>
+      <div class="tm-score" data-tm-score hidden><b data-tm-avg></b><span class="tm-stars" data-tm-stars></span><small data-tm-count></small></div>
+    </div>
+    <div class="tm-grid" id="tmGrid"></div>
+    <p class="swipe-hint" aria-hidden="true">Swipe to see more</p>
+    <div class="tm-cta"><p>Ready to write your own success story?</p><a class="btn" href="contact.html">Talk to an advisor</a></div>
+  </div>
+</section>
 
 <div data-gh-footer></div>
 <script src="assets/js/data.js"></script>
@@ -78,6 +88,42 @@
 <script src="assets/js/main.js"></script>
 <script>
 window.GHR_PAGE_INIT=function(){
+  // Testimonials: real reviews from the admin (approved + active); the client stories otherwise
+  (function(){
+    const grid=document.getElementById('tmGrid'); if(!grid) return;
+    const I=window.GHR.ICON||{};
+    const mk=(tag,cls,txt)=>{const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e;};
+    const reviews=((window.GHR_CMS&&window.GHR_CMS.reviews)||[]).filter(r=>r&&r.text&&r.name);
+    if(reviews.length){
+      reviews.slice(0,9).forEach(r=>{
+        const rating=Math.max(0,Math.min(5,Number(r.rating)||0));
+        const c=mk('article','tm-card'); c.appendChild(mk('span','tm-quote','“'));
+        const st=mk('div','tm-stars','★'.repeat(rating)+'☆'.repeat(5-rating)); st.setAttribute('aria-label',rating+' out of 5'); c.appendChild(st);
+        c.appendChild(mk('p','tm-text',r.text));
+        const who=mk('div','tm-who'); const av=mk('span','tm-av');
+        if(r.image&&/^(https?:\/\/|\/)/.test(r.image)){ av.style.backgroundImage='url("'+encodeURI(r.image)+'")'; } else av.textContent=r.name.trim().charAt(0).toUpperCase();
+        who.appendChild(av); const nm=mk('div'); nm.appendChild(mk('b',null,r.name));
+        const meta=[r.location, r.date?new Date(r.date+'T00:00:00').toLocaleDateString(undefined,{month:'short',year:'numeric'}):''].filter(Boolean).join(' · ');
+        if(meta) nm.appendChild(mk('small',null,meta)); who.appendChild(nm); c.appendChild(who); grid.appendChild(c);
+      });
+      const avg=reviews.reduce((a,r)=>a+(Number(r.rating)||0),0)/reviews.length;
+      document.querySelector('[data-tm-avg]').textContent=avg.toFixed(1);
+      document.querySelector('[data-tm-stars]').textContent='★'.repeat(Math.round(avg))+'☆'.repeat(5-Math.round(avg));
+      document.querySelector('[data-tm-count]').textContent=reviews.length+' review'+(reviews.length===1?'':'s');
+      document.querySelector('[data-tm-score]').hidden=false;
+    } else {
+      document.querySelector('[data-tm-eyebrow]').textContent='Client stories';
+      document.querySelector('[data-tm-title]').textContent='How we help our clients';
+      [['home','Buying','First-Time Home Buyer Success','A first-time buyer was looking for an affordable home. Our team helped them understand the market, compare options, and secure a property that matched their budget and lifestyle.'],
+       ['tag','Selling','Smooth Property Sale','A homeowner wanted to sell with confidence. We helped with pricing strategy, listing preparation, marketing, showings and negotiation to complete a smooth sale.'],
+       ['spark','Pre-Construction','Pre-Construction Investment Guidance','An investor was exploring new projects. Our advisors compared options, reviewed incentives and deposit structures, and helped choose a project with strong potential.'],
+       ['key','Leasing','Lease Support for Landlords','A landlord needed the right tenant. We handled marketing, tenant screening, documentation and lease support for a professional rental process.']
+      ].forEach(s=>{ const c=mk('article','tm-card tm-card--story'); c.appendChild(mk('span','tm-quote','“'));
+        const top=mk('div','tm-tag'); const ic=mk('span','tm-tag-ic'); ic.innerHTML=I[s[0]]||''; top.appendChild(ic); top.appendChild(mk('span',null,s[1])); c.appendChild(top);
+        c.appendChild(mk('h3','tm-story-title',s[2])); c.appendChild(mk('p','tm-text',s[3])); grid.appendChild(c); });
+    }
+  })();
+
   const I=window.GHR.ICON;
   document.querySelectorAll('[data-ic]').forEach(e=>e.innerHTML=I[e.dataset.ic]);
   const why=[

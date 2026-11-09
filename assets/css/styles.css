@@ -1991,3 +1991,43 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
   #featuredGrid > *,#homeServices > *,#investHighlights > *,#testimonials > *,#hydSvc > *,#vskpSvc > *,#svcGrid > *,#whyGrid > *{
     backface-visibility:visible;scroll-snap-align:start}
 }
+
+/* =====================================================================
+   About: testimonials (admin reviews) — quote cards, rating summary
+   ===================================================================== */
+.tm-sec{background:linear-gradient(180deg,#FFF6F7 0%,var(--paper,#faf8f5) 100%)}
+.tm-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem 2rem;flex-wrap:wrap;margin-bottom:1.8rem}
+.tm-score{display:flex;align-items:center;gap:.6rem;padding:.7rem 1.1rem;border-radius:14px;background:#fff;box-shadow:var(--card-shadow,0 8px 24px rgba(18,35,64,.06))}
+.tm-score b{font-family:var(--ff-display);font-size:1.8rem;color:var(--ink);line-height:1}
+.tm-score small{color:var(--slate)}
+.tm-stars{color:#E4A11B;letter-spacing:2px;font-size:1rem}
+.tm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem}
+.tm-card{position:relative;overflow:hidden;isolation:isolate;display:flex;flex-direction:column;gap:.8rem;padding:1.7rem 1.5rem 1.5rem;border-radius:var(--card-r,18px);
+  background:#fff;border:1px solid var(--card-line,rgba(18,35,64,.08));box-shadow:var(--card-shadow,0 8px 24px rgba(18,35,64,.06));
+  transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s,border-color .3s}
+.tm-card:hover{transform:translateY(-6px);box-shadow:var(--card-shadow-hover,0 24px 48px rgba(206,17,38,.14));border-color:rgba(206,17,38,.2)}
+.tm-card::after{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#CE1126,#E0263C)}
+.tm-quote{position:absolute;right:1.1rem;top:.2rem;z-index:-1;font-family:Georgia,serif;font-size:6rem;line-height:1;color:rgba(206,17,38,.10)}
+.tm-text{color:var(--slate);font-size:.96rem;line-height:1.65;margin:0;flex:1}
+.tm-card:not(.tm-card--story) .tm-text{color:var(--ink);font-size:1rem}
+.tm-who{display:flex;align-items:center;gap:.75rem;padding-top:.9rem;border-top:1px dashed rgba(206,17,38,.18)}
+.tm-av{width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,#E0263C,#A50D1F) center/cover no-repeat}
+.tm-who b{display:block;color:var(--ink)}
+.tm-who small{color:var(--slate);font-size:.8rem}
+.tm-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.tm-tag-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#FFF3F5,#FFE0E6)}
+.tm-tag-ic svg{width:20px;height:20px}
+.tm-story-title{font-size:1.08rem;margin:0}
+.tm-card--story:nth-child(4){display:none}
+.tm-cta{display:flex;align-items:center;justify-content:center;gap:1rem 1.4rem;flex-wrap:wrap;margin-top:2rem;text-align:center}
+.tm-cta p{margin:0;font-weight:600;color:var(--ink)}
+@media(max-width:900px){.tm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tm-card--story:nth-child(4){display:flex}}
+@media(max-width:560px){
+  #tmGrid{display:flex!important;grid-template-columns:none!important;gap:.85rem!important;overflow-x:auto;scroll-snap-type:x mandatory;
+    margin-inline:-16px;padding:.3rem 16px 1rem;scroll-padding-inline:16px;scrollbar-width:none;overscroll-behavior-x:contain;align-items:stretch}
+  #tmGrid::-webkit-scrollbar{display:none}
+  #tmGrid > *{flex:0 0 84%;scroll-snap-align:start;min-width:0;transform:none!important}
+  .tm-head{margin-bottom:1rem}
+}
+.tm-score[hidden]{display:none}

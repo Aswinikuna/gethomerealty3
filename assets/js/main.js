@@ -421,7 +421,26 @@
     wireReveal(); // run after page-specific content (e.g. What We Do / Client Stories) is injected
     fillGridGaps();
     heroMotion();
+    swipeDots();
   });
+
+  /* Phone swipe rows: page dots under each row that follow the swipe; tap a dot to glide there. */
+  function swipeDots(){
+    document.querySelectorAll('.swipe-hint').forEach(hint=>{
+      const row=hint.previousElementSibling; if(!row) return;
+      hint.innerHTML='<span class="swipe-label">Swipe to see more</span><span class="swipe-dots"></span>';
+      const dotsEl=hint.querySelector('.swipe-dots');
+      const cards=()=>[...row.children].filter(c=>c.offsetParent!==null);
+      let dots=[], raf=0;
+      const build=()=>{ const n=cards().length; dotsEl.innerHTML=Array.from({length:n},(_,i)=>`<button type="button" aria-label="Show card ${i+1}"></button>`).join('');
+        dots=[...dotsEl.children]; dots.forEach((d,i)=>d.addEventListener('click',()=>{ const c=cards()[i]; if(c) row.scrollTo({left:c.offsetLeft-row.offsetLeft-parseFloat(getComputedStyle(row).paddingLeft||0),behavior:'smooth'}); })); sync(); };
+      const sync=()=>{ const cs=cards(); if(!cs.length) return; const x=row.scrollLeft, w=cs[0].offsetWidth+parseFloat(getComputedStyle(row).columnGap||14);
+        let i=Math.round(x/w); if(row.scrollLeft+row.clientWidth>=row.scrollWidth-4) i=cs.length-1;
+        dots.forEach((d,k)=>d.classList.toggle('on',k===i)); };
+      row.addEventListener('scroll',()=>{ hint.classList.add('used'); cancelAnimationFrame(raf); raf=requestAnimationFrame(sync); },{passive:true});
+      build(); let t; window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(build,150)});
+    });
+  }
 
   /* Home hero: windows lighting up across the skyline, a live project count,
      and a gentle mouse parallax. Skipped when the visitor prefers reduced motion. */

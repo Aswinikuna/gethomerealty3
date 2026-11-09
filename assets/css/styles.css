@@ -1955,3 +1955,30 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
 .cp-mapwrap .leaflet-top.leaflet-left{left:auto;right:0}
 .cp-mapwrap .leaflet-top.leaflet-left .leaflet-control{margin-right:12px}
 @media(max-width:560px){.cq-sub{overflow-wrap:normal;word-break:normal;font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+
+/* =====================================================================
+   Smooth swipe rows on phones: everything in a row is already visible
+   (no fade-in pop while swiping), no repainting photo drift, momentum +
+   gentle snapping, page dots that track the swipe.
+   ===================================================================== */
+@media(max-width:560px){
+  #featuredGrid,#homeServices,#investHighlights,#testimonials,#hydSvc,#vskpSvc,#svcGrid,#whyGrid{
+    overscroll-behavior-x:contain;touch-action:pan-x pan-y;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory}
+  #featuredGrid > *,#homeServices > *,#investHighlights > *,#testimonials > *,#hydSvc > *,#vskpSvc > *,#svcGrid > *,#whyGrid > *{
+    scroll-snap-stop:normal;opacity:1!important;translate:none!important;scale:none!important;transform:none!important;
+    animation:none!important;transition:none!important;backface-visibility:hidden}
+  #featuredGrid .feat-img{animation:none!important;transition:none!important}
+  #homeServices .card,#svcGrid .card,#whyGrid .card,#hydSvc .card,#vskpSvc .card,#testimonials .story{box-shadow:0 6px 18px rgba(18,35,64,.08)}
+  .swipe-hint{gap:.55rem;margin-top:.1rem}
+  .swipe-hint::after{display:none}
+  .swipe-dots{display:flex;gap:6px;align-items:center}
+  .swipe-dots button{width:7px;height:7px;padding:0;border:0;border-radius:99px;background:rgba(206,17,38,.25);cursor:pointer;
+    transition:width .3s cubic-bezier(.2,.7,.2,1),background .3s}
+  .swipe-dots button.on{width:22px;background:var(--red)}
+  .section--ink .swipe-dots button{background:rgba(255,255,255,.3)}
+  .section--ink .swipe-dots button.on{background:#fff}
+  .swipe-label{transition:opacity .4s}
+  .swipe-hint.used .swipe-label{opacity:0;width:0;overflow:hidden}
+}
+@media(prefers-reduced-motion:reduce){#featuredGrid,#homeServices,#investHighlights,#testimonials,#hydSvc,#vskpSvc,#svcGrid,#whyGrid{scroll-behavior:auto}}

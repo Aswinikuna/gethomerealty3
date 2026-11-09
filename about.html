@@ -66,7 +66,7 @@
 </section>
 
 <!-- TESTIMONIALS — approved reviews from Admin > Reviews; client stories until reviews exist -->
-<section class="section tm-sec" id="testimonials-about">
+<section class="section tm-sec" id="testimonials-about" hidden>
   <div class="wrap">
     <div class="tm2-head">
       <p class="tm2-kicker" data-tm-eyebrow>See what our clients have to say</p>
@@ -96,6 +96,7 @@ window.GHR_PAGE_INIT=function(){
     const reviews=((window.GHR_CMS&&window.GHR_CMS.reviews)||[]).filter(r=>r&&r.text&&r.name);
     let items;
     if(reviews.length){
+      document.getElementById('testimonials-about').hidden=false;   // real, approved reviews: show the section
       items=reviews.slice(0,9).map(r=>({text:r.text,name:r.name,
         role:[r.location, r.date?new Date(r.date+'T00:00:00').toLocaleDateString(undefined,{month:'short',year:'numeric'}):''].filter(Boolean).join(' · '),
         rating:Math.max(0,Math.min(5,Number(r.rating)||0)), image:(r.image&&/^(https?:\/\/|\/)/.test(r.image))?r.image:''}));
@@ -105,16 +106,9 @@ window.GHR_PAGE_INIT=function(){
       document.querySelector('[data-tm-count]').textContent=reviews.length+' review'+(reviews.length===1?'':'s');
       document.querySelector('[data-tm-score]').hidden=false;
     } else {
-      // no approved reviews yet: describe the services honestly (not presented as client stories)
-      document.querySelector('[data-tm-eyebrow]').textContent='What we do for you';
-      document.querySelector('[data-tm-title]').textContent='How We Help';
-      stage.classList.add('tm2--services');
-      items=[['home','Buying','Buying a home','We help you understand the market, compare options and secure a property that matches your budget, location and lifestyle.'],
-        ['tag','Selling','Selling your property','Pricing strategy, listing preparation, marketing, showings and negotiation — so you sell with confidence.'],
-        ['spark','Pre-construction','Pre-construction projects','We compare new projects, explain incentives and deposit structures, and help you choose one with strong potential.'],
-        ['key','Leasing','Leasing & rentals','For landlords and tenants: marketing, tenant screening, documentation and lease support for a smooth rental.'],
-        ['chart','Investing','Investment guidance','Rental-yield and appreciation analysis on high-growth corridors, so your capital goes where the returns are.']]
-        .map(x=>({icon:x[0],role:x[1],name:x[2],text:x[3]}));
+      // no approved reviews yet: keep the section off the page until real reviews are approved in the admin
+      document.getElementById('testimonials-about').hidden=true;
+      return;
     }
     const cards=items.map((it,i)=>{
       const c=mk('figure','tm2-card'); c.dataset.i=i;

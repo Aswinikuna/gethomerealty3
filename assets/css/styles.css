@@ -2086,3 +2086,19 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
   .tm2-card.is-active .tm2-who{margin-top:2.9rem}
 }
 @media(prefers-reduced-motion:reduce){.tm2-card,.tm2-box{transition:none}}
+
+/* testimonials: sliding track (auto-scrolls) — replaces the column-swapping layout */
+@media(min-width:561px){
+  .tm2-stage{display:block!important;overflow:hidden;min-height:0;padding:1.4rem 0 .6rem}
+  .tm2-track{display:flex;align-items:center;gap:clamp(1rem,2.5vw,2rem);transition:transform .8s cubic-bezier(.22,.7,.2,1);will-change:transform}
+  .tm2-card,.tm2-card.is-prev,.tm2-card.is-next,.tm2-card.is-active{display:flex!important;grid-column:auto;grid-row:auto;flex:0 0 calc((100% - 2*clamp(1rem,2.5vw,2rem))/3)}
+  .tm2-card:not(.is-active){opacity:.85}
+}
+@media(min-width:561px) and (max-width:900px){
+  .tm2-card,.tm2-card.is-prev,.tm2-card.is-next,.tm2-card.is-active{flex-basis:calc((100% - clamp(1rem,2.5vw,2rem))/1.6)}
+}
+@media(max-width:560px){
+  .tm2-track{display:flex;gap:.9rem}
+  .tm2-card{flex:0 0 calc(84vw - 16px)}
+}
+@media(prefers-reduced-motion:reduce){.tm2-track{transition:none}}

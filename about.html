@@ -124,27 +124,42 @@ window.GHR_PAGE_INIT=function(){
       else av.textContent=it.name.trim().charAt(0).toUpperCase();
       box.appendChild(av); c.appendChild(box);
       const cap=mk('figcaption','tm2-who'); cap.appendChild(mk('b',null,it.name)); if(it.role) cap.appendChild(mk('small',null,it.role)); c.appendChild(cap);
-      c.addEventListener('click',()=>{ if(!c.classList.contains('is-active')) go(i); });
       stage.appendChild(c); return c;
     });
-    const n=cards.length; let cur=n>2?1:0, timer=0;
+    // cards sit on a sliding track; the active card is centred and highlighted
+    const track=document.createElement('div'); track.className='tm2-track'; cards.forEach(c=>track.appendChild(c)); stage.appendChild(track);
+    const n=cards.length; let cur=0, timer=0, paused=false, inView=true;
     dotsEl.innerHTML=cards.map((_,i)=>`<button type="button" role="tab" aria-label="Show ${i+1}"></button>`).join('');
-    const dots=[...dotsEl.children]; dots.forEach((d,i)=>d.addEventListener('click',()=>go(i)));
+    const dots=[...dotsEl.children]; dots.forEach((d,i)=>d.addEventListener('click',()=>go(i,true)));
     const phone=()=>matchMedia('(max-width:560px)').matches;
+    const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
     function paint(){
-      cards.forEach((c,i)=>{ const off=((i-cur)%n+n)%n;
-        c.classList.toggle('is-active',off===0); c.classList.toggle('is-next',n>1&&off===1); c.classList.toggle('is-prev',n>2&&off===n-1);
-        c.setAttribute('aria-hidden',off===0||off===1||off===n-1?'false':'true'); });
+      cards.forEach((c,i)=>{ c.classList.toggle('is-active',i===cur); c.setAttribute('aria-hidden',i===cur?'false':'true'); });
       dots.forEach((d,i)=>{ d.classList.toggle('on',i===cur); d.setAttribute('aria-selected',i===cur); });
     }
-    function go(i){ cur=(i+n)%n; paint(); if(phone()) stage.scrollTo({left:cards[cur].offsetLeft-stage.offsetLeft-16,behavior:'smooth'}); restart(); }
-    function restart(){ clearInterval(timer); if(n>1&&!matchMedia('(prefers-reduced-motion: reduce)').matches) timer=setInterval(()=>{ if(!document.hidden&&!phone()) go(cur+1); },6000); }
-    stage.addEventListener('mouseenter',()=>clearInterval(timer)); stage.addEventListener('mouseleave',restart);
-    // phones: swipe row; the card in view becomes the highlighted one
+    function place(){
+      if(phone()){ track.style.transform=''; return; }
+      const c=cards[cur], x=stage.clientWidth/2-(c.offsetLeft+c.offsetWidth/2);
+      const min=stage.clientWidth-track.scrollWidth;   // don't slide past either end
+      track.style.transform=`translateX(${Math.max(Math.min(x,0),Math.min(0,min))}px)`;
+    }
+    function go(i,user){
+      cur=(i+n)%n; paint();
+      if(phone()) stage.scrollTo({left:cards[cur].offsetLeft-16,behavior:calm?'auto':'smooth'}); else place();
+      if(user) restart();
+    }
+    function restart(){ clearInterval(timer); if(n>1&&!calm) timer=setInterval(()=>{ if(!document.hidden&&!paused&&inView) go(cur+1); },4000); }
+    // pause while the visitor is reading (hover / touch), and while the section is off screen
+    stage.addEventListener('mouseenter',()=>{paused=true}); stage.addEventListener('mouseleave',()=>{paused=false});
+    stage.addEventListener('touchstart',()=>{paused=true},{passive:true});
+    stage.addEventListener('touchend',()=>{ setTimeout(()=>{paused=false},5000); },{passive:true});
+    if('IntersectionObserver' in window) new IntersectionObserver(es=>{inView=es[0].isIntersecting},{threshold:.25}).observe(stage);
+    // phones: the card the visitor swipes to becomes the active one
     let raf=0; stage.addEventListener('scroll',()=>{ if(!phone()) return; cancelAnimationFrame(raf); raf=requestAnimationFrame(()=>{
       const w=cards[0].offsetWidth+14; const i=Math.min(n-1,Math.round(stage.scrollLeft/w)); if(i!==cur){ cur=i; paint(); } }); },{passive:true});
-    if(phone()) cur=0;
-    paint(); restart();
+    cards.forEach((c,i)=>c.addEventListener('click',()=>{ if(i!==cur) go(i,true); }));
+    let rt; window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(place,120)});
+    cur=(!phone()&&n>2)?1:0; paint(); requestAnimationFrame(place); restart();
   })();
 
   const I=window.GHR.ICON;

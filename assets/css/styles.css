@@ -1982,3 +1982,12 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
   .swipe-hint.used .swipe-label{opacity:0;width:0;overflow:hidden}
 }
 @media(prefers-reduced-motion:reduce){#featuredGrid,#homeServices,#investHighlights,#testimonials,#hydSvc,#vskpSvc,#svcGrid,#whyGrid{scroll-behavior:auto}}
+/* Swipe rows — reliable native swiping on iPhone/Safari and Android:
+   no smooth-scroll on the snap container (Safari's momentum + snap fight it),
+   no touch-action override, no per-card compositing hints */
+@media(max-width:560px){
+  #featuredGrid,#homeServices,#investHighlights,#testimonials,#hydSvc,#vskpSvc,#svcGrid,#whyGrid{
+    scroll-behavior:auto!important;touch-action:auto!important;scroll-snap-type:x mandatory;overflow-y:hidden}
+  #featuredGrid > *,#homeServices > *,#investHighlights > *,#testimonials > *,#hydSvc > *,#vskpSvc > *,#svcGrid > *,#whyGrid > *{
+    backface-visibility:visible;scroll-snap-align:start}
+}

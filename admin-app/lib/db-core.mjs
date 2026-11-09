@@ -35,7 +35,11 @@ async function connect() {
     const local = /@(localhost|127\.0\.0\.1)[:/]/.test(url);
     const ssl = process.env.DATABASE_SSL === 'disable' || local ? false : 'require';
     // prepare:false — required by Supabase's transaction pooler (pgbouncer).
-    const sql = postgres(url, { max: Number(process.env.DATABASE_POOL || 5), ssl, prepare: false, idle_timeout: 20 });
+    // The app passes json/jsonb values already serialised (JSON.stringify → "$n::jsonb").
+    // postgres.js would JSON.stringify them a second time and store a JSON *string*;
+    // pass strings through unchanged so they arrive as real objects/arrays.
+    const json = { to: 114, from: [114, 3802], serialize: (x) => (typeof x === 'string' ? x : JSON.stringify(x)), parse: (x) => JSON.parse(x) };
+    const sql = postgres(url, { max: Number(process.env.DATABASE_POOL || 5), ssl, prepare: false, idle_timeout: 20, types: { json } });
     const wrap = (s) => ({ query: (text, params = []) => s.unsafe(text, /** @type {any[]} */ (params)).then((r) => [...r]) });
     return {
       kind: 'postgres',

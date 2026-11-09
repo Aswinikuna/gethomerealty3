@@ -483,16 +483,6 @@
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="section section--mist" style="padding-block:clamp(28px,4vw,48px)">
-  <div class="wrap">
-    <div class="section-head center"><p class="eyebrow" style="justify-content:center">Client Stories</p>
-      <h2 class="h2">Real results for buyers, sellers &amp; investors</h2></div>
-    <div class="grid cols-4" id="testimonials"></div>
-    <p class="swipe-hint" aria-hidden="true">Swipe to see more</p>
-  </div>
-</section>
-
 <!-- CTA -->
 <section class="section">
   <div class="wrap">
@@ -666,20 +656,6 @@ window.GHR_PAGE_INIT=function(){
   // icons
   document.getElementById('ic-hyd').innerHTML=I.pin;
   document.getElementById('ic-vskp').innerHTML=I.pin;
-
-  // client stories
-  const stories=[
-    ['home','Buying','First-Time Home Buyer Success','A first-time buyer was looking for an affordable home in the GTA. Our team helped them understand the market, compare options, and secure a property that matched their budget and lifestyle.'],
-    ['tag','Selling','Smooth Property Sale','A homeowner wanted to sell with confidence. Our brokerage helped with pricing strategy, listing preparation, marketing, showings, and negotiation to complete a smooth sale.'],
-    ['spark','Pre-Construction','Pre-Construction Investment Guidance','An investor was exploring pre-construction opportunities. Our advisors helped compare projects, review incentives, understand deposit structures, and choose a project with strong future potential.'],
-    ['key','Leasing','Lease Support for Landlords','A landlord needed help finding the right tenant. Our team assisted with marketing, tenant screening, documentation, and lease support for a professional rental process.'],
-  ];
-  document.getElementById('testimonials').innerHTML=stories.map(s=>`
-    <article class="story anim-up">
-      <div class="story-top"><span class="story-ic">${I[s[0]]}</span><span class="story-cat">${s[1]}</span></div>
-      <h3 class="story-title">${s[2]}</h3>
-      <p class="story-text">${s[3]}</p>
-    </article>`).join('');
 
   window.dispatchEvent(new Event('scroll'));
 };

@@ -2106,3 +2106,29 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
 /* testimonials section without reviews: service cards, not quotes */
 .tm2--services .tm2-q{display:none}
 .tm2--services .tm2-box{padding-top:2.2rem}
+/* testimonials — compact size */
+.tm-sec .tm2-head{margin-bottom:1.6rem}
+.tm-sec .tm2-head .h2{font-size:clamp(1.8rem,3vw,2.4rem)}
+.tm-sec .tm-score{padding:.5rem .9rem}
+.tm-sec .tm-score b{font-size:1.4rem}
+.tm2-box{padding:1.4rem 1.3rem 2.7rem;border-radius:14px}
+.tm2-q{font-size:3.2rem;height:1.8rem}
+.tm2-stars{font-size:.85rem;margin:.1rem 0 .35rem}
+.tm2-text{font-size:.86rem;line-height:1.6;-webkit-line-clamp:4}
+.tm2-av{width:54px;height:54px;font-size:1.1rem;border-width:3px}
+.tm2-who{margin-top:2.2rem}
+.tm2-who b{font-size:.92rem}
+.tm2-who small{font-size:.74rem}
+.tm2-card.is-active .tm2-box{padding:1.7rem 1.5rem 3rem;transform:translateY(-8px)}
+.tm2-card.is-active .tm2-text{font-size:.9rem;-webkit-line-clamp:5}
+.tm2-card.is-active .tm2-av{width:60px;height:60px;transform:translate(-50%,calc(50% - 8px))}
+.tm2-card.is-active .tm2-who{margin-top:2.3rem}
+@media(min-width:561px){
+  .tm2-stage{max-width:1000px;margin-inline:auto;padding-top:.9rem}
+  .tm2-card,.tm2-card.is-prev,.tm2-card.is-next,.tm2-card.is-active{flex-basis:calc((100% - 2*clamp(1rem,2.5vw,2rem))/3)}
+}
+@media(max-width:560px){
+  .tm2-card{flex-basis:calc(78vw - 16px)}
+  .tm2-card.is-active .tm2-box{padding:1.4rem 1.3rem 2.7rem}
+  .tm2-card.is-active .tm2-av{transform:translate(-50%,50%)}
+}

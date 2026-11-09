@@ -2132,3 +2132,10 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
   .tm2-card.is-active .tm2-box{padding:1.4rem 1.3rem 2.7rem}
   .tm2-card.is-active .tm2-av{transform:translate(-50%,50%)}
 }
+
+/* phone polish: testimonial card no longer clipped at the top; hero badge clear of the towers */
+@media(max-width:560px){
+  .tm2-stage{padding-top:1.2rem!important;padding-bottom:1.4rem}
+  .tm2-card.is-active .tm2-box{transform:none}
+  .hero2-float--a{left:2%;right:auto;top:2%}
+}

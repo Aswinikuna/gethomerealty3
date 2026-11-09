@@ -68,15 +68,13 @@
 <!-- TESTIMONIALS — approved reviews from Admin > Reviews; client stories until reviews exist -->
 <section class="section tm-sec" id="testimonials-about">
   <div class="wrap">
-    <div class="tm-head">
-      <div>
-        <p class="eyebrow" data-tm-eyebrow>Testimonials</p>
-        <h2 class="h2" data-tm-title>What our clients say</h2>
-      </div>
+    <div class="tm2-head">
+      <p class="tm2-kicker" data-tm-eyebrow>See what our clients have to say</p>
+      <h2 class="h2" data-tm-title>Testimonials</h2>
       <div class="tm-score" data-tm-score hidden><b data-tm-avg></b><span class="tm-stars" data-tm-stars></span><small data-tm-count></small></div>
     </div>
-    <div class="tm-grid" id="tmGrid"></div>
-    <p class="swipe-hint" aria-hidden="true">Swipe to see more</p>
+    <div class="tm2-stage" id="tmGrid" aria-live="polite"></div>
+    <div class="tm2-dots" id="tmDots" role="tablist" aria-label="Choose testimonial"></div>
     <div class="tm-cta"><p>Ready to write your own success story?</p><a class="btn" href="contact.html">Talk to an advisor</a></div>
   </div>
 </section>
@@ -88,40 +86,65 @@
 <script src="assets/js/main.js"></script>
 <script>
 window.GHR_PAGE_INIT=function(){
-  // Testimonials: real reviews from the admin (approved + active); the client stories otherwise
+  // Testimonials (reference layout): three cards, the centre one raised in brand red, avatar on the
+  // bottom edge, name + role underneath; rotates every 6 s (pauses on hover); real reviews from
+  // Admin > Reviews, the client stories until reviews exist.
   (function(){
-    const grid=document.getElementById('tmGrid'); if(!grid) return;
+    const stage=document.getElementById('tmGrid'), dotsEl=document.getElementById('tmDots'); if(!stage) return;
     const I=window.GHR.ICON||{};
     const mk=(tag,cls,txt)=>{const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e;};
     const reviews=((window.GHR_CMS&&window.GHR_CMS.reviews)||[]).filter(r=>r&&r.text&&r.name);
+    let items;
     if(reviews.length){
-      reviews.slice(0,9).forEach(r=>{
-        const rating=Math.max(0,Math.min(5,Number(r.rating)||0));
-        const c=mk('article','tm-card'); c.appendChild(mk('span','tm-quote','“'));
-        const st=mk('div','tm-stars','★'.repeat(rating)+'☆'.repeat(5-rating)); st.setAttribute('aria-label',rating+' out of 5'); c.appendChild(st);
-        c.appendChild(mk('p','tm-text',r.text));
-        const who=mk('div','tm-who'); const av=mk('span','tm-av');
-        if(r.image&&/^(https?:\/\/|\/)/.test(r.image)){ av.style.backgroundImage='url("'+encodeURI(r.image)+'")'; } else av.textContent=r.name.trim().charAt(0).toUpperCase();
-        who.appendChild(av); const nm=mk('div'); nm.appendChild(mk('b',null,r.name));
-        const meta=[r.location, r.date?new Date(r.date+'T00:00:00').toLocaleDateString(undefined,{month:'short',year:'numeric'}):''].filter(Boolean).join(' · ');
-        if(meta) nm.appendChild(mk('small',null,meta)); who.appendChild(nm); c.appendChild(who); grid.appendChild(c);
-      });
+      items=reviews.slice(0,9).map(r=>({text:r.text,name:r.name,
+        role:[r.location, r.date?new Date(r.date+'T00:00:00').toLocaleDateString(undefined,{month:'short',year:'numeric'}):''].filter(Boolean).join(' · '),
+        rating:Math.max(0,Math.min(5,Number(r.rating)||0)), image:(r.image&&/^(https?:\/\/|\/)/.test(r.image))?r.image:''}));
       const avg=reviews.reduce((a,r)=>a+(Number(r.rating)||0),0)/reviews.length;
       document.querySelector('[data-tm-avg]').textContent=avg.toFixed(1);
       document.querySelector('[data-tm-stars]').textContent='★'.repeat(Math.round(avg))+'☆'.repeat(5-Math.round(avg));
       document.querySelector('[data-tm-count]').textContent=reviews.length+' review'+(reviews.length===1?'':'s');
       document.querySelector('[data-tm-score]').hidden=false;
     } else {
-      document.querySelector('[data-tm-eyebrow]').textContent='Client stories';
-      document.querySelector('[data-tm-title]').textContent='How we help our clients';
-      [['home','Buying','First-Time Home Buyer Success','A first-time buyer was looking for an affordable home. Our team helped them understand the market, compare options, and secure a property that matched their budget and lifestyle.'],
-       ['tag','Selling','Smooth Property Sale','A homeowner wanted to sell with confidence. We helped with pricing strategy, listing preparation, marketing, showings and negotiation to complete a smooth sale.'],
-       ['spark','Pre-Construction','Pre-Construction Investment Guidance','An investor was exploring new projects. Our advisors compared options, reviewed incentives and deposit structures, and helped choose a project with strong potential.'],
-       ['key','Leasing','Lease Support for Landlords','A landlord needed the right tenant. We handled marketing, tenant screening, documentation and lease support for a professional rental process.']
-      ].forEach(s=>{ const c=mk('article','tm-card tm-card--story'); c.appendChild(mk('span','tm-quote','“'));
-        const top=mk('div','tm-tag'); const ic=mk('span','tm-tag-ic'); ic.innerHTML=I[s[0]]||''; top.appendChild(ic); top.appendChild(mk('span',null,s[1])); c.appendChild(top);
-        c.appendChild(mk('h3','tm-story-title',s[2])); c.appendChild(mk('p','tm-text',s[3])); grid.appendChild(c); });
+      document.querySelector('[data-tm-eyebrow]').textContent='How we help our clients';
+      document.querySelector('[data-tm-title]').textContent='Client Stories';
+      items=[['home','Buying','First-Time Home Buyer Success','A first-time buyer was looking for an affordable home. Our team helped them understand the market, compare options, and secure a property that matched their budget and lifestyle.'],
+        ['tag','Selling','Smooth Property Sale','A homeowner wanted to sell with confidence. We helped with pricing strategy, listing preparation, marketing, showings and negotiation to complete a smooth sale.'],
+        ['spark','Pre-Construction','Pre-Construction Investment Guidance','An investor was exploring new projects. Our advisors compared options, reviewed incentives and deposit structures, and helped choose a project with strong potential.'],
+        ['key','Leasing','Lease Support for Landlords','A landlord needed the right tenant. We handled marketing, tenant screening, documentation and lease support for a professional rental process.']]
+        .map(x=>({icon:x[0],role:x[1],name:x[2],text:x[3]}));
     }
+    const cards=items.map((it,i)=>{
+      const c=mk('figure','tm2-card'); c.dataset.i=i;
+      const box=mk('div','tm2-box'); box.appendChild(mk('span','tm2-q','“'));
+      if(it.rating){ const st=mk('div','tm2-stars','★'.repeat(it.rating)+'☆'.repeat(5-it.rating)); st.setAttribute('aria-label',it.rating+' out of 5'); box.appendChild(st); }
+      box.appendChild(mk('blockquote','tm2-text',it.text));
+      const av=mk('span','tm2-av');
+      if(it.image) av.style.backgroundImage='url("'+encodeURI(it.image)+'")';
+      else if(it.icon) av.innerHTML=I[it.icon]||'';
+      else av.textContent=it.name.trim().charAt(0).toUpperCase();
+      box.appendChild(av); c.appendChild(box);
+      const cap=mk('figcaption','tm2-who'); cap.appendChild(mk('b',null,it.name)); if(it.role) cap.appendChild(mk('small',null,it.role)); c.appendChild(cap);
+      c.addEventListener('click',()=>{ if(!c.classList.contains('is-active')) go(i); });
+      stage.appendChild(c); return c;
+    });
+    const n=cards.length; let cur=n>2?1:0, timer=0;
+    dotsEl.innerHTML=cards.map((_,i)=>`<button type="button" role="tab" aria-label="Show ${i+1}"></button>`).join('');
+    const dots=[...dotsEl.children]; dots.forEach((d,i)=>d.addEventListener('click',()=>go(i)));
+    const phone=()=>matchMedia('(max-width:560px)').matches;
+    function paint(){
+      cards.forEach((c,i)=>{ const off=((i-cur)%n+n)%n;
+        c.classList.toggle('is-active',off===0); c.classList.toggle('is-next',n>1&&off===1); c.classList.toggle('is-prev',n>2&&off===n-1);
+        c.setAttribute('aria-hidden',off===0||off===1||off===n-1?'false':'true'); });
+      dots.forEach((d,i)=>{ d.classList.toggle('on',i===cur); d.setAttribute('aria-selected',i===cur); });
+    }
+    function go(i){ cur=(i+n)%n; paint(); if(phone()) stage.scrollTo({left:cards[cur].offsetLeft-stage.offsetLeft-16,behavior:'smooth'}); restart(); }
+    function restart(){ clearInterval(timer); if(n>1&&!matchMedia('(prefers-reduced-motion: reduce)').matches) timer=setInterval(()=>{ if(!document.hidden&&!phone()) go(cur+1); },6000); }
+    stage.addEventListener('mouseenter',()=>clearInterval(timer)); stage.addEventListener('mouseleave',restart);
+    // phones: swipe row; the card in view becomes the highlighted one
+    let raf=0; stage.addEventListener('scroll',()=>{ if(!phone()) return; cancelAnimationFrame(raf); raf=requestAnimationFrame(()=>{
+      const w=cards[0].offsetWidth+14; const i=Math.min(n-1,Math.round(stage.scrollLeft/w)); if(i!==cur){ cur=i; paint(); } }); },{passive:true});
+    if(phone()) cur=0;
+    paint(); restart();
   })();
 
   const I=window.GHR.ICON;

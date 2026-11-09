@@ -2031,3 +2031,58 @@ section[id],[id].section{scroll-margin-top:calc(var(--header-h) + 18px)}
   .tm-head{margin-bottom:1rem}
 }
 .tm-score[hidden]{display:none}
+
+/* =====================================================================
+   About: testimonials — reference layout (centre card raised in red,
+   avatar on the bottom edge, name + role below), rotating
+   ===================================================================== */
+.tm2-head{text-align:center;margin-bottom:clamp(2rem,4vw,3rem);display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.tm2-kicker{margin:0;font-size:.76rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--slate)}
+.tm2-head .h2{margin:0}
+.tm2-head .tm-score{margin-top:.6rem}
+.tm2-stage{position:relative;display:grid;grid-template-columns:1fr 1.18fr 1fr;align-items:center;gap:clamp(1rem,2.5vw,2rem);min-height:360px;padding-bottom:.5rem}
+.tm2-card{margin:0;display:none;flex-direction:column;align-items:center;cursor:pointer;transition:transform .55s cubic-bezier(.2,.7,.2,1),opacity .45s}
+.tm2-card.is-prev,.tm2-card.is-active,.tm2-card.is-next{display:flex}
+.tm2-card.is-prev{grid-column:1;grid-row:1}
+.tm2-card.is-active{grid-column:2;grid-row:1;cursor:default}
+.tm2-card.is-next{grid-column:3;grid-row:1}
+.tm2-box{position:relative;width:100%;padding:2rem 1.8rem 3.6rem;border-radius:16px;text-align:center;background:#fff;
+  box-shadow:0 14px 34px rgba(18,17,15,.08);transition:background .45s,box-shadow .45s,transform .45s,padding .45s}
+.tm2-card:not(.is-active):hover .tm2-box{transform:translateY(-4px);box-shadow:0 20px 40px rgba(18,17,15,.12)}
+.tm2-q{display:block;font-family:Georgia,serif;font-size:4.6rem;line-height:.7;height:2.6rem;color:#E9E4E2;transition:color .45s}
+.tm2-stars{color:#E4A11B;letter-spacing:2px;margin:.2rem 0 .5rem}
+.tm2-text{margin:0;color:var(--slate);font-size:.93rem;line-height:1.7;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.tm2-av{position:absolute;left:50%;bottom:0;transform:translate(-50%,50%);width:68px;height:68px;border-radius:50%;display:grid;place-items:center;
+  border:4px solid #fff;background:linear-gradient(135deg,#E0263C,#A50D1F) center/cover no-repeat;color:#fff;font-weight:700;font-size:1.4rem;
+  box-shadow:0 8px 20px rgba(18,17,15,.18)}
+.tm2-av svg{width:28px;height:28px}
+.tm2-who{margin-top:2.9rem;text-align:center}
+.tm2-who b{display:block;color:var(--ink);font-size:1rem}
+.tm2-who small{display:block;margin-top:.15rem;color:var(--slate);font-size:.78rem;font-weight:600;letter-spacing:.04em}
+/* the highlighted centre card */
+.tm2-card.is-active .tm2-box{background:linear-gradient(140deg,#E0263C 0%,#CE1126 50%,#A50D1F 100%);padding:2.6rem 2.2rem 4rem;transform:translateY(-14px);
+  box-shadow:0 26px 54px rgba(206,17,38,.32)}
+.tm2-card.is-active .tm2-q{color:rgba(255,255,255,.45)}
+.tm2-card.is-active .tm2-text{color:#fff;font-size:1rem;-webkit-line-clamp:9}
+.tm2-card.is-active .tm2-stars{color:#FFD979}
+.tm2-card.is-active .tm2-av{width:76px;height:76px;transform:translate(-50%,calc(50% - 14px))}
+.tm2-card.is-active .tm2-who{margin-top:3rem}
+.tm2-dots{display:flex;justify-content:center;gap:7px;margin-top:1.6rem}
+.tm2-dots button{width:8px;height:8px;padding:0;border:0;border-radius:99px;background:rgba(206,17,38,.25);cursor:pointer;transition:width .3s,background .3s}
+.tm2-dots button.on{width:24px;background:var(--red)}
+@media(max-width:900px) and (min-width:561px){
+  .tm2-stage{grid-template-columns:1fr 1.25fr}
+  .tm2-card.is-prev{display:none}
+  .tm2-card.is-active{grid-column:1}
+  .tm2-card.is-next{grid-column:2}
+}
+@media(max-width:560px){
+  .tm2-stage{display:flex!important;gap:.9rem;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-16px;padding:1.2rem 16px 1rem;
+    scroll-padding-inline:16px;scrollbar-width:none;overscroll-behavior-x:contain;min-height:0;align-items:flex-start}
+  .tm2-stage::-webkit-scrollbar{display:none}
+  .tm2-card{display:flex!important;flex:0 0 84%;scroll-snap-align:start;min-width:0}
+  .tm2-card.is-active .tm2-box{transform:none;padding:2rem 1.6rem 3.6rem}
+  .tm2-card.is-active .tm2-av{transform:translate(-50%,50%)}
+  .tm2-card.is-active .tm2-who{margin-top:2.9rem}
+}
+@media(prefers-reduced-motion:reduce){.tm2-card,.tm2-box{transition:none}}
